@@ -1,0 +1,18 @@
+.container {
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+
+	/* border: 2px black solid; */
+}
+
+.box {
+	display: block;
+	position: absolute;
+	background-color: gray;
+	opacity: 0.5;
+	animation-name: blink;
+	animation-iteration-count: infinite;
+	animation-play-state: running;
+	aspect-ratio: 16 / 9;
+}

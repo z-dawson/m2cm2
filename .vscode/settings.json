@@ -3,5 +3,8 @@
 		"editor.formatOnSave": true,
 		"source.fixAll.eslint": true,
 		"source.fixAll.stylelint": true
-	}
+	},
+	"cSpell.words": [
+		"roboto"
+	]
 }
