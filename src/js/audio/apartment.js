@@ -1,7 +1,13 @@
 import * as Tone from 'tone'
 
-const onStart = () => {}
+const onStart = (video) => {
+	video.current.currentTime = 0
+	video.current.play()
+}
 
-const onStop = () => {}
+const onStop = (video) => {
+	video.current.pause()
+	video.current.currentTime = 0
+}
 
 export { onStart, onStop }
