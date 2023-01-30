@@ -4,11 +4,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import routes from '@/js/routes'
 import Animation from '@/components/animation'
-import dynamic from 'next/dynamic'
-
-const PlayAudio = dynamic(() => import('../components/PlayAudio'), {
-	ssr: false,
-})
 
 function Home() {
 	return (
@@ -38,7 +33,6 @@ function Home() {
 						<h2 className={styles.subtitle}>
 							listen to the music as you compose music.
 						</h2>
-						<PlayAudio />
 					</div>
 					<div className={styles.layer1}>
 						<div className={styles.animation}>

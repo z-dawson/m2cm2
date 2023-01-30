@@ -2,7 +2,7 @@ import styles from '@/styles/Animation.module.css'
 
 const divs = Array(8).fill(0)
 
-function Animation() {
+const Animation = () => {
 	return (
 		<div className={styles.container}>
 			{divs.map((el, index, arr) => {

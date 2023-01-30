@@ -1,25 +1,11 @@
 const routes = [
-	{
-		name: 'apartment',
-	},
-	{
-		name: 'connecting',
-	},
-	{
-		name: 'office',
-	},
-	{
-		name: 'home',
-	},
-	{
-		name: 'lobby',
-	},
-	{
-		name: 'connect',
-	},
-	{
-		name: 'nowhere',
-	},
+	{ name: 'apartment' },
+	{ name: 'office' },
+	{ name: 'sleep' },
+	{ name: 'lobby' },
+	{ name: 'connecting' },
+	{ name: 'nowhere' },
+	{ name: 'vacation' },
 ]
 
 export default routes
