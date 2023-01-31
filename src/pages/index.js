@@ -3,7 +3,7 @@ import styles from '@/styles/Home.module.css'
 import Link from 'next/link'
 import Image from 'next/image'
 import routes from '@/js/routes'
-import Animation from '@/components/animation'
+import Animation from '@/components/Animation'
 
 function Home() {
 	return (
