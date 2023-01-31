@@ -5,12 +5,12 @@ const randomRange = (min, max) => {
 	// The maximum is inclusive and the minimum is inclusive
 	return Math.floor(Math.random() * (max - min + 1) + min)
 }
-const NoRepetition = class {
-	constructor(max, waiting, reuse) {
+const Urn = class {
+	constructor(max, waiting, reuse = 1) {
 		const fillRange = (start, end) =>
 			Array(end - start + 1)
 				.fill(0)
-				.map((item, index) => start + index)
+				.map((_, index) => start + index)
 		this.waiting = waiting
 		this.reuse = reuse
 		this.possible = fillRange(0, max - 1)
@@ -28,4 +28,4 @@ const NoRepetition = class {
 		return result
 	}
 }
-export { randomRange, NoRepetition }
+export { randomRange, Urn }
