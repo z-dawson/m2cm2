@@ -41,18 +41,20 @@ const RandomMetro = class {
 	constructor(callback, min, max) {
 		Object.assign(this, { callback, min, max })
 		this.delay
+		this.count = 0
 	}
 
 	start(callback) {
 		if (callback) this.callback = callback
 		const time = randomInt(this.min, this.max)
-		this.callback(time)
+		this.callbackClear = this.callback({ time, count: this.count })
+		this.count++
 		this.delay = setTimeout(this.start.bind(this), time)
 	}
 
-	stop(callCallback = false) {
+	stop() {
 		clearTimeout(this.delay)
-		callCallback && this.callback(0)
+		this?.callbackClear?.()
 	}
 
 	setRange(min, max) {
@@ -64,4 +66,48 @@ const mToMs = (m) => m * 1000
 
 const msToM = (ms) => ms / 1000
 
-export { randomRange, Urn, RandomMetro, mToMs, msToM }
+const Loop = class {
+	constructor(callback, options) {
+		this.init(callback, options)
+		this.active = false
+	}
+
+	init(callback, options = {}) {
+		this.callback = callback
+		const initOptions = { interval: 1000 }
+		Object.assign(this, initOptions, options)
+		this.count = 0
+	}
+
+	start(callback, options) {
+		const call = () => {
+			this.callbackClear = this.callback(this.count)
+			this.count += 1
+		}
+		if (this.active) {
+			this.clear()
+		}
+		if (callback) this.init(callback, options)
+		call()
+		this.loopReference = setInterval(() => {
+			if (this.count >= this.times) {
+				this.clear()
+			} else call()
+		}, this.interval)
+		this.active = true
+		return this
+	}
+
+	clear() {
+		clearInterval(this.loopReference)
+		this?.callbackClear?.()
+		this.active = false
+		return this
+	}
+
+	stop() {
+		return this.clear()
+	}
+}
+
+export { randomRange, Urn, RandomMetro, Loop, mToMs, msToM }
