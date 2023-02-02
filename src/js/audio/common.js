@@ -28,4 +28,40 @@ const Urn = class {
 		return result
 	}
 }
-export { randomRange, Urn }
+
+const randomFloat = (min, max) => {
+	return Math.random() * (max - min) + min
+}
+
+const randomInt = (min, max) => {
+	return Math.floor(randomFloat(min, max))
+}
+
+const RandomMetro = class {
+	constructor(callback, min, max) {
+		Object.assign(this, { callback, min, max })
+		this.delay
+	}
+
+	start(callback) {
+		if (callback) this.callback = callback
+		const time = randomInt(this.min, this.max)
+		this.callback(time)
+		this.delay = setTimeout(this.start.bind(this), time)
+	}
+
+	stop(callCallback = false) {
+		clearTimeout(this.delay)
+		callCallback && this.callback(0)
+	}
+
+	setRange(min, max) {
+		Object.assign(this, { min, max })
+	}
+}
+
+const mToMs = (m) => m * 1000
+
+const msToM = (ms) => ms / 1000
+
+export { randomRange, Urn, RandomMetro, mToMs, msToM }

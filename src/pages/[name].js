@@ -1,17 +1,11 @@
 import routes from '@/js/routes'
 import styles from '@/styles/Apartment.module.css'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import PlayAudio from '../components/PlayAudio'
 
 const Page = ({ name }) => {
 	const [soundEngine, setSoundEngine] = useState({})
 	const video = useRef()
-
-	useEffect(() => {
-		;(async () => {
-			setSoundEngine(await import(`../js/audio/${name}.js`))
-		})()
-	}, [name])
 
 	const onStart = () => {
 		soundEngine?.onStart?.(video)
@@ -20,6 +14,14 @@ const Page = ({ name }) => {
 	const onStop = () => {
 		soundEngine?.onStop?.(video)
 	}
+
+	useEffect(() => {
+		;(async () => {
+			const soundEngineModule = await import(`../js/audio/${name}.js`)
+			soundEngineModule.init({ video })
+			setSoundEngine(soundEngineModule)
+		})()
+	}, [name])
 
 	return (
 		<>
