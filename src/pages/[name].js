@@ -18,7 +18,9 @@ const Page = ({ name }) => {
 	useEffect(() => {
 		;(async () => {
 			const soundEngineModule = await import(`../js/audio/${name}.js`)
-			soundEngineModule.init({ video })
+			video.current.addEventListener('loadedmetadata', () => {
+				soundEngineModule.init({ video })
+			})
 			setSoundEngine(soundEngineModule)
 		})()
 	}, [name])
