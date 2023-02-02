@@ -55,6 +55,7 @@ const RandomMetro = class {
 	stop() {
 		clearTimeout(this.delay)
 		this?.callbackClear?.()
+		this.count = 0
 	}
 
 	setRange(min, max) {
@@ -99,6 +100,7 @@ const Loop = class {
 	}
 
 	clear() {
+		this.count = 0
 		clearInterval(this.loopReference)
 		this?.callbackClear?.()
 		this.active = false

@@ -64,7 +64,9 @@ const onStart = async (video) => {
 
 			console.log('starting loop', count, loopOptions)
 		}
-		return loop.stop
+		return () => {
+			loop.stop()
+		}
 	})
 }
 
