@@ -1,9 +1,5 @@
 import * as Tone from 'tone'
-import wait from 'wait'
-import { Urn, RandomMetro, mToMs } from '@/js/audio/common'
-const { rando, randoSequence } = require('@nastyox/rando.js')
-
-const context = new AudioContext()
+import { rando } from '@nastyox/rando.js'
 
 const audioUrls = [
 	'/audio/workspace/memory.mp3',
@@ -21,32 +17,13 @@ const audioUrls = [
 
 let officeAudio = new Tone.Players(audioUrls).toDestination()
 
-const urn = new Urn(audioUrls.length, 1)
-
 officeAudio._buffers._buffers.forEach((_, index) => {
 	officeAudio.player(index)
 })
 
-let playerIndex
-let playerDuration
-let prevPlayerDuration
 let video
-let loopDuration = 2
-let looping = false
-let loop
 
-const init = (args) => {
-	video = args.video
-	video.current.addEventListener('ended', onEnd)
-	video.current.addEventListener('seeking', () => {
-		console.log('seeking')
-	})
-}
-
-loop = new Tone.ToneEvent((time) => {
-	console.log('event')
-	console.log({ time })
-
+let loop = new Tone.ToneEvent((time) => {
 	let duration = 0
 	while (video.current.duration > duration) {
 		const playerIndex = rando(0, 1)
@@ -58,8 +35,19 @@ loop = new Tone.ToneEvent((time) => {
 			officeAudio.player(playerIndexNext).buffer.duration
 		officeAudio.player(playerIndexNext).start(time + playerDuration + duration)
 		duration += playerDuration + playerDurationNext
+		console.log(`schedule player ${playerIndex}, time: ${time + duration}`)
+		console.log(
+			`scheduling player ${playerIndexNext}, time: ${
+				time + playerDuration + duration
+			}`
+		)
 	}
 })
+
+const init = (args) => {
+	video = args.video
+	video.current.addEventListener('ended', onEnd)
+}
 
 const onStart = async (video) => {
 	Tone.start()
@@ -69,7 +57,7 @@ const onStart = async (video) => {
 	loop.start()
 }
 
-const onEnd = (video) => {
+const onEnd = () => {
 	loop.cancel(Tone.immediate())
 	Tone.Transport.stop()
 }
