@@ -26,7 +26,7 @@ const Page = ({ name }) => {
 	return (
 		<>
 			<PlayAudio {...{ onStart, onStop }} />
-			<video muted loop className={styles.video} ref={video}>
+			<video muted className={styles.video} ref={video}>
 				<source src={`/videos/${name}.mp4`} type="video/mp4" />
 			</video>
 		</>

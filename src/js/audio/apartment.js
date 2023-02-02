@@ -32,6 +32,7 @@ Tone.Transport.debug = true
 
 const init = (args) => {
 	video = args.video
+	video.current.loop = true
 	video.current.addEventListener('playing', onLoop)
 	video.current.addEventListener('seeking', () => {
 		console.log('seeking')
