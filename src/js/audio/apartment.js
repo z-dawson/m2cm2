@@ -31,7 +31,7 @@ Tone.Transport.debug = true
 const init = (args) => {
 	video = args.video
 	video.current.loop = true
-	video.current.addEventListener('playing', () => {
+	video.current.addEventListener('seeked', () => {
 		if (!looping) onRepeat()
 	})
 	randomMetro = new RandomMetro(
@@ -42,12 +42,13 @@ const init = (args) => {
 }
 
 const onStart = async (video) => {
+	await Tone.start()
 	video.current.currentTime = 0
 	video.current.play()
-	Tone.start()
 
-	const time = video.current.duration * rando(1, 'float')
 	randomMetro.start(({ count }) => {
+		const time = video.current.duration * rando(1, 'float')
+
 		const loopCallback = (count) => {
 			video.current.currentTime = time
 			apartmentAudio.player(playerIndex).seek(time)
