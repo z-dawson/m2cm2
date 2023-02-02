@@ -1,9 +1,6 @@
 import * as Tone from 'tone'
-import wait from 'wait'
-import { Urn, RandomMetro, mToMs } from '@/js/audio/common'
-const { rando, randoSequence } = require('@nastyox/rando.js')
-
-const context = new AudioContext()
+import { Urn, RandomMetro, mToMs, Loop } from '@/js/audio/common'
+import { rando } from '@nastyox/rando.js'
 
 const audioUrls = [
 	'/audio/apartment/S0_03 a.mp3',
@@ -18,6 +15,7 @@ let apartmentAudio = new Tone.Players(audioUrls).toDestination()
 
 const urn = new Urn(audioUrls.length, 1)
 let randomMetro
+const loop = new Loop()
 
 apartmentAudio._buffers._buffers.forEach((_, index) => {
 	apartmentAudio.player(index)
@@ -32,9 +30,9 @@ Tone.Transport.debug = true
 
 const init = (args) => {
 	video = args.video
-	video.current.addEventListener('playing', onLoop)
-	video.current.addEventListener('seeking', () => {
-		console.log('seeking')
+	video.current.loop = true
+	video.current.addEventListener('playing', () => {
+		if (!looping) onRepeat()
 	})
 	randomMetro = new RandomMetro(
 		console.log,
@@ -48,34 +46,35 @@ const onStart = async (video) => {
 	video.current.play()
 	Tone.start()
 
-	await wait(1000)
-	randomMetro.start(() => {
-		let count = 0
-		let max = rando(2, 5)
-		const time = video.current.duration * rando(1, 'float')
-		looping = true
-		const intervalReference = setInterval(() => {
-			if (count >= max) {
-				looping = false
-				clearInterval(intervalReference)
-			}
+	const time = video.current.duration * rando(1, 'float')
+	randomMetro.start(({ count }) => {
+		const loopCallback = (count) => {
 			video.current.currentTime = time
 			apartmentAudio.player(playerIndex).seek(time)
-			count = count + 1
-		}, rando(200, 1500))
+			console.log('loop', count)
+			return () => {
+				looping = false
+			}
+		}
+
+		if (count > 0) {
+			looping = true
+			const loopOptions = { interval: rando(200, 1500), times: rando(2, 5) + 1 }
+			loop.start(loopCallback, loopOptions)
+
+			console.log('starting loop', count, loopOptions)
+		}
+		return loop.stop
 	})
 }
 
-const onLoop = (video) => {
-	if (!looping) {
-		console.log('playing')
-		const prevPlayerIndex = urn.discarded[urn.discarded.length - 1]
-		if (prevPlayerIndex) apartmentAudio.player(prevPlayerIndex).stop()
+const onRepeat = () => {
+	const prevPlayerIndex = urn.discarded[urn.discarded.length - 1]
+	if (prevPlayerIndex) apartmentAudio.player(prevPlayerIndex).stop()
 
-		playerIndex = urn.next()
-		console.log(playerIndex)
-		apartmentAudio.player(playerIndex).start(Tone.now())
-	}
+	playerIndex = urn.next()
+	console.log('playing from start', { playerIndex })
+	apartmentAudio.player(playerIndex).start(Tone.now())
 }
 
 const onStop = (video) => {
