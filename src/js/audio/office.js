@@ -31,7 +31,7 @@ let playerIndex
 let playerDuration
 let prevPlayerDuration
 let video
-let loopDuration = 9
+let loopDuration = 2
 let looping = false
 let loop
 
@@ -43,26 +43,30 @@ const init = (args) => {
 	})
 }
 
+loop = new Tone.ToneEvent((time) => {
+	console.log('event')
+	console.log({ time })
+
+	let duration = 0
+	while (video.current.duration > duration) {
+		const playerIndex = rando(0, 1)
+		const playerDuration = officeAudio.player(playerIndex).buffer.duration
+		officeAudio.player(playerIndex).start(time + duration)
+
+		const playerIndexNext = rando(2, 8)
+		const playerDurationNext =
+			officeAudio.player(playerIndexNext).buffer.duration
+		officeAudio.player(playerIndexNext).start(time + playerDuration + duration)
+		duration += playerDuration + playerDurationNext
+	}
+})
+
 const onStart = async (video) => {
 	Tone.start()
 	Tone.Transport.start()
 	video.current.currentTime = 0
 	video.current.play()
-	loop = new Tone.ToneEvent((time) => {
-		console.log('event')
-		console.log({ time })
-		playerIndex = rando(0, 1)
-		playerDuration = officeAudio.player(playerIndex).buffer.duration
-		officeAudio.player(playerIndex).start(time)
-		playerIndex = rando(2, 8)
-		prevPlayerDuration = officeAudio.player(playerIndex).buffer.duration
-		loopDuration = playerDuration + prevPlayerDuration
-		console.log(loopDuration)
-		officeAudio.player(playerIndex).start(time + playerDuration)
-		loop.loop = true
-		console.log(loop.progress)
-	}).start()
-	loop.loopEnd = loopDuration
+	loop.start()
 }
 
 const onEnd = (video) => {
