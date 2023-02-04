@@ -1,10 +1,11 @@
 import routes from '@/js/routes'
 import styles from '@/styles/Apartment.module.css'
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import PlayAudio from '../components/PlayAudio'
 
 const Page = ({ name }) => {
 	const [soundEngine, setSoundEngine] = useState({})
+	const [loaded, setLoaded] = useState(false)
 	const video = useRef()
 
 	const onStart = () => {
@@ -18,8 +19,10 @@ const Page = ({ name }) => {
 	useEffect(() => {
 		;(async () => {
 			const soundEngineModule = await import(`../js/audio/${name}.js`)
+			video.current.load()
 			video.current.addEventListener('loadedmetadata', () => {
 				soundEngineModule.init({ video })
+				setLoaded(true)
 			})
 			setSoundEngine(soundEngineModule)
 		})()
@@ -27,7 +30,7 @@ const Page = ({ name }) => {
 
 	return (
 		<>
-			<PlayAudio {...{ onStart, onStop }} />
+			<PlayAudio {...{ onStart, onStop }} enabled={loaded} />
 			<video muted className={styles.video} ref={video}>
 				<source src={`/videos/${name}.mp4`} type="video/mp4" />
 			</video>

@@ -1,12 +1,29 @@
-const button = {
+import { useMemo } from 'react'
+
+const defaultButtonStyles = {
 	padding: '1em',
-	cursor: 'pointer',
 	margin: '0.5em',
-	border: '2px solid black',
+	borderColor: 'black',
+	borderStyle: 'solid',
+	borderWidth: 2,
 	backgroundColor: 'white',
+	cursor: 'pointer',
+}
+
+const disabledStyles = {
+	cursor: 'wait',
+	pointerEvent: 'none',
+	color: 'gray',
+	borderColor: 'gray',
 }
 
 const PlayAudio = (props) => {
+	const { enabled } = props
+
+	const buttonStyles = useMemo(() => {
+		return Object.assign({}, defaultButtonStyles, enabled ? {} : disabledStyles)
+	}, [enabled])
+
 	return (
 		<div
 			style={{
@@ -20,10 +37,10 @@ const PlayAudio = (props) => {
 				alignItems: 'center',
 			}}
 		>
-			<button style={button} onClick={() => props?.onStart?.()}>
+			<button style={buttonStyles} onClick={() => props?.onStart?.()}>
 				Play
 			</button>
-			<button style={button} onClick={() => props?.onStop?.()}>
+			<button style={buttonStyles} onClick={() => props?.onStop?.()}>
 				Stop
 			</button>
 		</div>

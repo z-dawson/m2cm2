@@ -32,7 +32,7 @@ const init = (args) => {
 	video = args.video
 	video.current.loop = true
 	video.current.addEventListener('seeked', () => {
-		if (!looping) onRepeat()
+		if (!looping && !video?.current?.paused) onRepeat()
 	})
 	randomMetro = new RandomMetro(
 		console.log,
@@ -83,7 +83,8 @@ const onRepeat = () => {
 const onStop = (video) => {
 	video.current.pause()
 	video.current.currentTime = 0
-	apartmentAudio.player(playerIndex).stop()
+	console.log({ playerIndex })
+	if (typeof playerIndex == 'number') apartmentAudio.player(playerIndex).stop()
 	randomMetro.stop()
 }
 
