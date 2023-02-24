@@ -15,25 +15,27 @@ const audioUrls = [
 	'/audio/workspace/searching.mp3',
 ]
 
-let officeAudio = new Tone.Players(audioUrls).toDestination()
+let workspaceAudio = new Tone.Players(audioUrls).toDestination()
 
-officeAudio._buffers._buffers.forEach((_, index) => {
-	officeAudio.player(index)
+workspaceAudio._buffers._buffers.forEach((_, index) => {
+	workspaceAudio.player(index)
 })
 
-let video
+let video, playbackRate
 
 let loop = new Tone.ToneEvent((time) => {
 	let duration = 0
 	while (video.current.duration > duration) {
 		const playerIndex = rando(0, 1)
-		const playerDuration = officeAudio.player(playerIndex).buffer.duration
-		officeAudio.player(playerIndex).start(time + duration)
+		const playerDuration = workspaceAudio.player(playerIndex).buffer.duration
+		workspaceAudio.player(playerIndex).start(time + duration)
 
 		const playerIndexNext = rando(2, 8)
 		const playerDurationNext =
-			officeAudio.player(playerIndexNext).buffer.duration
-		officeAudio.player(playerIndexNext).start(time + playerDuration + duration)
+			workspaceAudio.player(playerIndexNext).buffer.duration
+		workspaceAudio
+			.player(playerIndexNext)
+			.start(time + playerDuration + duration)
 		duration += playerDuration + playerDurationNext
 		console.log(`schedule player ${playerIndex}, time: ${time + duration}`)
 		console.log(
@@ -45,7 +47,9 @@ let loop = new Tone.ToneEvent((time) => {
 })
 
 const init = (args) => {
+	console.log(args)
 	video = args.video
+	// video.playbackRate = args.options.playbackRate
 	video.current.addEventListener('ended', onEnd)
 }
 
@@ -66,7 +70,7 @@ const onStop = (video) => {
 	video.current.pause()
 	video.current.currentTime = 0
 	loop.cancel(Tone.immediate())
-	officeAudio.stopAll()
+	workspaceAudio.stopAll()
 	Tone.Transport.stop()
 }
 

@@ -8,7 +8,7 @@
 
 .nav {
 	height: 100vh;
-	min-width: min(20%, 12rem);
+	min-width: max(6rem, min(20%, 12rem));
 }
 
 .nav ul li {

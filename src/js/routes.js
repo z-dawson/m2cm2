@@ -1,11 +1,17 @@
 const routes = [
 	{ name: 'apartment' },
-	{ name: 'office' },
+	{
+		name: 'workspace',
+		options: {
+			playbackRate: 0.25,
+		},
+	},
 	{ name: 'sleep' },
 	{ name: 'lobby' },
-	{ name: 'connecting' },
+	{ name: 'concert' },
 	{ name: 'nowhere' },
 	{ name: 'vacation' },
+	{ name: 'experience' },
 ]
 
 export default routes

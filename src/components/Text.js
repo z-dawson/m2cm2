@@ -18,11 +18,9 @@ const Text = (props) => {
 			console.log('setWordIndex')
 			console.log({ wordIndex })
 
-			const prevTime = wordIndex
-				? timestamps[paragraphIndex][wordIndex - 1].start
-				: 0
+			const prevTime = wordIndex ? timestamps[paragraphIndex][wordIndex - 1] : 0
 
-			const interval = timestamps[paragraphIndex][wordIndex].start - prevTime
+			const interval = timestamps[paragraphIndex][wordIndex] - prevTime
 
 			timeout.current = setTimeout(() => {
 				setDisplayedText((prev) => [...prev, sliced[wordIndex]])
@@ -34,7 +32,7 @@ const Text = (props) => {
 	}, [paragraphIndex, sliced])
 
 	useEffect(() => {
-		const randomParagraph = 0 //randomInt(0, text.length - 1)
+		const randomParagraph = 1 //randomInt(0, text.length - 1)
 		const slicedText = text[randomParagraph].split(' ')
 
 		setParagraphIndex(randomParagraph)
@@ -46,7 +44,7 @@ const Text = (props) => {
 	useEffect(() => {
 		if (reading) {
 			nextWord()
-			soundEngine.onStart(paragraphIndex)
+			soundEngine.onStart(0)
 		}
 	}, [reading])
 

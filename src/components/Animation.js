@@ -1,6 +1,6 @@
 import styles from '@/styles/Animation.module.css'
 
-const divs = Array(8).fill(0)
+const divs = Array(16).fill(0)
 
 const Animation = () => {
 	return (
@@ -10,10 +10,10 @@ const Animation = () => {
 				return (
 					<div
 						style={{
-							bottom: `${pos}%`,
+							bottom: `${pos * 1.4}%`,
 							left: `${pos}%`,
-							width: '50%',
-							opacity: index / arr.length,
+							width: `calc(30% + 50px)`,
+							opacity: index / (arr.length - 1),
 							// animationDuration: `${index}s`,
 							// animationDelay: `${arr.length - index}s`,
 						}}

@@ -1,5 +1,5 @@
 import * as Tone from 'tone'
-import { Urn, RandomMetro, mToMs, Loop } from '@/js/audio/common'
+import { Urn, RandomMetro, sToMs, Loop } from '@/js/audio/common'
 import { rando } from '@nastyox/rando.js'
 
 const audioUrls = [
@@ -36,8 +36,8 @@ const init = (args) => {
 	})
 	randomMetro = new RandomMetro(
 		console.log,
-		mToMs(video.current.duration) / 2,
-		mToMs(video.current.duration) * 2
+		sToMs(video.current.duration) / 2,
+		sToMs(video.current.duration) * 2
 	)
 }
 

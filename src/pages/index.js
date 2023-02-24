@@ -45,7 +45,7 @@ function Home() {
 				</nav>
 				<main className={styles.main}>
 					<div className={styles.frontLayer}>
-						<PlayAudio
+						{/* <PlayAudio
 							// style={{ zIndex: 10 }}
 							onStart={() => {
 								setReading(true)
@@ -54,7 +54,7 @@ function Home() {
 								setReading(false)
 							}}
 							enabled={loaded}
-						/>
+						/> */}
 						<h2 className={styles.subtitle}>
 							listen to the music as you compose music.
 						</h2>
