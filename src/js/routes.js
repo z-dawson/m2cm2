@@ -6,6 +6,7 @@ const routes = [
 	{ name: 'connecting' },
 	{ name: 'nowhere' },
 	{ name: 'vacation' },
+	{ name: 'travel' },
 ]
 
 export default routes

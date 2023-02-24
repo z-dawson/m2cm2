@@ -112,4 +112,4 @@ const Loop = class {
 	}
 }
 
-export { randomRange, Urn, RandomMetro, Loop, mToMs, msToM }
+export { randomRange, Urn, RandomMetro, Loop, mToMs, msToM, randomInt }
