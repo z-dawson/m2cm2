@@ -63,9 +63,9 @@ const RandomMetro = class {
 	}
 }
 
-const mToMs = (m) => m * 1000
+const sToMs = (m) => m * 1000
 
-const msToM = (ms) => ms / 1000
+const msToS = (ms) => ms / 1000
 
 const Loop = class {
 	constructor(callback, options) {
@@ -112,4 +112,4 @@ const Loop = class {
 	}
 }
 
-export { randomRange, Urn, RandomMetro, Loop, mToMs, msToM }
+export { randomRange, Urn, RandomMetro, Loop, sToMs, msToS, randomInt }
