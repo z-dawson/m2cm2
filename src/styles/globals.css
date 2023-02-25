@@ -62,3 +62,13 @@ ul {
 		filter: brightness(0%);
 	}
 }
+
+@keyframes horizontal-scroll {
+	from {
+		object-position: 80% 100%;
+	}
+
+	to {
+		object-position: 30% 100%;
+	}
+}

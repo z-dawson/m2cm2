@@ -1,6 +1,5 @@
 import * as Tone from 'tone'
 import Stochastic from '@/js/audio/stochastic.js'
-import { sToMs } from './common'
 
 const audioUrls = [
 	'/audio/vacation/Small Wave.mp3',
@@ -73,9 +72,29 @@ let loop2 = new Tone.Loop((time) => {
 	textRepeat = randomRepeatLoop2.next()
 	loop2.interval = time + textRepeat
 })
+
 const init = (args) => {
 	video = args.video
 	video.current.loop = true
+}
+
+const onResize = ({ width, height }) => {
+	const animation = {
+		animationName: 'horizontal-scroll',
+		animationDuration: '40s',
+		animationDirection: 'alternate',
+		animationIterationCount: 'infinite',
+		animationTimingFunction: 'linear',
+	}
+	const noAnimation = {
+		animation: 'none',
+	}
+
+	console.log({ resize: height > width })
+
+	const styles = height > width ? animation : noAnimation
+
+	video?.current && Object.assign(video.current.style, styles)
 }
 
 const onStart = async (video) => {
@@ -96,4 +115,4 @@ const onStop = (video) => {
 	video.current.currentTime = 0
 }
 
-export { onStart, onStop, init }
+export { onStart, onStop, init, onResize }

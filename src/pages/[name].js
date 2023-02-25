@@ -1,3 +1,4 @@
+import { useWindowSize } from '@/js/hooks'
 import routes from '@/js/routes'
 import styles from '@/styles/Apartment.module.css'
 import { useEffect, useRef, useState } from 'react'
@@ -7,6 +8,12 @@ const Page = ({ name }) => {
 	const [soundEngine, setSoundEngine] = useState({})
 	const [loaded, setLoaded] = useState(false)
 	const video = useRef()
+
+	const size = useWindowSize()
+
+	useEffect(() => {
+		soundEngine?.onResize?.(size)
+	}, [size, soundEngine])
 
 	const onStart = () => {
 		soundEngine?.onStart?.(video)

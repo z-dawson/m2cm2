@@ -1,5 +1,6 @@
 import * as Tone from 'tone'
-import { Urn } from './common'
+import { randomInt, Urn } from './common'
+import Stochastic from './stochastic'
 
 const audioUrls = [
 	'S0_05 - Lobby - Chord Clips [2022-12-22 114549].mp3',
@@ -128,6 +129,18 @@ const audioUrls = [
 	'S0_05 - Lobby - Chord Clips [2022-12-22 114546]-1.mp3',
 ]
 
+const voiceIntervals = new Stochastic([45, 60, 15, 2 * 60, 3 * 60])
+
+const voiceUrl = 'audio/lobby/recurring.mp3'
+
+const voice = new Tone.Player(voiceUrl).toDestination()
+
+const voiceLoop = new Tone.Loop((time) => {
+	const randomDuration = voiceIntervals.next()
+	voice.start(time)
+	voiceLoop.interval = time + randomDuration
+})
+
 let players = new Tone.Players(
 	audioUrls.map((url) => 'audio/lobby/' + url)
 ).toDestination()
@@ -143,6 +156,9 @@ players._buffers._buffers.forEach((_, index) => {
 const init = (args) => {
 	video = args.video
 	video.current.loop = true
+	Object.assign(video.current.style, {
+		objectPosition: '70% 100%',
+	})
 	video.current.addEventListener('seeked', () => {
 		if (!video?.current?.paused) onRepeat()
 	})
@@ -150,8 +166,10 @@ const init = (args) => {
 
 const onStart = async () => {
 	await Tone.start()
+	Tone.Transport.start()
 	video.current.currentTime = 0
 	video.current.play()
+	voiceLoop.start()
 }
 
 const onRepeat = () => {
@@ -176,6 +194,9 @@ const onStop = (video) => {
 	playerIndexes.forEach((index) => {
 		players.player(index).stop()
 	})
+	voiceLoop.cancel()
+	voiceLoop.stop()
+	Tone.Transport.stop()
 }
 
 export { onStart, onStop, init }
