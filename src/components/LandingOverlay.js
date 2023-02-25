@@ -18,8 +18,23 @@ const styles = {
 const LandingOverlay = ({ onClick }) => {
 	return (
 		<div onClick={onClick} style={styles}>
-			<div style={{ textAlign: 'center' }}>
-				listen to the music as you compose music.
+			<div
+				style={{
+					width: '100%',
+					maxWidth: 1200,
+					overflow: 'hidden',
+					justifyContent: 'center',
+					display: 'flex',
+					padding: '0 10px',
+				}}
+			>
+				<video
+					muted
+					autoPlay
+					loop
+					src="listen to the music shorter.mp4"
+					style={{ width: '110%', objectFit: 'cover' }}
+				/>
 			</div>
 		</div>
 	)

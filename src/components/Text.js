@@ -29,6 +29,7 @@ const Text = (props) => {
 	useEffect(() => {
 		const randomParagraph = 0 //randomInt(0, text.length - 1)
 		const slicedText = text[randomParagraph].split(' ')
+		// const sentences = text[randomParagraph]
 
 		setParagraphIndex(randomParagraph)
 		setSliced(slicedText)

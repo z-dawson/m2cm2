@@ -46,33 +46,11 @@ function Home() {
 				</nav>
 				<main className={styles.main}>
 					<div className={styles.frontLayer}>
-						{/* <PlayAudio
-							// style={{ zIndex: 10 }}
-							onStart={() => {
-								setReading(true)
-							}}
-							onStop={() => {
-								setReading(false)
-							}}
-							enabled={loaded}
-						/> */}
-						<h2 className={styles.subtitle}>
-							listen to the music as you compose music.
-						</h2>
-						{/* <video width="60%" autoPlay muted loop>
-							<source
-								src="/listen to the music as you compose music4.mp4"
-								type="video/mp4"
-							/>
-						</video> */}
 						<p className={styles.text}>
 							<Text reading={reading} soundEngine={soundEngine} />
 						</p>
 					</div>
 					<div className={styles.bottomLayer}>
-						{/* <div className={styles.mountain}>
-							<Image src="/mountain.png" alt="mountain" fill={true} />
-						</div> */}
 						<div className={styles.animation}>
 							<Animation />
 						</div>
