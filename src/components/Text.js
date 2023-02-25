@@ -13,15 +13,10 @@ const Text = (props) => {
 	const timeout = useRef()
 
 	const nextWord = useCallback(() => {
-		console.log('nextWord')
 		setWordIndex((wordIndex) => {
-			console.log('setWordIndex')
-			console.log({ wordIndex })
-
 			const prevTime = wordIndex ? timestamps[paragraphIndex][wordIndex - 1] : 0
 
-			const interval = timestamps[paragraphIndex][wordIndex] - prevTime
-
+			const interval = timestamps[paragraphIndex][wordIndex]
 			timeout.current = setTimeout(() => {
 				setDisplayedText((prev) => [...prev, sliced[wordIndex]])
 				nextWord()
@@ -32,7 +27,7 @@ const Text = (props) => {
 	}, [paragraphIndex, sliced])
 
 	useEffect(() => {
-		const randomParagraph = 1 //randomInt(0, text.length - 1)
+		const randomParagraph = 0 //randomInt(0, text.length - 1)
 		const slicedText = text[randomParagraph].split(' ')
 
 		setParagraphIndex(randomParagraph)

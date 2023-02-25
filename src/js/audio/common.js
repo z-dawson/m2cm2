@@ -63,7 +63,7 @@ const RandomMetro = class {
 	}
 }
 
-const sToMs = (m) => m * 1000
+const sToMs = (s) => s * 1000
 
 const msToS = (ms) => ms / 1000
 
