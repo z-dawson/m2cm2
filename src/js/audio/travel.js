@@ -3,12 +3,12 @@ import Stochastic from '@/js/audio/stochastic.js'
 import { sToMs } from './common'
 
 const audioUrls = [
-	'/audio/Travel/travel5.mp3',
-	'/audio/Travel/travel4.mp3',
-	'/audio/Travel/travel3.mp3',
-	'/audio/Travel/travel2.mp3',
-	'/audio/Travel/travel1.mp3',
-	'/audio/Travel/waiting.mp3',
+	'/audio/travel/travel5.mp3',
+	'/audio/travel/travel4.mp3',
+	'/audio/travel/travel3.mp3',
+	'/audio/travel/travel2.mp3',
+	'/audio/travel/travel1.mp3',
+	'/audio/travel/waiting.mp3',
 ]
 
 let travelAudio = new Tone.Players(audioUrls).toDestination()

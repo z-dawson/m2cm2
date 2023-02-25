@@ -3,20 +3,20 @@ import Stochastic from '@/js/audio/stochastic.js'
 import { msToS } from './common'
 
 const audioUrls = [
-	'/audio/Nowhere/iteration2.mp3',
-	'/audio/Nowhere/iteration3.mp3',
-	'/audio/Nowhere/iteration4.mp3',
-	'/audio/Nowhere/iteration5.mp3',
-	'/audio/Nowhere/iteration6.mp3',
-	'/audio/Nowhere/iteration7.mp3',
-	'/audio/Nowhere/iteration8.mp3',
-	'/audio/Nowhere/iteration9.mp3',
-	'/audio/Nowhere/iteration10.mp3',
-	'/audio/Nowhere/iteration11.mp3',
-	'/audio/Nowhere/iteration12.mp3',
-	'/audio/Nowhere/iteration13.mp3',
-	'/audio/Nowhere/nowhere.mp3',
-	'/audio/Nowhere/slowly.mp3',
+	'/audio/nowhere/iteration2.mp3',
+	'/audio/nowhere/iteration3.mp3',
+	'/audio/nowhere/iteration4.mp3',
+	'/audio/nowhere/iteration5.mp3',
+	'/audio/nowhere/iteration6.mp3',
+	'/audio/nowhere/iteration7.mp3',
+	'/audio/nowhere/iteration8.mp3',
+	'/audio/nowhere/iteration9.mp3',
+	'/audio/nowhere/iteration10.mp3',
+	'/audio/nowhere/iteration11.mp3',
+	'/audio/nowhere/iteration12.mp3',
+	'/audio/nowhere/iteration13.mp3',
+	'/audio/nowhere/nowhere.mp3',
+	'/audio/nowhere/slowly.mp3',
 ]
 
 let nowhereAudio = new Tone.Players(audioUrls).toDestination()
