@@ -5,8 +5,8 @@ import Image from 'next/image'
 import routes from '@/js/routes'
 import Animation from '@/components/Animation'
 import Text from '@/components/Text'
-import PlayAudio from '@/components/PlayAudio'
 import { useEffect, useState } from 'react'
+import LandingOverlay from '@/components/LandingOverlay.js'
 
 function Home() {
 	const [reading, setReading] = useState(false)
@@ -29,28 +29,7 @@ function Home() {
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				{/* <link rel="icon" href="/favicon.ico" /> */}
 			</Head>
-			{!reading && (
-				<div
-					onClick={() => setReading(true)}
-					style={{
-						position: 'fixed',
-						top: 0,
-						left: 0,
-						right: 0,
-						bottom: 0,
-						width: '100vw',
-						height: '100vh',
-						backgroundColor: 'white',
-						zIndex: 100,
-						display: 'flex',
-						justifyContent: 'center',
-						alignItems: 'center',
-						fontSize: '2rem',
-					}}
-				>
-					<div>listen to the music as you compose music.</div>
-				</div>
-			)}
+			{!reading && <LandingOverlay onClick={() => setReading(true)} />}
 			<div className={styles.container}>
 				<nav className={styles.nav}>
 					<ul>
