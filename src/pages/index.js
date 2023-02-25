@@ -29,6 +29,28 @@ function Home() {
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				{/* <link rel="icon" href="/favicon.ico" /> */}
 			</Head>
+			{!reading && (
+				<div
+					onClick={() => setReading(true)}
+					style={{
+						position: 'fixed',
+						top: 0,
+						left: 0,
+						right: 0,
+						bottom: 0,
+						width: '100vw',
+						height: '100vh',
+						backgroundColor: 'white',
+						zIndex: 100,
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+						fontSize: '2rem',
+					}}
+				>
+					<div>listen to the music as you compose music.</div>
+				</div>
+			)}
 			<div className={styles.container}>
 				<nav className={styles.nav}>
 					<ul>

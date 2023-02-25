@@ -3,7 +3,7 @@ import styles from '@/styles/Apartment.module.css'
 import { useEffect, useRef, useState } from 'react'
 import PlayAudio from '../components/PlayAudio'
 
-const Page = ({ name, options }) => {
+const Page = ({ name }) => {
 	const [soundEngine, setSoundEngine] = useState({})
 	const [loaded, setLoaded] = useState(false)
 	const video = useRef()
@@ -21,7 +21,7 @@ const Page = ({ name, options }) => {
 			const soundEngineModule = await import(`../js/audio/${name}.js`)
 			video.current.load()
 			video.current.addEventListener('loadedmetadata', () => {
-				soundEngineModule.init({ video, options })
+				soundEngineModule.init({ video })
 				setLoaded(true)
 			})
 			setSoundEngine(soundEngineModule)
@@ -42,8 +42,8 @@ export default Page
 
 export const getStaticPaths = async () => {
 	return {
-		paths: routes.map(({ name, options }) => ({
-			params: { name, options },
+		paths: routes.map(({ name }) => ({
+			params: { name },
 		})),
 		fallback: false,
 	}
@@ -53,7 +53,6 @@ export const getStaticProps = async (context) => {
 	return {
 		props: {
 			name: context.params.name,
-			// options: context.params.options,
 		},
 	}
 }

@@ -1,11 +1,6 @@
 const routes = [
 	{ name: 'apartment' },
-	{
-		name: 'workspace',
-		options: {
-			playbackRate: 0.25,
-		},
-	},
+	{ name: 'workspace' },
 	{ name: 'sleep' },
 	{ name: 'lobby' },
 	{ name: 'concert' },

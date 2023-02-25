@@ -21,7 +21,7 @@ workspaceAudio._buffers._buffers.forEach((_, index) => {
 	workspaceAudio.player(index)
 })
 
-let video, playbackRate
+let video
 
 let loop = new Tone.ToneEvent((time) => {
 	let duration = 0
@@ -47,9 +47,8 @@ let loop = new Tone.ToneEvent((time) => {
 })
 
 const init = (args) => {
-	console.log(args)
 	video = args.video
-	// video.playbackRate = args.options.playbackRate
+	video.current.playbackRate = 0.25
 	video.current.addEventListener('ended', onEnd)
 }
 
@@ -59,6 +58,12 @@ const onStart = async (video) => {
 	video.current.currentTime = 0
 	video.current.play()
 	loop.start()
+	Object.assign(video.current.style, {
+		animationName: 'workspace',
+		animationDuration: `${
+			video.current.duration * (1 / video.current.playbackRate)
+		}s`,
+	})
 }
 
 const onEnd = () => {
