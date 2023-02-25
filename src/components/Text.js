@@ -40,7 +40,7 @@ const Text = (props) => {
 	useEffect(() => {
 		if (reading) {
 			nextWord()
-			soundEngine.onStart(0)
+			soundEngine?.onStart?.(0)
 		}
 	}, [reading])
 

@@ -1,17 +1,17 @@
 import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
 import Link from 'next/link'
-import Image from 'next/image'
 import routes from '@/js/routes'
 import Animation from '@/components/Animation'
 import Text from '@/components/Text'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import LandingOverlay from '@/components/LandingOverlay.js'
+import { EnteredContext } from './_app.js'
 
 function Home() {
-	const [reading, setReading] = useState(false)
 	const [loaded, setLoaded] = useState(false)
 	const [soundEngine, setSoundEngine] = useState()
+	const { entered, setEntered } = useContext(EnteredContext)
 
 	useEffect(() => {
 		;(async () => {
@@ -29,7 +29,13 @@ function Home() {
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				{/* <link rel="icon" href="/favicon.ico" /> */}
 			</Head>
-			{!reading && <LandingOverlay onClick={() => setReading(true)} />}
+			{!entered && (
+				<LandingOverlay
+					onClick={() => {
+						setEntered(true)
+					}}
+				/>
+			)}
 			<div className={styles.container}>
 				<nav className={styles.nav}>
 					<ul>
@@ -47,7 +53,7 @@ function Home() {
 				<main className={styles.main}>
 					<div className={styles.frontLayer}>
 						<p className={styles.text}>
-							<Text reading={reading} soundEngine={soundEngine} />
+							<Text reading={entered} soundEngine={soundEngine} />
 						</p>
 					</div>
 					<div className={styles.bottomLayer}>
