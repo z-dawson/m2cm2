@@ -6,7 +6,7 @@ import { randomInt, sToMs } from '@/js/audio/common'
 
 const Text = (props) => {
 	const { reading, soundEngine } = props
-	const [paragraphIndex, setParagraphIndex] = useState(0)
+	const [paragraphIndex, setParagraphIndex] = useState(2)
 	const [wordIndex, setWordIndex] = useState(0)
 	const [sliced, setSliced] = useState([])
 	const [displayedText, setDisplayedText] = useState([])
@@ -27,8 +27,8 @@ const Text = (props) => {
 	}, [paragraphIndex, sliced])
 
 	useEffect(() => {
-		const randomParagraph = 0 //randomInt(0, text.length - 1)
-		const slicedText = text[randomParagraph].split(' ')
+		const randomParagraph = 2 //randomInt(0, text.length - 1)
+		const slicedText = text[randomParagraph].split(/[\s-]/)
 		// const sentences = text[randomParagraph]
 
 		setParagraphIndex(randomParagraph)
@@ -40,7 +40,7 @@ const Text = (props) => {
 	useEffect(() => {
 		if (reading) {
 			nextWord()
-			soundEngine?.onStart?.(0)
+			soundEngine?.onStart?.(2)
 		}
 	}, [reading])
 
