@@ -46,28 +46,33 @@ const onStart = async (video) => {
 	video.current.currentTime = 0
 	video.current.play()
 
-	randomMetro.start(({ count }) => {
-		const time = video.current.duration * rando(1, 'float')
+	randomMetro.start({
+		callback: ({ count }) => {
+			const time = video.current.duration * rando(1, 'float')
 
-		const loopCallback = (count) => {
-			video.current.currentTime = time
-			apartmentAudio.player(playerIndex).seek(time)
-			console.log('loop', count)
-			return () => {
-				looping = false
+			const loopCallback = (count) => {
+				video.current.currentTime = time
+				apartmentAudio.player(playerIndex).seek(time)
+				console.log('loop', count)
+				return () => {
+					looping = false
+				}
 			}
-		}
 
-		if (count > 0) {
-			looping = true
-			const loopOptions = { interval: rando(200, 1500), times: rando(2, 5) + 1 }
-			loop.start(loopCallback, loopOptions)
+			if (count > 0) {
+				looping = true
+				const loopOptions = {
+					interval: rando(200, 1500),
+					times: rando(2, 5) + 1,
+				}
+				loop.start(loopCallback, loopOptions)
 
-			console.log('starting loop', count, loopOptions)
-		}
-		return () => {
-			loop.stop()
-		}
+				console.log('starting loop', count, loopOptions)
+			}
+			return () => {
+				loop.stop()
+			}
+		},
 	})
 }
 

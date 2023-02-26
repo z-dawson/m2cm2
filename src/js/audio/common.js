@@ -44,9 +44,9 @@ const RandomMetro = class {
 		this.count = 0
 	}
 
-	start(callback) {
+	start({ callback, nextInterval }) {
 		if (callback) this.callback = callback
-		const time = randomInt(this.min, this.max)
+		const time = nextInterval ? nextInterval() : randomInt(this.min, this.max)
 		this.callbackClear = this.callback({ time, count: this.count })
 		this.count++
 		this.delay = setTimeout(this.start.bind(this), time)
