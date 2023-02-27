@@ -6,7 +6,7 @@ import { randomInt, sToMs } from '@/js/audio/common'
 
 const Text = (props) => {
 	const { reading, soundEngine } = props
-	const [paragraphIndex, setParagraphIndex] = useState(2)
+	const [paragraphIndex, setParagraphIndex] = useState(7)
 	const [wordIndex, setWordIndex] = useState(0)
 	const [sliced, setSliced] = useState([])
 	const [displayedText, setDisplayedText] = useState([])
@@ -16,6 +16,7 @@ const Text = (props) => {
 		setWordIndex((wordIndex) => {
 			const prevTime = wordIndex ? timestamps[paragraphIndex][wordIndex - 1] : 0
 
+			console.log(timestamps[paragraphIndex][wordIndex], wordIndex)
 			const interval = timestamps[paragraphIndex][wordIndex]
 			timeout.current = setTimeout(() => {
 				setDisplayedText((prev) => [...prev, sliced[wordIndex]])
@@ -27,11 +28,11 @@ const Text = (props) => {
 	}, [paragraphIndex, sliced])
 
 	useEffect(() => {
-		const randomParagraph = 2 //randomInt(0, text.length - 1)
-		const slicedText = text[randomParagraph].split(/[\s-]/)
+		// const randomParagraph = 2 //randomInt(0, text.length - 1)
+		const slicedText = text[paragraphIndex].split(/[\s-]/)
 		// const sentences = text[randomParagraph]
 
-		setParagraphIndex(randomParagraph)
+		// setParagraphIndex(randomParagraph)
 		setSliced(slicedText)
 
 		return () => clearTimeout(timeout.current)
@@ -40,7 +41,7 @@ const Text = (props) => {
 	useEffect(() => {
 		if (reading) {
 			nextWord()
-			soundEngine?.onStart?.(2)
+			soundEngine?.onStart?.(paragraphIndex)
 		}
 	}, [reading])
 
