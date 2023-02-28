@@ -8,7 +8,10 @@
 
 .nav {
 	height: 100vh;
-	min-width: max(6rem, min(20%, 12rem));
+	min-width: max(6rem, min(20%, 14rem));
+	letter-spacing: 0.03rem;
+	font-weight: 100;
+	font-size: 1.1rem;
 }
 
 .nav ul li {
@@ -73,11 +76,11 @@
 }
 
 .text {
-	width: 50%;
+	width: min(50%, 17rem);
 	height: 100%;
 	position: absolute;
 	right: 0;
 	top: 0;
 	padding-top: 3rem;
-	line-height: 2rem;
+	line-height: 1.2rem;
 }

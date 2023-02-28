@@ -5,7 +5,7 @@ import { createContext, useState } from 'react'
 export const EnteredContext = createContext()
 
 const roboto = Roboto_Serif({
-	// weight: '400',
+	weight: ['100', '200', '300'],
 	subsets: ['latin'],
 	display: 'optional',
 })

@@ -1,39 +1,77 @@
 import text from '@/js/text/text'
 import timestamps from '@/js/text/timestamps'
-import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
+import {
+	Fragment,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react'
 import styles from '@/styles/Text.module.css'
 import { randomInt, sToMs } from '@/js/audio/common'
+import userNameGenerator from 'username-generator'
 
 const Text = (props) => {
 	const { reading, soundEngine } = props
 	const [paragraphIndex, setParagraphIndex] = useState(7)
-	const [wordIndex, setWordIndex] = useState(0)
-	const [sliced, setSliced] = useState([])
-	const [displayedText, setDisplayedText] = useState([])
+	const [displayedSentences, setDisplayedSentences] = useState([])
+
+	const wordIndex = useRef(0)
+	const sentenceIndex = useRef(0)
+	const sliced = useState([])
 	const timeout = useRef()
 
 	const nextWord = useCallback(() => {
-		setWordIndex((wordIndex) => {
-			const prevTime = wordIndex ? timestamps[paragraphIndex][wordIndex - 1] : 0
+		// interval: time until the next word
+		const interval = timestamps[paragraphIndex][wordIndex.current]
 
-			console.log(timestamps[paragraphIndex][wordIndex], wordIndex)
-			const interval = timestamps[paragraphIndex][wordIndex]
-			timeout.current = setTimeout(() => {
-				setDisplayedText((prev) => [...prev, sliced[wordIndex]])
-				nextWord()
-			}, sToMs(interval))
+		timeout.current = setTimeout(() => {
+			console.log({ interval })
+			// console.log(
+			// 	Object.fromEntries(
+			// 		Object.entries({ sentenceIndex, wordIndex }).map(([key, value]) => [
+			// 			key,
+			// 			value.current,
+			// 		])
+			// 	)
+			// )
+			setDisplayedSentences((prev) => {
+				const sentences = [...prev]
+				if (!sentences[sentenceIndex.current]) {
+					sentences[sentenceIndex.current] = []
+				}
+				sentences[sentenceIndex.current].push(
+					sliced.current[sentenceIndex.current][wordIndex.current]
+				)
+				console.log(
+					sliced.current[sentenceIndex.current][wordIndex.current],
+					wordIndex.current
+				)
+				return sentences
+			})
 
-			return wordIndex + 1
-		})
-	}, [paragraphIndex, sliced])
+			if (
+				wordIndex.current >=
+				sliced.current[sentenceIndex.current].length - 1
+			) {
+				sentenceIndex.current++
+				wordIndex.current = 0
+			} else {
+				console.log('increment word index')
+				wordIndex.current++
+			}
+
+			nextWord()
+		}, sToMs(interval / 2))
+	}, [paragraphIndex])
 
 	useEffect(() => {
 		// const randomParagraph = 2 //randomInt(0, text.length - 1)
-		const slicedText = text[paragraphIndex].split(/[\s-]/)
-		// const sentences = text[randomParagraph]
+		const sentences = text[paragraphIndex].split(/[?.]/)
+		sliced.current = sentences.map((sentence) => sentence.split(/[\s-]/))
 
 		// setParagraphIndex(randomParagraph)
-		setSliced(slicedText)
 
 		return () => clearTimeout(timeout.current)
 	}, [])
@@ -45,16 +83,27 @@ const Text = (props) => {
 		}
 	}, [reading])
 
+	const userName = useMemo(() => {
+		return userNameGenerator.generateUsername('_')
+	}, [paragraphIndex])
+
 	return (
-		<>
-			{displayedText.map((word, index) => {
+		<div className={styles.container}>
+			{displayedSentences.map((sentence, index) => {
 				return (
-					<Fragment key={index}>
-						<span>{word}</span>{' '}
-					</Fragment>
+					<div className={styles.sentence} key={index}>
+						<strong>{userName}: </strong>
+						{sentence.map((word, index) => {
+							return (
+								<Fragment key={index}>
+									<span>{word}</span>{' '}
+								</Fragment>
+							)
+						})}
+					</div>
 				)
 			})}
-		</>
+		</div>
 	)
 }
 

@@ -1,4 +1,10 @@
-.highlighted {
-	color: white;
-	background-color: gray;
+.container {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	overflow: hidden;
+}
+
+.sentence {
+	margin-bottom: 1.5rem;
 }
