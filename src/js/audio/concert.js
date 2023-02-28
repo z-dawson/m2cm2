@@ -94,8 +94,85 @@ const audioUrls2 = [
 	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134255].mp3',
 ]
 
-const onStart = () => {}
+let concertAudio1 = new Tone.Players(audioUrls1).toDestination()
 
-const onStop = () => {}
+concertAudio1._buffers._buffers.forEach((_, index) => {
+	concertAudio1.player(index)
+})
 
-export { onStart, onStop }
+let concertAudio2 = new Tone.Players(audioUrls2).toDestination()
+
+concertAudio2._buffers._buffers.forEach((_, index) => {
+	concertAudio2.player(index)
+})
+
+let video
+
+const init = (args) => {
+	video = args.video
+	video.current.loop = true
+}
+concertAudio1.fadeOut = 0.02
+concertAudio1.fadeIn = 0.02
+concertAudio2.fadeOut = 0.02
+concertAudio2.fadeIn = 0.02
+const instruction1 = [{ range: [0, 59] }]
+const instruction2 = [{ range: [0, 25] }]
+const instruction3 = [
+	{ value: 1, followedBy: ['bank2'], name: 'bank1' },
+	{ value: 2, followedBy: ['bank1'], name: 'bank2' },
+]
+const instruction4 = [{ range: [12, 26] }]
+let randomBank1 = new Stochastic(instruction1)
+let randomBank2 = new Stochastic(instruction2)
+let bankSelector = new Stochastic(instruction3)
+let randomTiming = new Stochastic(instruction4)
+
+let loop1 = new Tone.Loop((time) => {
+	console.log('loop1')
+	let playerDuration
+	let playerIndex = randomBank1.next()
+	concertAudio1.player(playerIndex).start(Tone.now())
+	playerDuration = concertAudio1.player(playerIndex).buffer.duration
+	loop1.interval = playerDuration
+	console.log('volumeAudio1 ' + concertAudio1.volume.value)
+})
+let loop2 = new Tone.Loop((time) => {
+	console.log('loop2')
+	let playerDuration
+	let playerIndex = randomBank2.next()
+	concertAudio2.player(playerIndex).start(Tone.now())
+	playerDuration = concertAudio2.player(playerIndex).buffer.duration
+	loop2.interval = playerDuration
+	console.log('volumeAudio2 ' + concertAudio2.volume.value)
+})
+
+const timeSelector = new RandomMetro(() => {
+	console.log('timeSelector')
+	if (bankSelector.next() == 1) {
+		concertAudio1.volume.rampTo(0, 0.05)
+		concertAudio2.volume.rampTo(-80, 0.05)
+	} else {
+		concertAudio1.volume.rampTo(-80, 0.05)
+		concertAudio2.volume.rampTo(0, 0.05)
+	}
+})
+const onStart = async (video) => {
+	await Tone.start()
+	Tone.Transport.start()
+	video.current.currentTime = 0
+	video.current.play()
+	loop1.start()
+	loop2.start()
+	timeSelector.start({
+		nextInterval: () => {
+			return sToMs(randomTiming.next())
+		},
+	})
+}
+
+const onStop = () => {
+	timeSelector.stop()
+}
+
+export { onStart, onStop, init }

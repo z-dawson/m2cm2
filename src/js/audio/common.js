@@ -44,11 +44,16 @@ const RandomMetro = class {
 		this.count = 0
 	}
 
-	start({ callback, nextInterval }) {
+	start(args) {
+		const { callback, nextInterval } = args || {}
 		if (callback) this.callback = callback
-		const time = nextInterval ? nextInterval() : randomInt(this.min, this.max)
-		this.callbackClear = this.callback({ time, count: this.count })
+		if (nextInterval) this.nextInterval = nextInterval
+		this.callbackClear = this.callback({ count: this.count })
+		const time = this.nextInterval
+			? this.nextInterval()
+			: randomInt(this.min, this.max)
 		this.count++
+		console.log('nextSampleWillPlayIn ' + time)
 		this.delay = setTimeout(this.start.bind(this), time)
 	}
 
