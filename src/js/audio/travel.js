@@ -10,16 +10,14 @@ const audioUrls = [
 	'/audio/travel/waiting.mp3',
 ]
 
-let travelAudio = new Tone.Players(audioUrls).toDestination()
+const travelAudio = new Tone.Players(audioUrls).toDestination()
 
 travelAudio._buffers._buffers.forEach((_, index) => {
 	travelAudio.player(index)
 })
 
 let video
-let playerIndex
-let playerDuration = 3
-let jitterDuration = 5
+
 const instruction1 = [
 	{ range: [0, 4], probability: 1, name: 'drone', followedBy: ['text'] },
 	{ value: 5, name: 'text', probability: 0, followedBy: ['drone'] },
@@ -35,14 +33,14 @@ const init = (args) => {
 	video = args.video
 	video.current.loop = true
 }
-let loop = new Tone.Loop((time) => {
-	playerIndex = random.next()
-	jitterDuration = randomDuration.next()
+const loop = new Tone.Loop((time) => {
+	const playerIndex = random.next()
+	const jitterDuration = randomDuration.next()
 	console.log(jitterDuration)
-	playerDuration = travelAudio.player(playerIndex).buffer.duration
+	const playerDuration = travelAudio.player(playerIndex).buffer.duration
 	console.log('playerduration ' + playerDuration)
 	travelAudio.player(playerIndex).start(time)
-	loop.interval = time + Math.ceil(playerDuration) + jitterDuration
+	loop.interval = Math.ceil(playerDuration) + jitterDuration
 })
 
 const onStart = async (video) => {
@@ -58,7 +56,7 @@ const onStop = (video) => {
 	loop.cancel()
 	loop.stop()
 	Tone.Transport.stop()
-	travelAudio.player(playerIndex).stop()
+	travelAudio.stopAll()
 	video.current.currentTime = 0
 }
 

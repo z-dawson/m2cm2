@@ -11,11 +11,14 @@ const audioUrls = [
 	'/audio/apartment/S0_03 f.mp3',
 ]
 
-let apartmentAudio = new Tone.Players(audioUrls).toDestination()
+const apartmentAudio = new Tone.Players(audioUrls).toDestination()
 
 const urn = new Urn(audioUrls.length, 1)
 let randomMetro
 const loop = new Loop()
+let playerIndex
+let video
+let looping = false
 
 apartmentAudio._buffers._buffers.forEach((_, index) => {
 	apartmentAudio.player(index)
@@ -23,10 +26,6 @@ apartmentAudio._buffers._buffers.forEach((_, index) => {
 
 apartmentAudio.fadeOut = 0.3
 apartmentAudio.fadeIn = 0.08
-let playerIndex
-let video
-let looping = false
-Tone.Transport.debug = true
 
 const init = (args) => {
 	video = args.video

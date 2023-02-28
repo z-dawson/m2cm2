@@ -15,7 +15,7 @@ const audioUrls = [
 	'/audio/workspace/searching.mp3',
 ]
 
-let workspaceAudio = new Tone.Players(audioUrls).toDestination()
+const workspaceAudio = new Tone.Players(audioUrls).toDestination()
 
 workspaceAudio._buffers._buffers.forEach((_, index) => {
 	workspaceAudio.player(index)
@@ -23,7 +23,7 @@ workspaceAudio._buffers._buffers.forEach((_, index) => {
 
 let video
 
-let loop = new Tone.ToneEvent((time) => {
+const loop = new Tone.ToneEvent((time) => {
 	let duration = 0
 	while (video.current.duration * (1 / video.current.playbackRate) > duration) {
 		const playerIndex = rando(0, 1)

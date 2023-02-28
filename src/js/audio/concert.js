@@ -1,8 +1,8 @@
 import * as Tone from 'tone'
 import Stochastic from '@/js/audio/stochastic.js'
-import { msToS, RandomMetro } from './common'
+import { RandomMetro } from './common'
 import { sToMs } from './common'
-import { randomRange } from './common'
+
 const audioUrls1 = [
 	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131921].mp3',
 	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131951].mp3',
@@ -94,13 +94,13 @@ const audioUrls2 = [
 	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134255].mp3',
 ]
 
-let concertAudio1 = new Tone.Players(audioUrls1).toDestination()
+const concertAudio1 = new Tone.Players(audioUrls1).toDestination()
 
 concertAudio1._buffers._buffers.forEach((_, index) => {
 	concertAudio1.player(index)
 })
 
-let concertAudio2 = new Tone.Players(audioUrls2).toDestination()
+const concertAudio2 = new Tone.Players(audioUrls2).toDestination()
 
 concertAudio2._buffers._buffers.forEach((_, index) => {
 	concertAudio2.player(index)
@@ -117,35 +117,31 @@ concertAudio1.fadeOut = 0.02
 concertAudio1.fadeIn = 0.02
 concertAudio2.fadeOut = 0.02
 concertAudio2.fadeIn = 0.02
-const instruction1 = [{ range: [0, 59] }]
-const instruction2 = [{ range: [0, 25] }]
+
 const instruction3 = [
 	{ value: 1, followedBy: ['bank2'], name: 'bank1' },
 	{ value: 2, followedBy: ['bank1'], name: 'bank2' },
 ]
-const instruction4 = [{ range: [12, 26] }]
-let randomBank1 = new Stochastic(instruction1)
-let randomBank2 = new Stochastic(instruction2)
-let bankSelector = new Stochastic(instruction3)
-let randomTiming = new Stochastic(instruction4)
+const randomBank1 = new Stochastic([{ range: [0, 59] }])
+const randomBank2 = new Stochastic([{ range: [0, 25] }])
+const bankSelector = new Stochastic(instruction3)
+const randomTiming = new Stochastic([{ range: [12, 26] }])
 
-let loop1 = new Tone.Loop((time) => {
+const loop1 = new Tone.Loop(() => {
 	console.log('loop1')
-	let playerDuration
 	let playerIndex = randomBank1.next()
-	concertAudio1.player(playerIndex).start(Tone.now())
-	playerDuration = concertAudio1.player(playerIndex).buffer.duration
-	loop1.interval = playerDuration
+	const selectedPlayer = concertAudio1.player(playerIndex)
+	selectedPlayer.start(Tone.now())
+	loop1.interval = selectedPlayer.buffer.duration
 	console.log('volumeAudio1 ' + concertAudio1.volume.value)
 })
 
-let loop2 = new Tone.Loop((time) => {
+const loop2 = new Tone.Loop(() => {
 	console.log('loop2')
-	let playerDuration
-	let playerIndex = randomBank2.next()
-	concertAudio2.player(playerIndex).start(Tone.now())
-	playerDuration = concertAudio2.player(playerIndex).buffer.duration
-	loop2.interval = playerDuration
+	const playerIndex = randomBank2.next()
+	const selectedPlayer = concertAudio2.player(playerIndex)
+	selectedPlayer.start(Tone.now())
+	loop2.interval = selectedPlayer.buffer.duration
 	console.log('volumeAudio2 ' + concertAudio2.volume.value)
 })
 

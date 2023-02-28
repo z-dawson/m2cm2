@@ -19,7 +19,7 @@ const audioUrls = [
 	'/audio/nowhere/slowly.mp3',
 ]
 
-let nowhereAudio = new Tone.Players(audioUrls).toDestination()
+const nowhereAudio = new Tone.Players(audioUrls).toDestination()
 
 nowhereAudio._buffers._buffers.forEach((_, index) => {
 	nowhereAudio.player(index)
@@ -51,11 +51,11 @@ const textIndexGenerator = new Stochastic(instruction3)
 
 let video
 const reverbDuration = 10
-let loop = new RandomMetro(() => {
-	let currentIndex = randomIndexGenerator.next()
-	let textIndex = textIndexGenerator.next()
-	let randomJitter = msToS(randomJitterGenerator.next())
-	let currentPlayer = nowhereAudio.player(currentIndex)
+const loop = new RandomMetro(() => {
+	const currentIndex = randomIndexGenerator.next()
+	const textIndex = textIndexGenerator.next()
+	const randomJitter = msToS(randomJitterGenerator.next())
+	const currentPlayer = nowhereAudio.player(currentIndex)
 	currentPlayer.start()
 	if (textIndex != null) {
 		nowhereAudio
