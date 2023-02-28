@@ -1,19 +1,22 @@
 import * as Tone from 'tone'
 import Stochastic from '@/js/audio/stochastic.js'
-import { msToS, RandomMetro } from './common'
+import { msToS, randomInt, RandomMetro } from './common'
 import { sToMs } from './common'
 import { randomRange } from './common'
 
-const audioUrls = [
+const waveUrls = [
 	'/audio/vacation/Small Wave.mp3',
 	'/audio/vacation/Medium Wave.mp3',
 	'/audio/vacation/Large Wave.mp3',
 ]
-const audioUrls2 = [
+const operatorUrls = [
 	'/audio/vacation/Operator/Operator 1.mp3',
 	'/audio/vacation/Operator/Operator 2.mp3',
 	'/audio/vacation/Operator/Operator 3.mp3',
 	'/audio/vacation/Operator/Operator 4.mp3',
+]
+
+const waterUrls = [
 	'/audio/vacation/Water Slices/Water 01.mp3',
 	'/audio/vacation/Water Slices/Water 02.mp3',
 	'/audio/vacation/Water Slices/Water 03.mp3',
@@ -30,19 +33,30 @@ const audioUrls2 = [
 	'audio/vacation/Water Slices/Water 014.mp3',
 	'audio/vacation/Water Slices/Water 015.mp3',
 	'audio/vacation/Water Slices/Water 016.mp3',
-	'/audio/vacation/forgetting.mp3',
 ]
 
-let vacationAudio = new Tone.Players(audioUrls).toDestination()
+const voiceUrl = '/audio/vacation/forgetting.mp3'
 
-vacationAudio._buffers._buffers.forEach((_, index) => {
-	vacationAudio.player(index)
+const voicePlayer = new Tone.Player(voiceUrl).toDestination()
+
+const wavePanner = new Tone.Panner(0).toDestination()
+const operatorPanner = new Tone.Panner(0).toDestination()
+const waterPanner = new Tone.Panner(0).toDestination()
+
+const wavePlayers = new Tone.Players(waveUrls).connect(wavePanner)
+const operatorPlayers = new Tone.Players(operatorUrls).connect(operatorPanner)
+const waterPlayers = new Tone.Players(waterUrls).connect(waterPanner)
+
+wavePlayers._buffers._buffers.forEach((_, index) => {
+	wavePlayers.player(index)
 })
 
-let vacationAudio2 = new Tone.Players(audioUrls2).toDestination()
+operatorPlayers._buffers._buffers.forEach((_, index) => {
+	operatorPlayers.player(index)
+})
 
-vacationAudio2._buffers._buffers.forEach((_, index) => {
-	vacationAudio2.player(index)
+waterPlayers._buffers._buffers.forEach((_, index) => {
+	waterPlayers.player(index)
 })
 
 let video
@@ -69,50 +83,54 @@ const instruction1 = [
 		followedBy: ['smallWaves'],
 	},
 ]
-const random = new Stochastic(instruction1)
-const randomDuration = new Stochastic([{ range: [0, 6] }])
-const randomRepeatDuration = new Stochastic([{ range: [0, 2] }])
-const randomRepeatLoop2 = new Stochastic([{ range: [35, 65] }])
-const operatorRandom = new Stochastic([{ range: [0, 4] }])
-const waterRandom = new Stochastic([{ range: [4, 19] }])
-const operatorJitter = new Stochastic([{ range: [15, 32] }])
-const waterJitter = new Stochastic([{ range: [400, 800] }])
+const randomWave = new Stochastic(instruction1)
 
-vacationAudio.volume.value = -13
-vacationAudio2.volume.value = 2
+wavePlayers.volume.value = -15
+operatorPlayers.volume.value = 5
+waterPlayers.volume.value = 3
 
-let loopWaves = new RandomMetro(() => {
-	let timing
-	let playerIndex = random.next()
-	console.log(playerIndex)
+const loopWaves = new RandomMetro(() => {
+	let interval
+	const playerIndex = randomWave.next()
 	if (playerIndex != null) {
-		let JitterDuration
-		JitterDuration = randomRepeatDuration.next()
-		let playerDuration = vacationAudio.player(playerIndex).buffer.duration
+		const jitterDuration = randomInt(0, 2)
+		const selectedPlayer = wavePlayers.player(playerIndex)
+		const playerDuration = selectedPlayer.buffer.duration
+		const amount = 0.7
+		const initPan = randomInt(0, 2) ? amount : -amount
+		console.log({ initPan })
+		wavePanner.pan.value = initPan
+		wavePanner.pan.rampTo(-initPan, selectedPlayer.buffer.duration)
+		selectedPlayer.start()
 		console.log('playerduration ' + playerDuration)
-		vacationAudio.player(playerIndex).start()
-		timing = playerDuration + JitterDuration
+		interval = playerDuration + jitterDuration
 	} else {
-		let JitterDuration = randomDuration.next()
-		console.log('else' + JitterDuration)
-		timing = JitterDuration
+		const jitterDuration = randomInt(0, 6)
+		console.log('else' + jitterDuration)
+		interval = jitterDuration
 	}
-	return { interval: sToMs(timing) }
+	return { interval: sToMs(interval) }
 })
 
-let loopText = new RandomMetro(() => {
-	vacationAudio2.player(20).start(1)
-	return { interval: sToMs(randomRepeatLoop2.next()) }
+const loopVoice = new RandomMetro(() => {
+	voicePlayer.start(1)
+	return { interval: sToMs(randomInt(35, 65)) }
 })
 
-let loopOperator = new RandomMetro(() => {
-	let operatorIndex = operatorRandom.next()
-	let waterIndex = waterRandom.next()
-	let waterOffset = waterJitter.next() / 100
+const loopOperatorAndWater = new RandomMetro(() => {
+	const waterOffset = randomInt(400, 800) / 100
 	//let playerDuration = vacationAudio2.player(operatorIndex).buffer.duration
-	vacationAudio2.player(operatorIndex).start()
-	vacationAudio2.player(waterIndex).start(Tone.now() + waterOffset)
-	return { interval: sToMs(operatorJitter.next()) }
+	const initPan = randomInt(0, 2) ? 1 : -1
+	const playerIndex = randomInt(0, operatorUrls.length - 1)
+	const selectedPlayer = operatorPlayers.player(playerIndex)
+	operatorPanner.pan.value = initPan
+	operatorPanner.pan.rampTo(-initPan, selectedPlayer.buffer.duration)
+	selectedPlayer.start()
+	waterPanner.pan.value = [-0.8, 0, 0.8][randomInt(0, 3)]
+	waterPlayers
+		.player(randomInt(0, waterUrls.length))
+		.start(Tone.now() + waterOffset)
+	return { interval: sToMs(randomInt(15, 32)) }
 })
 
 const init = (args) => {
@@ -141,8 +159,8 @@ const onResize = ({ width, height }) => {
 const onStart = async (video) => {
 	await Tone.start()
 	loopWaves.start()
-	loopText.start()
-	loopOperator.start()
+	loopVoice.start()
+	loopOperatorAndWater.start()
 	video.current.currentTime = 0
 	video.current.play()
 }
@@ -150,6 +168,9 @@ const onStart = async (video) => {
 const onStop = (video) => {
 	video.current.pause()
 	Tone.Transport.stop()
+	loopWaves.stop()
+	loopVoice.stop()
+	loopOperatorAndWater.stop()
 	video.current.currentTime = 0
 }
 
