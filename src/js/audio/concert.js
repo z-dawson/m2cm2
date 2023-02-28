@@ -112,6 +112,7 @@ const init = (args) => {
 	video = args.video
 	video.current.loop = true
 }
+
 concertAudio1.fadeOut = 0.02
 concertAudio1.fadeIn = 0.02
 concertAudio2.fadeOut = 0.02
@@ -137,6 +138,7 @@ let loop1 = new Tone.Loop((time) => {
 	loop1.interval = playerDuration
 	console.log('volumeAudio1 ' + concertAudio1.volume.value)
 })
+
 let loop2 = new Tone.Loop((time) => {
 	console.log('loop2')
 	let playerDuration
@@ -156,19 +158,17 @@ const timeSelector = new RandomMetro(() => {
 		concertAudio1.volume.rampTo(-80, 0.05)
 		concertAudio2.volume.rampTo(0, 0.05)
 	}
+	return { interval: sToMs(randomTiming.next()) }
 })
+
 const onStart = async (video) => {
 	await Tone.start()
 	Tone.Transport.start()
 	video.current.currentTime = 0
 	video.current.play()
 	loop1.start()
-	loop2.start()
-	timeSelector.start({
-		nextInterval: () => {
-			return sToMs(randomTiming.next())
-		},
-	})
+	// loop2.start()
+	timeSelector.start()
 }
 
 const onStop = () => {

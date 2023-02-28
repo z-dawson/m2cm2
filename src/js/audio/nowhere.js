@@ -1,6 +1,6 @@
 import * as Tone from 'tone'
 import Stochastic from '@/js/audio/stochastic.js'
-import { msToS } from './common'
+import { msToS, RandomMetro, sToMs } from './common'
 
 const audioUrls = [
 	'/audio/nowhere/iteration2.mp3',
@@ -24,16 +24,10 @@ let nowhereAudio = new Tone.Players(audioUrls).toDestination()
 nowhereAudio._buffers._buffers.forEach((_, index) => {
 	nowhereAudio.player(index)
 })
-const instruction1 = [
-	{
-		range: [0, 11],
-	},
-]
-const instruction2 = [
-	{
-		range: [-2000, 4000],
-	},
-]
+
+const randomIndexGenerator = new Stochastic([{ range: [0, 11] }])
+const randomJitterGenerator = new Stochastic([{ range: [-2000, 4000] }])
+
 const instruction3 = [
 	{
 		value: 12,
@@ -52,25 +46,22 @@ const instruction3 = [
 		probability: 0.4,
 	},
 ]
-const randomIndexGenerator = new Stochastic(instruction1)
-const randomJitterGenerator = new Stochastic(instruction2)
+
 const textIndexGenerator = new Stochastic(instruction3)
+
 let video
-let loop = new Tone.Loop((time) => {
+let loop = new RandomMetro(() => {
 	let currentIndex = randomIndexGenerator.next()
 	let textIndex = textIndexGenerator.next()
 	let randomJitter = msToS(randomJitterGenerator.next())
-	console.log(currentIndex)
-	console.log(randomJitter)
 	let currentPlayer = nowhereAudio.player(currentIndex)
 	currentPlayer.start()
 	if (textIndex != null) {
 		nowhereAudio
 			.player(textIndex)
-			.start(time + currentPlayer.buffer.duration + randomJitter - 2)
+			.start(Tone.now() + currentPlayer.buffer.duration + randomJitter - 2)
 	}
-
-	loop.interval = time + currentPlayer.buffer.duration + randomJitter
+	return { interval: sToMs(currentPlayer.buffer.duration + randomJitter) }
 })
 
 const init = (args) => {

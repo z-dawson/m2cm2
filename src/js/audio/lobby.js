@@ -174,11 +174,11 @@ const onStart = async () => {
 
 const onRepeat = () => {
 	// stop prev
-	urn.discarded
-		.slice(urn.discarded.length - 2, urn.discarded.length)
-		.forEach((index) => {
-			players.player(index).stop()
-		})
+	// urn.discarded
+	// 	.slice(urn.discarded.length - 2, urn.discarded.length)
+	// 	.forEach((index) => {
+	// 		players.player(index).stop()
+	// 	})
 
 	playerIndexes = [urn.next(), urn.next()]
 	console.log(`schedule player ${playerIndexes[0]} for door opening`)

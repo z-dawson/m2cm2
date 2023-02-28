@@ -38,20 +38,19 @@ const randomInt = (min, max) => {
 }
 
 const RandomMetro = class {
-	constructor(callback, min, max) {
-		Object.assign(this, { callback, min, max })
+	constructor(callback) {
+		this.callback = callback
 		this.delay
 		this.count = 0
 	}
 
 	start(args) {
-		const { callback, nextInterval } = args || {}
+		const { callback } = args || {}
 		if (callback) this.callback = callback
-		if (nextInterval) this.nextInterval = nextInterval
-		this.callbackClear = this.callback({ count: this.count })
-		const time = this.nextInterval
-			? this.nextInterval()
-			: randomInt(this.min, this.max)
+		const { interval, clear } = this.callback(this) || {}
+		this.callbackClear = clear
+		const time =
+			typeof interval == 'number' ? interval : randomInt(this.min, this.max)
 		this.count++
 		console.log('nextSampleWillPlayIn ' + time)
 		this.delay = setTimeout(this.start.bind(this), time)
@@ -87,7 +86,7 @@ const Loop = class {
 
 	start(callback, options) {
 		const call = () => {
-			this.callbackClear = this.callback(this.count)
+			this.callbackClear = this.callback(this)
 			this.count += 1
 		}
 		if (this.active) {

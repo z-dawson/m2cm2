@@ -85,13 +85,11 @@ const waterRandom = new Stochastic(instruction6)
 const operatorJitter = new Stochastic(instruction7)
 const waterJitter = new Stochastic(instruction8)
 
-let timing
-let timing2 = randomRepeatLoop2.next()
-let timingOperator = operatorJitter.next()
 vacationAudio.volume.value = -10
 vacationAudio2.volume.value = 6
 
 let loopWaves = new RandomMetro(() => {
+	let timing
 	let playerIndex = random.next()
 	console.log(playerIndex)
 	if (playerIndex != null) {
@@ -106,11 +104,12 @@ let loopWaves = new RandomMetro(() => {
 		console.log('else' + JitterDuration)
 		timing = JitterDuration
 	}
+	return { interval: sToMs(timing) }
 })
 
 let loopText = new RandomMetro(() => {
 	vacationAudio2.player(20).start(1)
-	timing2 = randomRepeatLoop2.next()
+	return { interval: sToMs(randomRepeatLoop2.next()) }
 })
 let loopOperator = new RandomMetro(() => {
 	let operatorIndex = operatorRandom.next()
@@ -119,6 +118,7 @@ let loopOperator = new RandomMetro(() => {
 	//let playerDuration = vacationAudio2.player(operatorIndex).buffer.duration
 	vacationAudio2.player(operatorIndex).start()
 	vacationAudio2.player(waterIndex).start(Tone.now() + waterOffset)
+	return { interval: sToMs(operatorJitter.next()) }
 })
 
 const init = (args) => {
@@ -147,23 +147,10 @@ const onResize = ({ width, height }) => {
 
 const onStart = async (video) => {
 	await Tone.start()
-	timing = vacationAudio.player(0).buffer.duration
 	console.log('Timing' + vacationAudio.player(2).buffer.duration)
-	loopWaves.start({
-		nextInterval: () => {
-			return sToMs(timing)
-		},
-	})
-	loopText.start({
-		nextInterval: () => {
-			return sToMs(timing2)
-		},
-	})
-	loopOperator.start({
-		nextInterval: () => {
-			return sToMs(timingOperator)
-		},
-	})
+	loopWaves.start()
+	loopText.start()
+	loopOperator.start()
 	video.current.currentTime = 0
 	video.current.play()
 }

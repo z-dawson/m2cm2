@@ -1,7 +1,6 @@
 import * as Tone from 'tone'
 import Stochastic from '@/js/audio/stochastic.js'
-import { msToS } from './common'
-import { sToMs } from './common'
+import { msToS, RandomMetro, sToMs } from './common'
 import { randomRange } from './common'
 
 const audioUrls = [
@@ -83,20 +82,14 @@ const instruction1 = [
 	{ value: 2, probability: 0.15, repeat: [3, 15], name: 'glitchedShuffle' },
 	{ value: null, probability: 0.15, name: 'rest' },
 ]
-const instruction2 = [{ range: [1, 56] }]
-const instruction3 = [{ range: [80, 190] }]
-const instruction4 = [{ range: [1500, 4500] }]
-const instruction5 = [{ range: [28, 48] }]
 const shuffleMode = new Stochastic(instruction1)
-const audioShuffle = new Stochastic(instruction2)
-const fastRepeats = new Stochastic(instruction3)
-const rest = new Stochastic(instruction4)
-const voiceDuration = new Stochastic(instruction5)
+const audioShuffle = new Stochastic([{ range: [1, 56] }])
+const fastRepeats = new Stochastic([{ range: [80, 190] }])
+const rest = new Stochastic([{ range: [1500, 4500] }])
 let playerDuration
 let playerIndex = 1
-let voiceTime
 
-let loop = new Tone.Loop((time) => {
+let loop = new RandomMetro(() => {
 	let Timing
 	let shuffleState = shuffleMode.next()
 	let glitchTime = msToS(fastRepeats.next())
@@ -105,7 +98,7 @@ let loop = new Tone.Loop((time) => {
 	sleepAudio.player(playerIndex).start(Tone.now())
 	playerDuration = sleepAudio.player(playerIndex).buffer.duration
 	//console.log('loop1')
-	//console.log(shuffleState)
+	console.log({ shuffleState })
 	switch (shuffleState) {
 		case null:
 			Timing = playerDuration + msToS(rest.next())
@@ -117,18 +110,18 @@ let loop = new Tone.Loop((time) => {
 			break
 		case 2:
 			Timing = glitchTime
-		// console.log(glitchTime)
-		//console.log('glitch')
+			// console.log(glitchTime)
+			console.log('glitch')
 	}
+	return { interval: sToMs(Timing) }
 	//console.log(Timing + ' ScheduledTime')
-	loop.interval = Timing
 })
 let loopVoice = new Tone.Loop((time) => {
 	sleepAudio.player(0).start(time)
-	console.log('previousInterval ' + loopVoice.interval)
+	// console.log('previousInterval ' + loopVoice.interval)
 	loopVoice.interval = 45
-	console.log('currentInterval ' + loopVoice.interval)
-	console.log('TimeNow ' + time)
+	// console.log('currentInterval ' + loopVoice.interval)
+	// console.log('TimeNow ' + time)
 	sleepAudio.player(0).stop(time + sleepAudio.player(0).buffer.duration)
 })
 const onStart = async (video) => {

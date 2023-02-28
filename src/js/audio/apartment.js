@@ -1,5 +1,5 @@
 import * as Tone from 'tone'
-import { Urn, RandomMetro, sToMs, Loop } from '@/js/audio/common'
+import { Urn, RandomMetro, sToMs, Loop, randomInt } from '@/js/audio/common'
 import { rando } from '@nastyox/rando.js'
 
 const audioUrls = [
@@ -34,11 +34,34 @@ const init = (args) => {
 	video.current.addEventListener('seeked', () => {
 		if (!looping && !video?.current?.paused) onRepeat()
 	})
-	randomMetro = new RandomMetro(
-		console.log,
-		sToMs(video.current.duration) / 2,
-		sToMs(video.current.duration) * 2
-	)
+	randomMetro = new RandomMetro(({ count }) => {
+		const time = video.current.duration * rando(1, 'float')
+
+		const loopCallback = ({ count }) => {
+			video.current.currentTime = time
+			apartmentAudio.player(playerIndex).seek(time)
+			console.log('loop', count)
+			return () => {
+				looping = false
+			}
+		}
+
+		if (count > 0) {
+			looping = true
+			const loopOptions = {
+				interval: rando(200, 1500),
+				times: rando(2, 5) + 1,
+			}
+			loop.start(loopCallback, loopOptions)
+
+			console.log('starting loop', count, loopOptions)
+		}
+		const { duration } = video.current
+		return {
+			clear: loop.stop,
+			interval: sToMs(randomInt(duration / 2, duration * 2)),
+		}
+	})
 }
 
 const onStart = async (video) => {
@@ -46,34 +69,7 @@ const onStart = async (video) => {
 	video.current.currentTime = 0
 	video.current.play()
 
-	randomMetro.start({
-		callback: ({ count }) => {
-			const time = video.current.duration * rando(1, 'float')
-
-			const loopCallback = (count) => {
-				video.current.currentTime = time
-				apartmentAudio.player(playerIndex).seek(time)
-				console.log('loop', count)
-				return () => {
-					looping = false
-				}
-			}
-
-			if (count > 0) {
-				looping = true
-				const loopOptions = {
-					interval: rando(200, 1500),
-					times: rando(2, 5) + 1,
-				}
-				loop.start(loopCallback, loopOptions)
-
-				console.log('starting loop', count, loopOptions)
-			}
-			return () => {
-				loop.stop()
-			}
-		},
-	})
+	randomMetro.start()
 }
 
 const onRepeat = () => {
