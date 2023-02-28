@@ -50,6 +50,7 @@ const instruction3 = [
 const textIndexGenerator = new Stochastic(instruction3)
 
 let video
+const reverbDuration = 10
 let loop = new RandomMetro(() => {
 	let currentIndex = randomIndexGenerator.next()
 	let textIndex = textIndexGenerator.next()
@@ -61,7 +62,11 @@ let loop = new RandomMetro(() => {
 			.player(textIndex)
 			.start(Tone.now() + currentPlayer.buffer.duration + randomJitter - 2)
 	}
-	return { interval: sToMs(currentPlayer.buffer.duration + randomJitter) }
+	return {
+		interval: sToMs(
+			currentPlayer.buffer.duration - reverbDuration + randomJitter
+		),
+	}
 })
 
 const init = (args) => {

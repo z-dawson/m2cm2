@@ -78,9 +78,9 @@ const init = (args) => {
 }
 
 const instruction1 = [
-	{ value: 1, probability: 0.7, name: 'normalShuffle' },
-	{ value: 2, probability: 0.15, repeat: [3, 15], name: 'glitchedShuffle' },
-	{ value: null, probability: 0.15, name: 'rest' },
+	{ value: 1, probability: 0.5, name: 'normalShuffle' },
+	{ value: 2, probability: 0.25, repeat: [3, 15], name: 'glitchedShuffle' },
+	{ value: null, probability: 0.25, name: 'rest' },
 ]
 const shuffleMode = new Stochastic(instruction1)
 const audioShuffle = new Stochastic([{ range: [1, 56] }])

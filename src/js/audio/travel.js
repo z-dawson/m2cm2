@@ -1,6 +1,5 @@
 import * as Tone from 'tone'
 import Stochastic from '@/js/audio/stochastic.js'
-import { sToMs } from './common'
 
 const audioUrls = [
 	'/audio/travel/travel5.mp3',
@@ -16,7 +15,7 @@ let travelAudio = new Tone.Players(audioUrls).toDestination()
 travelAudio._buffers._buffers.forEach((_, index) => {
 	travelAudio.player(index)
 })
-// -5, 3 // -3, 2
+
 let video
 let playerIndex
 let playerDuration = 3

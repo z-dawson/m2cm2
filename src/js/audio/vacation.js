@@ -69,24 +69,17 @@ const instruction1 = [
 		followedBy: ['smallWaves'],
 	},
 ]
-const instruction2 = [{ range: [0, 6] }]
-const instruction3 = [{ range: [0, 2] }]
-const instruction4 = [{ range: [35, 65] }]
-const instruction5 = [{ range: [0, 4] }]
-const instruction6 = [{ range: [4, 19] }]
-const instruction7 = [{ range: [15, 32] }]
-const instruction8 = [{ range: [400, 800] }]
 const random = new Stochastic(instruction1)
-const randomDuration = new Stochastic(instruction2)
-const randomRepeatDuration = new Stochastic(instruction3)
-const randomRepeatLoop2 = new Stochastic(instruction4)
-const operatorRandom = new Stochastic(instruction5)
-const waterRandom = new Stochastic(instruction6)
-const operatorJitter = new Stochastic(instruction7)
-const waterJitter = new Stochastic(instruction8)
+const randomDuration = new Stochastic([{ range: [0, 6] }])
+const randomRepeatDuration = new Stochastic([{ range: [0, 2] }])
+const randomRepeatLoop2 = new Stochastic([{ range: [35, 65] }])
+const operatorRandom = new Stochastic([{ range: [0, 4] }])
+const waterRandom = new Stochastic([{ range: [4, 19] }])
+const operatorJitter = new Stochastic([{ range: [15, 32] }])
+const waterJitter = new Stochastic([{ range: [400, 800] }])
 
-vacationAudio.volume.value = -10
-vacationAudio2.volume.value = 6
+vacationAudio.volume.value = -13
+vacationAudio2.volume.value = 2
 
 let loopWaves = new RandomMetro(() => {
 	let timing
@@ -111,6 +104,7 @@ let loopText = new RandomMetro(() => {
 	vacationAudio2.player(20).start(1)
 	return { interval: sToMs(randomRepeatLoop2.next()) }
 })
+
 let loopOperator = new RandomMetro(() => {
 	let operatorIndex = operatorRandom.next()
 	let waterIndex = waterRandom.next()
@@ -134,11 +128,10 @@ const onResize = ({ width, height }) => {
 		animationIterationCount: 'infinite',
 		animationTimingFunction: 'linear',
 	}
+
 	const noAnimation = {
 		animation: 'none',
 	}
-
-	console.log({ resize: height > width })
 
 	const styles = height > width ? animation : noAnimation
 
@@ -147,7 +140,6 @@ const onResize = ({ width, height }) => {
 
 const onStart = async (video) => {
 	await Tone.start()
-	console.log('Timing' + vacationAudio.player(2).buffer.duration)
 	loopWaves.start()
 	loopText.start()
 	loopOperator.start()
