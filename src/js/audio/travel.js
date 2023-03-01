@@ -1,5 +1,6 @@
 import * as Tone from 'tone'
 import Stochastic from '@/js/audio/stochastic.js'
+import { RandomMetro } from './common'
 
 const audioUrls = [
 	'/audio/travel/travel5.mp3',
@@ -33,14 +34,15 @@ const init = (args) => {
 	video = args.video
 	video.current.loop = true
 }
-const loop = new Tone.Loop((time) => {
+const loop = new RandomMetro(() => {
 	const playerIndex = random.next()
 	const jitterDuration = randomDuration.next()
 	console.log(jitterDuration)
-	const playerDuration = travelAudio.player(playerIndex).buffer.duration
+	const selectedPlayer = travelAudio.player(playerIndex)
+	const playerDuration = selectedPlayer.buffer.duration
 	console.log('playerduration ' + playerDuration)
-	travelAudio.player(playerIndex).start(time)
-	loop.interval = Math.ceil(playerDuration) + jitterDuration
+	selectedPlayer.start()
+	return { interval: Math.ceil(playerDuration) + jitterDuration }
 })
 
 const onStart = async (video) => {
@@ -53,7 +55,6 @@ const onStart = async (video) => {
 
 const onStop = (video) => {
 	video.current.pause()
-	loop.cancel()
 	loop.stop()
 	Tone.Transport.stop()
 	travelAudio.stopAll()
