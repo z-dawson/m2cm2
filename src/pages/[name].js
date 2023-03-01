@@ -8,6 +8,7 @@ const Page = ({ name }) => {
 	const [soundEngine, setSoundEngine] = useState({})
 	const [loaded, setLoaded] = useState(false)
 	const video = useRef()
+	const video2 = useRef()
 
 	const size = useWindowSize()
 
@@ -28,7 +29,7 @@ const Page = ({ name }) => {
 			const soundEngineModule = await import(`../js/audio/${name}.js`)
 			video.current.load()
 			video.current.addEventListener('loadedmetadata', () => {
-				soundEngineModule.init({ video })
+				soundEngineModule.init({ video, video2 })
 				setLoaded(true)
 			})
 			setSoundEngine(soundEngineModule)
@@ -40,6 +41,14 @@ const Page = ({ name }) => {
 			<PlayAudio {...{ onStart, onStop }} enabled={loaded} />
 			<video muted className={styles.video} ref={video}>
 				<source src={`/videos/${name}.mp4`} type="video/mp4" />
+			</video>
+			<video
+				muted
+				className={styles.video}
+				style={{ visibility: 'hidden' }}
+				ref={video2}
+			>
+				<source src="/videos/concert2.mp4" type="video/mp4" />
 			</video>
 		</>
 	)
