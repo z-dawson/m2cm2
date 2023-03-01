@@ -75,12 +75,10 @@
 	text-align: center;
 }
 
-.text {
+.aside {
 	width: min(50%, 17rem);
-	height: 100%;
-	position: absolute;
-	right: 0;
-	top: 0;
+	overflow: hidden;
+	height: 100vh;
 	padding-top: 3rem;
 	line-height: 1.2rem;
 }

@@ -51,17 +51,15 @@ function Home() {
 					</ul>
 				</nav>
 				<main className={styles.main}>
-					<div className={styles.frontLayer}>
-						<p className={styles.text}>
-							<Text reading={entered} soundEngine={soundEngine} />
-						</p>
-					</div>
 					<div className={styles.bottomLayer}>
 						<div className={styles.animation}>
 							<Animation orientation={1} />
 						</div>
 					</div>
 				</main>
+				<aside className={styles.aside}>
+					<Text reading={entered} soundEngine={soundEngine} />
+				</aside>
 			</div>
 		</>
 	)

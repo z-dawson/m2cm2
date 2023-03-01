@@ -89,20 +89,22 @@ const Text = (props) => {
 
 	return (
 		<div className={styles.container}>
-			<strong style={{ fontWeight: 600 }}>{userName}: </strong>
-			{displayedSentences.map((sentence, index) => {
-				return (
-					<div className={styles.sentence} key={index}>
-						{sentence.map((word, index) => {
-							return (
-								<Fragment key={index}>
-									<span>{word}</span>{' '}
-								</Fragment>
-							)
-						})}
-					</div>
-				)
-			})}
+			<div className={styles.expandingContainer}>
+				<strong style={{ fontWeight: 600 }}>{userName}: </strong>
+				{displayedSentences.map((sentence, index) => {
+					return (
+						<p className={styles.sentence} key={index}>
+							{sentence.map((word, index) => {
+								return (
+									<Fragment key={index}>
+										<span>{word}</span>{' '}
+									</Fragment>
+								)
+							})}
+						</p>
+					)
+				})}
+			</div>
 		</div>
 	)
 }
