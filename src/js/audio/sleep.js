@@ -91,9 +91,9 @@ const loop = new RandomMetro(() => {
 	let Timing
 	const shuffleState = shuffleMode.next()
 	const glitchTime = msToS(fastRepeats.next())
-	const selectedPlayer = sleepAudio.player(playerIndex)
-	selectedPlayer.stop()
+	sleepAudio.player(playerIndex).stop()
 	playerIndex = audioShuffle.next()
+	const selectedPlayer = sleepAudio.player(playerIndex)
 	selectedPlayer.start(Tone.now())
 	const playerDuration = selectedPlayer.buffer.duration
 	//console.log('loop1')
@@ -108,6 +108,7 @@ const loop = new RandomMetro(() => {
 			//console.log('normalPlay')
 			break
 		case 2:
+			video.current.currentTime = 1
 			Timing = glitchTime
 			// console.log(glitchTime)
 			console.log('glitch')
