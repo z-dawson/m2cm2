@@ -29,7 +29,7 @@ const Page = ({ name }) => {
 			const soundEngineModule = await import(`../js/audio/${name}.js`)
 			video.current.load()
 			video.current.addEventListener('loadedmetadata', () => {
-				soundEngineModule.init({ video, video2 })
+				soundEngineModule?.init?.({ video, video2 })
 				setLoaded(true)
 			})
 			setSoundEngine(soundEngineModule)
