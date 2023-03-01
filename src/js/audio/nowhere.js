@@ -32,18 +32,18 @@ const instruction3 = [
 	{
 		value: 12,
 		name: 'nowhere',
-		probability: 0.5,
+		probability: 0.4,
 	},
 	{
 		value: 13,
 		name: 'slowly',
-		probability: 0.5,
+		probability: 0.4,
 		followedBy: ['rest'],
 	},
 	{
 		value: null,
 		name: 'rest',
-		probability: 0.4,
+		probability: 0.5,
 	},
 ]
 
@@ -56,15 +56,23 @@ const loop = new RandomMetro(() => {
 	const textIndex = textIndexGenerator.next()
 	const randomJitter = msToS(randomJitterGenerator.next())
 	const currentPlayer = nowhereAudio.player(currentIndex)
+	let textJitter = 0
 	currentPlayer.start()
 	if (textIndex != null) {
+		textJitter = 3
 		nowhereAudio
 			.player(textIndex)
-			.start(Tone.now() + currentPlayer.buffer.duration + randomJitter - 2)
+			.start(
+				Tone.now() +
+					currentPlayer.buffer.duration +
+					randomJitter -
+					2 -
+					reverbDuration
+			)
 	}
 	return {
 		interval: sToMs(
-			currentPlayer.buffer.duration - reverbDuration + randomJitter
+			currentPlayer.buffer.duration - reverbDuration + randomJitter + textJitter
 		),
 	}
 })
