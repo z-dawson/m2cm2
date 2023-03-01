@@ -85,14 +85,14 @@ const Text = (props) => {
 
 	const userName = useMemo(() => {
 		return userNameGenerator.generateUsername('_')
-	}, [paragraphIndex])
+	}, [displayedSentences])
 
 	return (
 		<div className={styles.container}>
+			<strong style={{ fontWeight: 600 }}>{userName}: </strong>
 			{displayedSentences.map((sentence, index) => {
 				return (
 					<div className={styles.sentence} key={index}>
-						<strong>{userName}: </strong>
 						{sentence.map((word, index) => {
 							return (
 								<Fragment key={index}>
