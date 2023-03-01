@@ -3,6 +3,7 @@ import Stochastic from '@/js/audio/stochastic.js'
 import { msToS, RandomMetro, sToMs } from './common'
 
 const audioUrls = [
+	'/audio/nowhere/iteration1.mp3',
 	'/audio/nowhere/iteration2.mp3',
 	'/audio/nowhere/iteration3.mp3',
 	'/audio/nowhere/iteration4.mp3',
@@ -14,7 +15,6 @@ const audioUrls = [
 	'/audio/nowhere/iteration10.mp3',
 	'/audio/nowhere/iteration11.mp3',
 	'/audio/nowhere/iteration12.mp3',
-	'/audio/nowhere/iteration13.mp3',
 	'/audio/nowhere/nowhere.mp3',
 	'/audio/nowhere/slowly.mp3',
 ]
