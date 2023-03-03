@@ -1,64 +1,77 @@
 import text from '@/js/text/text'
 import timestamps from '@/js/text/timestamps'
-import {
-	Fragment,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react'
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import styles from '@/styles/Text.module.css'
-import { sToMs } from '@/js/audio/common'
+import { sToMs, Urn } from '@/js/audio/common'
 import userNameGenerator from 'username-generator'
+
+const chooseParagraph = new Urn(timestamps.length, timestamps.length - 1)
+const getNewUserName = () => userNameGenerator.generateUsername('_')
 
 const Text = (props) => {
 	const { reading, soundEngine } = props
-	const [paragraphIndex, setParagraphIndex] = useState(7)
-	const [displayedSentences, setDisplayedSentences] = useState([])
+	const [chat, setChat] = useState([[[]]])
 
+	const paragraphIndex = useRef(chooseParagraph.next())
 	const wordIndex = useRef(0)
 	const sentenceIndex = useRef(0)
-	const sliced = useState([])
+	const timestampIndex = useRef(0)
+
+	const sliced = useRef([])
 	const timeout = useRef()
 	const userName = useRef()
 
 	const nextWord = useCallback(() => {
-		const interval = timestamps[paragraphIndex][wordIndex.current]
+		const interval = timestamps[paragraphIndex.current][timestampIndex.current]
+
+		const sentenceLength =
+			sliced.current[paragraphIndex.current][sentenceIndex.current].length
+		const paragraphLength = sliced.current[paragraphIndex.current].length
+
+		const endOfSentence = sentenceLength - 1 <= wordIndex.current
+		const endOfParagraph =
+			endOfSentence && paragraphLength - 1 <= sentenceIndex.current
 
 		timeout.current = setTimeout(() => {
-			setDisplayedSentences((prev) => {
-				const sentences = [...prev]
+			setChat((prev) => {
+				const chat = [...prev]
 
-				if (!sentences[sentenceIndex.current]) {
-					sentences[sentenceIndex.current] = []
-				}
-				sentences[sentenceIndex.current].push(
-					sliced.current[sentenceIndex.current][wordIndex.current]
+				chat[chat.length - 1][sentenceIndex.current].push(
+					sliced.current[paragraphIndex.current][sentenceIndex.current][
+						wordIndex.current
+					]
 				)
-				return sentences
+
+				if (endOfParagraph) {
+					chat[chat.length] = [[]]
+					paragraphIndex.current = chooseParagraph.next()
+					sentenceIndex.current = wordIndex.current = 0
+					timestampIndex.current = 0
+				} else {
+					timestampIndex.current += 1
+					if (endOfSentence) {
+						const currentSentence = chat[chat.length - 1]
+						currentSentence[currentSentence.length] = []
+						wordIndex.current = 0
+						sentenceIndex.current += 1
+					} else {
+						wordIndex.current += 1
+					}
+				}
+
+				userName.current = getNewUserName()
+				nextWord()
+
+				return chat
 			})
-
-			if (
-				wordIndex.current >=
-				sliced.current[sentenceIndex.current].length - 1
-			) {
-				sentenceIndex.current++
-				wordIndex.current = 0
-			} else {
-				wordIndex.current++
-			}
-
-			nextWord()
-		}, sToMs(interval / 2))
-	}, [paragraphIndex])
+		}, sToMs(interval))
+	}, [])
 
 	useEffect(() => {
-		// const randomParagraph = 2 //randomInt(0, text.length - 1)
-		const sentences = text[paragraphIndex].split(/[?.]/)
-		sliced.current = sentences.map((sentence) => sentence.split(/[\s-]/))
-
-		// setParagraphIndex(randomParagraph)
+		sliced.current = text.map((paragraph) => {
+			const sentences = paragraph.split(/[?.]\s/)
+			return sentences.map((sentence) => sentence.split(/[\s-]/))
+		})
 
 		return () => clearTimeout(timeout.current)
 	}, [])
@@ -66,29 +79,31 @@ const Text = (props) => {
 	useEffect(() => {
 		if (reading) {
 			nextWord()
-			soundEngine?.onStart?.(paragraphIndex)
+			soundEngine?.onStart?.(paragraphIndex.current)
 		}
 	}, [reading])
-
-	useEffect(() => {
-		userName.current = userNameGenerator.generateUsername('_')
-	}, [displayedSentences])
 
 	return (
 		<div className={styles.container}>
 			<div className={styles.expandingContainer}>
-				<strong style={{ fontWeight: 600 }}>{userName.current}: </strong>
-				{displayedSentences.map((sentence, index) => {
+				{chat.map((paragraph, index) => {
 					return (
-						<p className={styles.sentence} key={index}>
-							{sentence.map((word, index) => {
+						<Fragment key={index}>
+							<strong style={{ fontWeight: 600 }}>{userName.current}: </strong>
+							{paragraph.map((sentence, index) => {
 								return (
-									<Fragment key={index}>
-										<span>{word}</span>{' '}
-									</Fragment>
+									<p className={styles.sentence} key={index}>
+										{sentence.map((word, index) => {
+											return (
+												<Fragment key={index}>
+													<span>{word}</span>{' '}
+												</Fragment>
+											)
+										})}
+									</p>
 								)
 							})}
-						</p>
+						</Fragment>
 					)
 				})}
 			</div>

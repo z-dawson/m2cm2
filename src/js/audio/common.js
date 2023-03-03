@@ -1,10 +1,10 @@
-const { rando, randoSequence } = require('@nastyox/rando.js')
 const randomRange = (min, max) => {
 	min = Math.ceil(min)
 	max = Math.floor(max)
 	// The maximum is inclusive and the minimum is inclusive
 	return Math.floor(Math.random() * (max - min + 1) + min)
 }
+
 const Urn = class {
 	constructor(max, waiting, reuse = 1) {
 		const fillRange = (start, end) =>
@@ -16,15 +16,19 @@ const Urn = class {
 		this.possible = fillRange(0, max - 1)
 		this.discarded = []
 	}
+
 	next() {
 		if (this.discarded.length > this.waiting || this.possible.length == 0) {
 			this.possible = this.possible.concat(this.discarded.slice(0, this.reuse))
 			this.discarded.splice(0, this.reuse)
 		}
+
 		const index = Math.floor(Math.random() * this.possible.length)
 		const result = this.possible[index]
+
 		this.possible.splice(index, 1)
 		this.discarded.push(result)
+
 		return result
 	}
 }
@@ -33,7 +37,8 @@ const randomFloat = (min, max) => {
 	return Math.random() * (max - min) + min
 }
 
-const randomInt = (min, max) => {
+const randomInt = (...range) => {
+	const [min, max] = range.length == 1 ? [0, range[0]] : range
 	return Math.floor(randomFloat(min, max))
 }
 
@@ -52,7 +57,6 @@ const RandomMetro = class {
 		const time =
 			typeof interval == 'number' ? interval : randomInt(this.min, this.max)
 		this.count++
-		console.log('nextSampleWillPlayIn ' + time)
 		this.delay = setTimeout(this.start.bind(this), time)
 	}
 
@@ -82,6 +86,7 @@ const Loop = class {
 		const initOptions = { interval: 1000 }
 		Object.assign(this, initOptions, options)
 		this.count = 0
+		return this
 	}
 
 	start(callback, options) {
@@ -89,9 +94,8 @@ const Loop = class {
 			this.callbackClear = this.callback(this)
 			this.count += 1
 		}
-		if (this.active) {
-			this.clear()
-		}
+
+		if (this.active) this.clear()
 		if (callback) this.init(callback, options)
 		call()
 		this.loopReference = setInterval(() => {
