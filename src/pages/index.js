@@ -7,11 +7,15 @@ import Text from '@/components/Text'
 import { useContext, useEffect, useState } from 'react'
 import LandingOverlay from '@/components/LandingOverlay.js'
 import { EnteredContext } from './_app.js'
+import Popup, { useAd } from '@/components/Popup.js'
+
+const adds = ['workspace']
 
 function Home() {
 	const [loaded, setLoaded] = useState(false)
 	const [soundEngine, setSoundEngine] = useState()
 	const { entered, setEntered } = useContext(EnteredContext)
+	const { showAd, skipAd, ad } = useAd(adds)
 
 	useEffect(() => {
 		;(async () => {
@@ -19,6 +23,7 @@ function Home() {
 			setLoaded(true)
 			setSoundEngine(soundEngineModule)
 		})()
+		showAd()
 	}, [])
 
 	return (
@@ -36,6 +41,7 @@ function Home() {
 					}}
 				/>
 			)}
+			{ad && <Popup ad={ad} onSkip={skipAd} />}
 			<div className={styles.container}>
 				<nav className={styles.nav}>
 					<ul>

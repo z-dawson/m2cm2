@@ -35,6 +35,7 @@ const PlayAudio = (props) => {
 				display: 'flex',
 				justifyContent: 'center',
 				alignItems: 'center',
+				zIndex: 2,
 			}}
 		>
 			<button style={buttonStyles} onClick={() => props?.onStart?.()}>
