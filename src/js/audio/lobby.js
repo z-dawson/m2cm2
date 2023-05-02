@@ -1,5 +1,5 @@
 import * as Tone from 'tone'
-import { randomInt, Urn } from './common'
+import { Urn } from './common'
 import Stochastic from './stochastic'
 
 const audioUrls = [
@@ -131,9 +131,16 @@ const audioUrls = [
 
 const voiceIntervals = new Stochastic([45, 60, 15, 2 * 60, 3 * 60])
 
-const voiceUrl = 'audio/lobby/recurring.mp3'
+const voiceUrl = '/audio/lobby/recurring.mp3'
 
-const voice = new Tone.Player(voiceUrl).toDestination()
+let voice
+
+const voiceLoaded = new Promise((resolve) => {
+	voice = new Tone.Player({
+		url: voiceUrl,
+		onload: resolve,
+	}).toDestination()
+})
 
 const voiceLoop = new Tone.Loop((time) => {
 	const randomDuration = voiceIntervals.next()
@@ -141,17 +148,19 @@ const voiceLoop = new Tone.Loop((time) => {
 	voiceLoop.interval = time + randomDuration
 })
 
-let players = new Tone.Players(
-	audioUrls.map((url) => 'audio/lobby/' + url)
-).toDestination()
+let players
+
+const loaded = new Promise((resolve) => {
+	players = new Tone.Players({
+		urls: audioUrls,
+		onload: resolve,
+		baseUrl: '/audio/lobby/',
+	}).toDestination()
+})
 
 const urn = new Urn(audioUrls.length, audioUrls.length - 1)
 let video
 let playerIndexes = []
-
-players._buffers._buffers.forEach((_, index) => {
-	players.player(index)
-})
 
 const init = (args) => {
 	video = args.video
@@ -165,7 +174,7 @@ const init = (args) => {
 }
 
 const onStart = async () => {
-	await Tone.start()
+	await Promise.all([Tone.start(), loaded, voiceLoaded])
 	Tone.Transport.start()
 	video.current.currentTime = 0
 	video.current.play()
@@ -189,8 +198,10 @@ const onRepeat = () => {
 }
 
 const onStop = (video) => {
-	video.current.pause()
-	video.current.currentTime = 0
+	if (video.current) {
+		video.current.pause()
+		video.current.currentTime = 0
+	}
 	playerIndexes.forEach((index) => {
 		players.player(index).stop()
 	})

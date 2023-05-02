@@ -1,8 +1,16 @@
 import routes from '@/js/routes'
 import Room from '@/components/Room'
+import { useEffect, useState } from 'react'
 
 const Page = ({ name }) => {
-	return <Room name={name} />
+	const [play, setPlay] = useState(false)
+
+	useEffect(() => {
+		setPlay(true)
+		return () => setPlay(false)
+	}, [])
+
+	return <Room name={name} play={play} />
 }
 
 export default Page

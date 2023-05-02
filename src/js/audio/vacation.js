@@ -3,59 +3,74 @@ import Stochastic from '@/js/audio/stochastic.js'
 import { randomInt, RandomMetro } from './common'
 import { sToMs } from './common'
 
-const waveUrls = [
-	'/audio/vacation/Small Wave.mp3',
-	'/audio/vacation/Medium Wave.mp3',
-	'/audio/vacation/Large Wave.mp3',
-]
+const waveUrls = ['Small Wave.mp3', 'Medium Wave.mp3', 'Large Wave.mp3']
 const operatorUrls = [
-	'/audio/vacation/Operator/Operator 1.mp3',
-	'/audio/vacation/Operator/Operator 2.mp3',
-	'/audio/vacation/Operator/Operator 3.mp3',
-	'/audio/vacation/Operator/Operator 4.mp3',
+	'Operator/Operator 1.mp3',
+	'Operator/Operator 2.mp3',
+	'Operator/Operator 3.mp3',
+	'Operator/Operator 4.mp3',
 ]
 
 const waterUrls = [
-	'/audio/vacation/Water Slices/Water 01.mp3',
-	'/audio/vacation/Water Slices/Water 02.mp3',
-	'/audio/vacation/Water Slices/Water 03.mp3',
-	'/audio/vacation/Water Slices/Water 04.mp3',
-	'/audio/vacation/Water Slices/Water 05.mp3',
-	'/audio/vacation/Water Slices/Water 06.mp3',
-	'/audio/vacation/Water Slices/Water 07.mp3',
-	'/audio/vacation/Water Slices/Water 08.mp3',
-	'/audio/vacation/Water Slices/Water 09.mp3',
-	'audio/vacation/Water Slices/Water 010.mp3',
-	'audio/vacation/Water Slices/Water 011.mp3',
-	'audio/vacation/Water Slices/Water 012.mp3',
-	'audio/vacation/Water Slices/Water 013.mp3',
-	'audio/vacation/Water Slices/Water 014.mp3',
-	'audio/vacation/Water Slices/Water 015.mp3',
-	'audio/vacation/Water Slices/Water 016.mp3',
+	'Water Slices/Water 01.mp3',
+	'Water Slices/Water 02.mp3',
+	'Water Slices/Water 03.mp3',
+	'Water Slices/Water 04.mp3',
+	'Water Slices/Water 05.mp3',
+	'Water Slices/Water 06.mp3',
+	'Water Slices/Water 07.mp3',
+	'Water Slices/Water 08.mp3',
+	'Water Slices/Water 09.mp3',
+	'Water Slices/Water 010.mp3',
+	'Water Slices/Water 011.mp3',
+	'Water Slices/Water 012.mp3',
+	'Water Slices/Water 013.mp3',
+	'Water Slices/Water 014.mp3',
+	'Water Slices/Water 015.mp3',
+	'Water Slices/Water 016.mp3',
 ]
 
-const voiceUrl = '/audio/vacation/forgetting.mp3'
+const baseUrl = '/audio/vacation/'
 
-const voicePlayer = new Tone.Player(voiceUrl).toDestination()
+const voiceUrl = 'forgetting.mp3'
+
+let voicePlayer
+
+const voiceLoaded = new Promise((resolve) => {
+	new Tone.Player({
+		url: baseUrl + voiceUrl,
+		onload: resolve,
+	}).toDestination()
+})
 
 const wavePanner = new Tone.Panner(0).toDestination()
 const operatorPanner = new Tone.Panner(0).toDestination()
 const waterPanner = new Tone.Panner(0).toDestination()
 
-const wavePlayers = new Tone.Players(waveUrls).connect(wavePanner)
-const operatorPlayers = new Tone.Players(operatorUrls).connect(operatorPanner)
-const waterPlayers = new Tone.Players(waterUrls).connect(waterPanner)
+let wavePlayers, operatorPlayers, waterPlayers
 
-wavePlayers._buffers._buffers.forEach((_, index) => {
-	wavePlayers.player(index)
-})
+const loaded = new Promise((resolve) => {
+	let index = 0
+	const onload = () => {
+		console.log(index)
+		if (++index > 2) resolve()
+	}
 
-operatorPlayers._buffers._buffers.forEach((_, index) => {
-	operatorPlayers.player(index)
-})
-
-waterPlayers._buffers._buffers.forEach((_, index) => {
-	waterPlayers.player(index)
+	wavePlayers = new Tone.Players({
+		urls: waveUrls,
+		baseUrl,
+		onload,
+	}).connect(wavePanner)
+	operatorPlayers = new Tone.Players({
+		urls: operatorUrls,
+		baseUrl,
+		onload,
+	}).connect(operatorPanner)
+	waterPlayers = new Tone.Players({
+		urls: waterUrls,
+		baseUrl,
+		onload,
+	}).connect(waterPanner)
 })
 
 let video
@@ -156,7 +171,7 @@ const onResize = ({ width, height }) => {
 }
 
 const onStart = async (video) => {
-	await Tone.start()
+	await Promise.all([Tone.start(), loaded, voiceLoaded])
 	loopWaves.start()
 	loopVoice.start()
 	loopOperatorAndWater.start()
@@ -165,12 +180,14 @@ const onStart = async (video) => {
 }
 
 const onStop = (video) => {
-	video.current.pause()
+	if (video.current) {
+		video.current.pause()
+		video.current.currentTime = 0
+	}
 	Tone.Transport.stop()
 	loopWaves.stop()
 	loopVoice.stop()
 	loopOperatorAndWater.stop()
-	video.current.currentTime = 0
 }
 
 export { onStart, onStop, init, onResize }

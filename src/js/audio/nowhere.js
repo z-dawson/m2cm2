@@ -2,27 +2,31 @@ import * as Tone from 'tone'
 import Stochastic from '@/js/audio/stochastic.js'
 import { msToS, RandomMetro, sToMs } from './common'
 
-const audioUrls = [
-	'/audio/nowhere/iteration1.mp3',
-	'/audio/nowhere/iteration2.mp3',
-	'/audio/nowhere/iteration3.mp3',
-	'/audio/nowhere/iteration4.mp3',
-	'/audio/nowhere/iteration5.mp3',
-	'/audio/nowhere/iteration6.mp3',
-	'/audio/nowhere/iteration7.mp3',
-	'/audio/nowhere/iteration8.mp3',
-	'/audio/nowhere/iteration9.mp3',
-	'/audio/nowhere/iteration10.mp3',
-	'/audio/nowhere/iteration11.mp3',
-	'/audio/nowhere/iteration12.mp3',
-	'/audio/nowhere/nowhere.mp3',
-	'/audio/nowhere/slowly.mp3',
+const urls = [
+	'iteration1.mp3',
+	'iteration2.mp3',
+	'iteration3.mp3',
+	'iteration4.mp3',
+	'iteration5.mp3',
+	'iteration6.mp3',
+	'iteration7.mp3',
+	'iteration8.mp3',
+	'iteration9.mp3',
+	'iteration10.mp3',
+	'iteration11.mp3',
+	'iteration12.mp3',
+	'nowhere.mp3',
+	'slowly.mp3',
 ]
 
-const nowhereAudio = new Tone.Players(audioUrls).toDestination()
+let nowhereAudio
 
-nowhereAudio._buffers._buffers.forEach((_, index) => {
-	nowhereAudio.player(index)
+const loaded = new Promise((resolve) => {
+	nowhereAudio = new Tone.Players({
+		urls,
+		onload: resolve,
+		baseUrl: '/audio/nowhere/',
+	}).toDestination()
 })
 
 const randomIndexGenerator = new Stochastic([{ range: [0, 11] }])
@@ -83,7 +87,7 @@ const init = (args) => {
 }
 
 const onStart = async (video) => {
-	await Tone.start()
+	await Promise.all([Tone.start(), loaded])
 	Tone.Transport.start()
 	loop.start()
 	video.current.currentTime = 0
@@ -91,8 +95,10 @@ const onStart = async (video) => {
 }
 
 const onStop = () => {
-	video.current.pause()
-	video.current.currentTime = 0
+	if (video.current) {
+		video.current.pause()
+		video.current.currentTime = 0
+	}
 	loop.stop(Tone.immediate())
 	nowhereAudio.stopAll()
 	Tone.Transport.stop()

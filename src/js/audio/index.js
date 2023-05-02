@@ -1,16 +1,25 @@
 import * as Tone from 'tone'
 
-const audioUrls = new Array(8).fill(0).map((value, index) => {
-	return `audio/index/Statement${index + 1}.mp3`
+const urls = new Array(8).fill(0).map((value, index) => {
+	return `Statement${index + 1}.mp3`
 })
 
-const players = new Tone.Players(audioUrls).toDestination()
+let players
+
+const loaded = new Promise((resolve, reject) => {
+	players = new Tone.Players({
+		urls,
+		onload: () => resolve(),
+		baseUrl: 'audio/index/',
+	}).toDestination()
+})
+
 let playingIndex
 
 const onStart = async (index) => {
-	await Tone.start()
+	await Promise.all([Tone.start(), loaded])
 	playingIndex = index
-	players.player(index).start(Tone.now())
+	players.player(playingIndex).start(Tone.now())
 }
 
 const onStop = (index = playingIndex) => {

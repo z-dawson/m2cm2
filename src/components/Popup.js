@@ -1,27 +1,24 @@
 import { randomInt } from '@/js/audio/common'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { BiSkipNext } from 'react-icons/bi'
 import styles from '@/styles/Popup.module.css'
 import Room from './Room'
 
 const Popup = ({ onSkip, ad }) => {
+	const [play, setPlay] = useState(false)
+
+	const handleClick = useCallback(() => {
+		onSkip()
+		setPlay(false)
+	}, [onSkip])
+
 	return (
 		<div className={styles.backdrop}>
 			<div className={styles.popup}>
-				<button onClick={onSkip} className={styles.skipAd}>
+				<button onClick={handleClick} className={styles.skipAd}>
 					Skip Ad <BiSkipNext style={{ fontSize: '1.6rem' }} />
 				</button>
-				{/* <video
-					muted
-					autoPlay
-					loop
-					src="videos/workspace.mp4"
-					style={{
-						height: '100%',
-						objectFit: 'cover',
-					}}
-				/> */}
-				<Room name={ad} />
+				<Room name={ad} play={play} />
 			</div>
 		</div>
 	)

@@ -2,19 +2,23 @@ import * as Tone from 'tone'
 import Stochastic from '@/js/audio/stochastic.js'
 import { RandomMetro } from './common'
 
-const audioUrls = [
-	'/audio/travel/travel5.mp3',
-	'/audio/travel/travel4.mp3',
-	'/audio/travel/travel3.mp3',
-	'/audio/travel/travel2.mp3',
-	'/audio/travel/travel1.mp3',
-	'/audio/travel/waiting.mp3',
+const urls = [
+	'travel5.mp3',
+	'travel4.mp3',
+	'travel3.mp3',
+	'travel2.mp3',
+	'travel1.mp3',
+	'waiting.mp3',
 ]
 
-const travelAudio = new Tone.Players(audioUrls).toDestination()
+let travelAudio
 
-travelAudio._buffers._buffers.forEach((_, index) => {
-	travelAudio.player(index)
+const loaded = new Promise((resolve) => {
+	travelAudio = new Tone.Players({
+		urls,
+		onload: resolve,
+		baseUrl: '/audio/travel/',
+	}).toDestination()
 })
 
 let video
@@ -46,7 +50,7 @@ const loop = new RandomMetro(() => {
 })
 
 const onStart = async (video) => {
-	await Tone.start()
+	await Promise.all([Tone.start(), loaded])
 	Tone.Transport.start()
 	loop.start()
 	video.current.currentTime = 0
@@ -54,11 +58,13 @@ const onStart = async (video) => {
 }
 
 const onStop = (video) => {
-	video.current.pause()
+	if (video.current) {
+		video.current.pause()
+		video.current.currentTime = 0
+	}
 	loop.stop()
 	Tone.Transport.stop()
 	travelAudio.stopAll()
-	video.current.currentTime = 0
 }
 
 export { onStart, onStop, init }

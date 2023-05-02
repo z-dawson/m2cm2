@@ -1,21 +1,24 @@
 import * as Tone from 'tone'
 import Stochastic from '@/js/audio/stochastic.js'
-import { msToS, RandomMetro } from './common'
+import { RandomMetro } from './common'
 import { sToMs } from './common'
-import { randomRange } from './common'
 
 const audioUrls = [
-	'/audio/Connecting/connecting.mp3',
-	'/audio/Connecting/connecting5.mp3',
-	'/audio/Connecting/connecting4.mp3',
-	'/audio/Connecting/connecting3.mp3',
-	'/audio/Connecting/connecting2.mp3',
-	'/audio/Connecting/connecting1.mp3',
+	'connecting.mp3',
+	'connecting5.mp3',
+	'connecting4.mp3',
+	'connecting3.mp3',
+	'connecting2.mp3',
+	'connecting1.mp3',
 ]
-let connectingAudio = new Tone.Players(audioUrls).toDestination()
+let connectingAudio
 
-connectingAudio._buffers._buffers.forEach((_, index) => {
-	connectingAudio.player(index)
+const loaded = new Promise((resolve) => {
+	connectingAudio = new Tone.Players({
+		urls: audioUrls,
+		onload: resolve,
+		baseUrl: '/audio/Connecting/',
+	}).toDestination()
 })
 
 let instruction1 = [{ range: [1, 5] }]
@@ -32,24 +35,26 @@ let loopSound = new RandomMetro(() => {
 	let playerDuration = connectingAudio.player(playerIndex).buffer.duration
 	connectingAudio.player(playerIndex).start()
 	timingSound = playerDuration + randomIntervalSound.next()
-	return {interval: sToMs(timingSound)}
+	return { interval: sToMs(timingSound) }
 })
 
 let loopText = new RandomMetro(() => {
 	connectingAudio.player(0).start()
 	timingText = randomIntervalText.next()
-	return {interval: sToMs(timingText)}
+	return { interval: sToMs(timingText) }
 })
 
 const onStart = async (video) => {
-	await Tone.start()
+	await Promise.all([Tone.start(), loaded])
 	loopSound.start()
 	loopText.start()
 }
 const onStop = (video) => {
-	video.current.pause()
 	Tone.Transport.stop()
-	video.current.currentTime = 0
+	if (video.current) {
+		video.current.pause()
+		video.current.currentTime = 0
+	}
 }
 
 export { onStart, onStop }

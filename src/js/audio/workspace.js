@@ -1,59 +1,68 @@
 import * as Tone from 'tone'
 import { rando } from '@nastyox/rando.js'
 
-const audioUrls = [
-	'/audio/workspace/memory.mp3',
-	'/audio/workspace/continue.mp3',
-	'/audio/workspace/fading.mp3',
-	'/audio/workspace/knowing.mp3',
-	'/audio/workspace/changing.mp3',
-	'/audio/workspace/processing.mp3',
-	'/audio/workspace/programming.mp3',
-	'/audio/workspace/progressing.mp3',
-	'/audio/workspace/remembering.mp3',
-	'/audio/workspace/returning.mp3',
-	'/audio/workspace/searching.mp3',
+const urls = [
+	'memory.mp3',
+	'continue.mp3',
+	'fading.mp3',
+	'knowing.mp3',
+	'changing.mp3',
+	'processing.mp3',
+	'programming.mp3',
+	'progressing.mp3',
+	'remembering.mp3',
+	'returning.mp3',
+	'searching.mp3',
 ]
 
-const workspaceAudio = new Tone.Players(audioUrls).toDestination()
+let workspaceAudio
 
-workspaceAudio._buffers._buffers.forEach((_, index) => {
-	workspaceAudio.player(index)
+const loaded = new Promise((resolve) => {
+	workspaceAudio = new Tone.Players({
+		urls,
+		onload: resolve,
+		baseUrl: '/audio/workspace/',
+	}).toDestination()
 })
 
 let video
 
-const loop = new Tone.ToneEvent((time) => {
-	let duration = 0
-	while (video.current.duration * (1 / video.current.playbackRate) > duration) {
-		const playerIndex = rando(0, 1)
-		const playerDuration = workspaceAudio.player(playerIndex).buffer.duration
-		workspaceAudio.player(playerIndex).start(time + duration)
-
-		const playerIndexNext = rando(2, 8)
-		const playerDurationNext =
-			workspaceAudio.player(playerIndexNext).buffer.duration
-		workspaceAudio
-			.player(playerIndexNext)
-			.start(time + playerDuration + duration)
-		duration += playerDuration + playerDurationNext
-		console.log(`schedule player ${playerIndex}, time: ${time + duration}`)
-		console.log(
-			`scheduling player ${playerIndexNext}, time: ${
-				time + playerDuration + duration
-			}`
-		)
-	}
-})
+let loop
 
 const init = (args) => {
 	video = args.video
 	video.current.playbackRate = 0.25
 	video.current.addEventListener('ended', onEnd)
+
+	loop = new Tone.ToneEvent((time) => {
+		let duration = 0
+		while (
+			video.current.duration * (1 / video.current.playbackRate) >
+			duration
+		) {
+			const playerIndex = rando(0, 1)
+			const playerDuration = workspaceAudio.player(playerIndex).buffer.duration
+			workspaceAudio.player(playerIndex).start(time + duration)
+
+			const playerIndexNext = rando(2, 8)
+			const playerDurationNext =
+				workspaceAudio.player(playerIndexNext).buffer.duration
+			workspaceAudio
+				.player(playerIndexNext)
+				.start(time + playerDuration + duration)
+			duration += playerDuration + playerDurationNext
+			console.log(`schedule player ${playerIndex}, time: ${time + duration}`)
+			console.log(
+				`scheduling player ${playerIndexNext}, time: ${
+					time + playerDuration + duration
+				}`
+			)
+		}
+	})
 }
 
 const onStart = async (video) => {
-	Tone.start()
+	await Promise.all([Tone.start(), loaded])
 	Tone.Transport.start()
 	video.current.currentTime = 0
 	video.current.play()
@@ -72,8 +81,10 @@ const onEnd = () => {
 }
 
 const onStop = (video) => {
-	video.current.pause()
-	video.current.currentTime = 0
+	if (video.current) {
+		video.current.pause()
+		video.current.currentTime = 0
+	}
 	loop.cancel(Tone.immediate())
 	workspaceAudio.stopAll()
 	Tone.Transport.stop()

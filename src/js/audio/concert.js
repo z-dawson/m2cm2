@@ -4,106 +4,112 @@ import { RandomMetro } from './common'
 import { sToMs } from './common'
 
 const audioUrls1 = [
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131921].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131951].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131952]-1.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131952]-2.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131952]-3.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131952].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131953]-1.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131953].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131954]-1.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131954].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131955].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131956]-1.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131956]-2.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131956]-3.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131956].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131957]-1.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131957]-2.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131957]-3.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131957].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131958]-1.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131958].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131959]-1.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 131959].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132000]-1.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132000].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132001].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132002]-1.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132002]-2.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132002].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132003]-1.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132003].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132004]-1.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132004]-2.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132004].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132005]-1.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132005]-2.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132005].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132006].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132008]-1.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132008]-2.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132008].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132009]-1.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132009].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132010]-1.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132010]-2.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132010]-3.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132010]-4.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132010].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132011]-1.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132011].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132013]-1.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132013].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132014]-1.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132014]-2.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132014]-3.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132014].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132015]-1.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132015]-2.mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132015].mp3',
-	'/audio/Concert/Piano Sample1 Clips/Freeze Piano Concerto (S1) [2023-02-28 132016].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 131921].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 131951].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 131952]-1.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 131952]-2.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 131952]-3.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 131952].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 131953]-1.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 131953].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 131954]-1.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 131954].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 131955].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 131956]-1.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 131956]-2.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 131956]-3.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 131956].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 131957]-1.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 131957]-2.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 131957]-3.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 131957].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 131958]-1.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 131958].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 131959]-1.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 131959].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132000]-1.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132000].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132001].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132002]-1.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132002]-2.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132002].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132003]-1.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132003].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132004]-1.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132004]-2.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132004].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132005]-1.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132005]-2.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132005].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132006].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132008]-1.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132008]-2.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132008].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132009]-1.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132009].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132010]-1.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132010]-2.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132010]-3.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132010]-4.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132010].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132011]-1.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132011].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132013]-1.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132013].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132014]-1.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132014]-2.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132014]-3.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132014].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132015]-1.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132015]-2.mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132015].mp3',
+	'Freeze Piano Concerto (S1) [2023-02-28 132016].mp3',
 ]
 const audioUrls2 = [
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134240]-1.mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134216].mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134240].mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134241].mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134242].mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134243]-1.mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134243]-2.mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134243].mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134244]-1.mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134244].mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134245]-1.mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134245].mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134246].mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134247]-1.mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134247].mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134248]-1.mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134248].mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134249]-1.mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134249]-2.mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134249]-3.mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134249].mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134250].mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134251].mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134252].mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134254].mp3',
-	'/audio/Concert/Piano Sample2 Clips/Freeze Piano Concerto (S2) [2023-02-28 134255].mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134240]-1.mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134216].mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134240].mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134241].mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134242].mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134243]-1.mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134243]-2.mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134243].mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134244]-1.mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134244].mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134245]-1.mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134245].mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134246].mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134247]-1.mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134247].mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134248]-1.mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134248].mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134249]-1.mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134249]-2.mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134249]-3.mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134249].mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134250].mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134251].mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134252].mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134254].mp3',
+	'Freeze Piano Concerto (S2) [2023-02-28 134255].mp3',
 ]
 
-const concertAudio1 = new Tone.Players(audioUrls1).toDestination()
+let concertAudio1, concertAudio2
 
-concertAudio1._buffers._buffers.forEach((_, index) => {
-	concertAudio1.player(index)
+const loaded1 = new Promise((resolve) => {
+	concertAudio1 = new Tone.Players({
+		urls: audioUrls1,
+		onload: resolve,
+		baseUrl: '/audio/Concert/Piano Sample1 Clips/',
+	}).toDestination()
 })
 
-const concertAudio2 = new Tone.Players(audioUrls2).toDestination()
-
-concertAudio2._buffers._buffers.forEach((_, index) => {
-	concertAudio2.player(index)
+const loaded2 = new Promise((resolve) => {
+	concertAudio2 = new Tone.Players({
+		urls: audioUrls2,
+		onload: resolve,
+		baseUrl: '/audio/Concert/Piano Sample2 Clips/',
+	}).toDestination()
 })
 
 let video
@@ -167,7 +173,7 @@ const timeSelector = new RandomMetro(() => {
 })
 
 const onStart = async (video) => {
-	await Tone.start()
+	await Promise.all([Tone.start(), loaded1, loaded2])
 	Tone.Transport.start()
 	video.current.currentTime = 0
 	video.current.play()
@@ -180,6 +186,16 @@ const onStart = async (video) => {
 
 const onStop = () => {
 	timeSelector.stop()
+	loop1.stop()
+	loop2.stop()
+	video?.current?.pause?.()
+	video2?.current?.pause?.()
+	;[(video, video2)].forEach((v) => {
+		if (v.current) {
+			v.current.pause()
+			v.current.currentTime = 0
+		}
+	})
 }
 
 export { onStart, onStop, init }

@@ -73,15 +73,20 @@ const Text = (props) => {
 			return sentences.map((sentence) => sentence.split(/[\s-]/))
 		})
 
-		return () => clearTimeout(timeout.current)
-	}, [])
+		return () => {
+			clearTimeout(timeout.current)
+			soundEngine?.onStop?.()
+		}
+	}, [soundEngine])
 
 	useEffect(() => {
-		if (reading) {
-			nextWord()
-			soundEngine?.onStart?.(paragraphIndex.current)
+		if (reading && soundEngine) {
+			;(async () => {
+				await soundEngine?.onStart?.(paragraphIndex.current)
+				nextWord()
+			})()
 		}
-	}, [reading])
+	}, [reading, soundEngine])
 
 	return (
 		<div className={styles.container}>

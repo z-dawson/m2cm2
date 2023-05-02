@@ -17,10 +17,6 @@
 // let timingText
 // let sonyAudio = new Tone.Players(audioUrls).toDestination()
 
-// sonyAudio._buffers._buffers.forEach((_, index) => {
-// 	sonyAudio.player(index)
-// })
-
 // const init = (args) => {
 // 	video = args.video
 // 	video.current.loop = true

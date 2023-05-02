@@ -12,7 +12,6 @@ import Popup, { useAd } from '@/components/Popup.js'
 const adds = ['workspace']
 
 function Home() {
-	const [loaded, setLoaded] = useState(false)
 	const [soundEngine, setSoundEngine] = useState()
 	const { entered, setEntered } = useContext(EnteredContext)
 	const { showAd, skipAd, ad } = useAd(adds)
@@ -20,11 +19,10 @@ function Home() {
 	useEffect(() => {
 		;(async () => {
 			const soundEngineModule = await import(`../js/audio/index.js`)
-			setLoaded(true)
 			setSoundEngine(soundEngineModule)
 		})()
 		showAd()
-	}, [])
+	}, [soundEngine])
 
 	return (
 		<>
@@ -41,7 +39,7 @@ function Home() {
 					}}
 				/>
 			)}
-			{ad && <Popup ad={ad} onSkip={skipAd} />}
+			{/* {ad && <Popup ad={ad} onSkip={skipAd} />} */}
 			<div className={styles.container}>
 				<nav className={styles.nav}>
 					<ul>

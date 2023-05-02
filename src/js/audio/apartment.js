@@ -2,27 +2,31 @@ import * as Tone from 'tone'
 import { Urn, RandomMetro, sToMs, Loop, randomInt } from '@/js/audio/common'
 import { rando } from '@nastyox/rando.js'
 
-const audioUrls = [
-	'/audio/apartment/S0_03 a.mp3',
-	'/audio/apartment/S0_03 b.mp3',
-	'/audio/apartment/S0_03 c.mp3',
-	'/audio/apartment/S0_03 d.mp3',
-	'/audio/apartment/S0_03 e.mp3',
-	'/audio/apartment/S0_03 f.mp3',
+const urls = [
+	'S0_03 a.mp3',
+	'S0_03 b.mp3',
+	'S0_03 c.mp3',
+	'S0_03 d.mp3',
+	'S0_03 e.mp3',
+	'S0_03 f.mp3',
 ]
 
-const apartmentAudio = new Tone.Players(audioUrls).toDestination()
+let apartmentAudio
 
-const urn = new Urn(audioUrls.length, 1)
+const loaded = new Promise((resolve) => {
+	apartmentAudio = new Tone.Players({
+		urls,
+		onload: resolve,
+		baseUrl: '/audio/apartment/',
+	}).toDestination()
+})
+
+const urn = new Urn(urls.length, 1)
 let randomMetro
 const loop = new Loop()
 let playerIndex
 let video
 let looping = false
-
-apartmentAudio._buffers._buffers.forEach((_, index) => {
-	apartmentAudio.player(index)
-})
 
 apartmentAudio.fadeOut = 0.3
 apartmentAudio.fadeIn = 0.08
@@ -35,6 +39,7 @@ const init = (args) => {
 	})
 	randomMetro = new RandomMetro(({ count }) => {
 		const time = video.current.duration * rando(1, 'float')
+		const newLoop = count > 0
 
 		const loopCallback = ({ count }) => {
 			video.current.currentTime = time
@@ -45,7 +50,7 @@ const init = (args) => {
 			}
 		}
 
-		if (count > 0) {
+		if (newLoop) {
 			looping = true
 			const loopOptions = {
 				interval: rando(200, 1500),
@@ -57,14 +62,14 @@ const init = (args) => {
 		}
 		const { duration } = video.current
 		return {
-			clear: loop.stop,
+			clear: newLoop ? loop.stop : undefined,
 			interval: sToMs(randomInt(duration / 2, duration * 2)),
 		}
 	})
 }
 
 const onStart = async (video) => {
-	await Tone.start()
+	await Promise.all([Tone.start(), loaded])
 	video.current.currentTime = 0
 	video.current.play()
 
@@ -73,19 +78,22 @@ const onStart = async (video) => {
 
 const onRepeat = () => {
 	const prevPlayerIndex = urn.discarded[urn.discarded.length - 1]
-	if (prevPlayerIndex) apartmentAudio.player(prevPlayerIndex).stop()
+	if (prevPlayerIndex !== undefined)
+		apartmentAudio.player(prevPlayerIndex).stop()
 
 	playerIndex = urn.next()
-	console.log('playing from start', { playerIndex })
 	apartmentAudio.player(playerIndex).start(Tone.now())
 }
 
 const onStop = (video) => {
-	video.current.pause()
-	video.current.currentTime = 0
+	if (video.current) {
+		video.current.pause()
+		video.current.currentTime = 0
+	}
 	console.log({ playerIndex })
 	if (typeof playerIndex == 'number') apartmentAudio.player(playerIndex).stop()
 	randomMetro.stop()
+	// apartmentAudio.dispose()
 }
 
 export { onStart, onStop, init }
