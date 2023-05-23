@@ -48,9 +48,9 @@ ul {
 	list-style: none;
 }
 
-@keyframes blink {
-	to {
-		visibility: hidden;
+@keyframes blink-animation {
+	50% {
+		visibility: visible;
 	}
 }
 

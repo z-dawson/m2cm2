@@ -57,7 +57,7 @@ function Home() {
 				<main className={styles.main}>
 					<div className={styles.bottomLayer}>
 						<div className={styles.animation}>
-							<Animation orientation={1} />
+							<Animation orientation={1} running={entered} />
 						</div>
 					</div>
 				</main>
