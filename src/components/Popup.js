@@ -3,9 +3,10 @@ import { useCallback, useState } from 'react'
 import { BiSkipNext } from 'react-icons/bi'
 import styles from '@/styles/Popup.module.css'
 import Room from './Room'
+import ads from '@/js/ads'
 
 const Popup = ({ onSkip, ad }) => {
-	const [play, setPlay] = useState(false)
+	const [play, setPlay] = useState(true)
 
 	const handleClick = useCallback(() => {
 		onSkip()
@@ -26,18 +27,18 @@ const Popup = ({ onSkip, ad }) => {
 
 export default Popup
 
-export const useAd = (adds) => {
+export const useAd = () => {
 	const [adIndex, setAdIndex] = useState(-1)
 
 	const showAd = () => {
-		setAdIndex(randomInt(adds.length))
+		setAdIndex(randomInt(ads.length))
 	}
 
 	const skipAd = () => {
 		setAdIndex(-1)
 	}
 
-	const ad = adds[adIndex]
+	const ad = ads[adIndex]?.name
 
 	return { showAd, skipAd, ad }
 }

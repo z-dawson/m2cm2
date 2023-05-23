@@ -1,5 +1,5 @@
 .popup {
-	width: 70%;
+	width: min(90%, 60rem);
 	height: 80%;
 	max-width: 1200;
 
@@ -41,7 +41,7 @@
 	bottom: 10%;
 	cursor: pointer;
 	padding: 1rem;
-	border: none;
+	border: 1px gray solid;
 	z-index: 100;
 	display: flex;
 	justify-content: center;

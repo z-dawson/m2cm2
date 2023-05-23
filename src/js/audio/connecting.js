@@ -11,7 +11,7 @@ const audioUrls = [
 	'connecting2.mp3',
 	'connecting1.mp3',
 ]
-let connectingAudio
+let connectingAudio, video
 
 const loaded = new Promise((resolve) => {
 	connectingAudio = new Tone.Players({
@@ -20,6 +20,11 @@ const loaded = new Promise((resolve) => {
 		baseUrl: '/audio/Connecting/',
 	}).toDestination()
 })
+
+const init = (args) => {
+	video = args.video
+	video.current.loop = true
+}
 
 let instruction1 = [{ range: [1, 5] }]
 let instruction2 = [{ range: [1, 8] }]
@@ -48,13 +53,16 @@ const onStart = async (video) => {
 	await Promise.all([Tone.start(), loaded])
 	loopSound.start()
 	loopText.start()
+	video.current.play()
 }
 const onStop = (video) => {
 	Tone.Transport.stop()
+	loopSound.stop()
+	loopText.stop()
 	if (video.current) {
 		video.current.pause()
 		video.current.currentTime = 0
 	}
 }
 
-export { onStart, onStop }
+export { onStart, onStop, init }
