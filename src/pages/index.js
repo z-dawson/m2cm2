@@ -34,10 +34,10 @@ function Home() {
 
 	const handleRoomClick = (name) => {
 		const probability = 30
+		setDestinationRoom(name)
 		if (randomInt(100) < probability) {
 			showAd()
 			soundEngine?.onStop?.()
-			setDestinationRoom(name)
 		} else {
 			setDestinationTrigger(true)
 		}
