@@ -9,6 +9,7 @@ import { EnteredContext } from './_app.js'
 import Popup, { useAd } from '@/components/Popup.js'
 import { randomInt } from '@/js/audio/common.js'
 import { useRouter } from 'next/router'
+import RandomImage from '@/components/RandomImage.js'
 
 const adds = ['workspace']
 
@@ -78,6 +79,7 @@ function Home() {
 					</ul>
 				</nav>
 				<main className={styles.main}>
+					<RandomImage />
 					<div className={styles.bottomLayer}>
 						<div className={styles.animation}>
 							<Animation orientation={1} running={entered} />

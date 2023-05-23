@@ -58,12 +58,16 @@ const RandomMetro = class {
 			typeof interval == 'number' ? interval : randomInt(this.min, this.max)
 		this.count++
 		this.delay = setTimeout(this.start.bind(this), time)
+		return this
 	}
 
 	stop() {
-		clearTimeout(this.delay)
-		this?.callbackClear?.()
-		this.count = 0
+		if (this) {
+			clearTimeout(this.delay)
+			this?.callbackClear?.()
+			this.count = 0
+			return this
+		}
 	}
 
 	setRange(min, max) {
