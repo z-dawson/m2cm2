@@ -70,7 +70,6 @@ const loaded = new Promise((resolve) => {
 		baseUrl: '/audio/Sleep/',
 	}).toDestination()
 })
-
 let video
 sleepAudio.fadeOut = 0.02
 sleepAudio.fadeIn = 0.02
@@ -92,6 +91,7 @@ const rest = new Stochastic([{ range: [1.5, 4.5] }])
 let playerIndex = 1
 
 const loop = new RandomMetro(() => {
+	sleepAudio.player(0).volume.value = -13
 	let Timing
 	const shuffleState = shuffleMode.next()
 	const glitchTime = msToS(fastRepeats.next())
@@ -124,7 +124,7 @@ const loop = new RandomMetro(() => {
 const loopVoice = new Tone.Loop((time) => {
 	sleepAudio.player(0).start(time)
 	// console.log('previousInterval ' + loopVoice.interval)
-	loopVoice.interval = 45
+	loopVoice.interval = 120
 	// console.log('currentInterval ' + loopVoice.interval)
 	// console.log('TimeNow ' + time)
 	sleepAudio.player(0).stop(time + sleepAudio.player(0).buffer.duration)
@@ -134,7 +134,7 @@ const onStart = async (video) => {
 	await Promise.all([Tone.start(), loaded])
 	Tone.Transport.start()
 	loop.start()
-	loopVoice.start(2)
+	loopVoice.start(60)
 	video.current.currentTime = 0
 	video.current.play()
 }

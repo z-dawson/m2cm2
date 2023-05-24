@@ -37,7 +37,7 @@ const voiceUrl = 'forgetting.mp3'
 let voicePlayer
 
 const voiceLoaded = new Promise((resolve) => {
-	new Tone.Player({
+	voicePlayer = new Tone.Player({
 		url: baseUrl + voiceUrl,
 		onload: resolve,
 	}).toDestination()
@@ -102,6 +102,7 @@ const randomWave = new Stochastic(instruction1)
 wavePlayers.volume.value = -15
 operatorPlayers.volume.value = 5
 waterPlayers.volume.value = 3
+voicePlayer.volume.value = -6
 
 const loopWaves = new RandomMetro(() => {
 	let interval
@@ -127,8 +128,8 @@ const loopWaves = new RandomMetro(() => {
 })
 
 const loopVoice = new RandomMetro(() => {
-	voicePlayer.start(1)
-	return { interval: sToMs(randomInt(35, 65)) }
+	voicePlayer.start(60)
+	return { interval: sToMs(randomInt(140, 200)) }
 })
 
 const loopOperatorAndWater = new RandomMetro(() => {
