@@ -37,7 +37,7 @@ const voiceUrl = 'forgetting.mp3'
 let voicePlayer
 
 const voiceLoaded = new Promise((resolve) => {
-	new Tone.Player({
+	voicePlayer = new Tone.Player({
 		url: baseUrl + voiceUrl,
 		onload: resolve,
 	}).toDestination()
@@ -123,28 +123,43 @@ const loopWaves = new RandomMetro(() => {
 		console.log('else' + jitterDuration)
 		interval = jitterDuration
 	}
-	return { interval: sToMs(interval) }
+	return {
+		interval: sToMs(interval),
+		clear: () => {
+			wavePlayers.player(playerIndex).stop()
+		},
+	}
 })
 
 const loopVoice = new RandomMetro(() => {
 	voicePlayer.start(1)
-	return { interval: sToMs(randomInt(35, 65)) }
+	return {
+		interval: sToMs(randomInt(35, 65)),
+		clear: () => {
+			voicePlayer.stop(1)
+		},
+	}
 })
 
 const loopOperatorAndWater = new RandomMetro(() => {
 	const waterOffset = randomInt(400, 800) / 100
 	//let playerDuration = vacationAudio2.player(operatorIndex).buffer.duration
 	const initPan = randomInt(0, 2) ? 1 : -1
-	const playerIndex = randomInt(0, operatorUrls.length - 1)
-	const selectedPlayer = operatorPlayers.player(playerIndex)
+	const operatorIndex = randomInt(0, operatorUrls.length - 1)
+	const selectedPlayer = operatorPlayers.player(operatorIndex)
 	operatorPanner.pan.value = initPan
 	operatorPanner.pan.rampTo(-initPan, selectedPlayer.buffer.duration)
 	selectedPlayer.start()
 	waterPanner.pan.value = [-0.8, 0, 0.8][randomInt(0, 3)]
-	waterPlayers
-		.player(randomInt(0, waterUrls.length))
-		.start(Tone.now() + waterOffset)
-	return { interval: sToMs(randomInt(15, 32)) }
+	const waterIndex = randomInt(waterUrls.length)
+	waterPlayers.player(waterIndex).start(Tone.now() + waterOffset)
+	return {
+		interval: sToMs(randomInt(15, 32)),
+		clear: () => {
+			waterPlayers.player(waterIndex).stop()
+			operatorPlayers.player(operatorIndex).stop()
+		},
+	}
 })
 
 const init = (args) => {
