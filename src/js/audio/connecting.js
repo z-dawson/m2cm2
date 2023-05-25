@@ -40,13 +40,23 @@ let loopSound = new RandomMetro(() => {
 	let playerDuration = connectingAudio.player(playerIndex).buffer.duration
 	connectingAudio.player(playerIndex).start()
 	timingSound = playerDuration + randomIntervalSound.next()
-	return { interval: sToMs(timingSound) }
+	return {
+		interval: sToMs(timingSound),
+		clear: () => {
+			connectingAudio.player(playerIndex).stop()
+		},
+	}
 })
 
 let loopText = new RandomMetro(() => {
 	connectingAudio.player(0).start()
 	timingText = randomIntervalText.next()
-	return { interval: sToMs(timingText) }
+	return {
+		interval: sToMs(timingText),
+		clear: () => {
+			connectingAudio?.player(0).stop()
+		},
+	}
 })
 
 const onStart = async (video) => {
