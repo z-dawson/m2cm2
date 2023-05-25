@@ -28,7 +28,6 @@ const loaded = new Promise((resolve) => {
 		baseUrl: '/audio/nowhere/',
 	}).toDestination()
 })
-
 const randomIndexGenerator = new Stochastic([{ range: [0, 11] }])
 const randomJitterGenerator = new Stochastic([{ range: [-2000, 4000] }])
 
@@ -47,7 +46,7 @@ const instruction3 = [
 	{
 		value: null,
 		name: 'rest',
-		probability: 0.5,
+		probability: 0.6,
 	},
 ]
 
@@ -56,6 +55,8 @@ const textIndexGenerator = new Stochastic(instruction3)
 let video
 const reverbDuration = 10
 const loop = new RandomMetro(() => {
+	nowhereAudio.player(12).volume.value = -5
+	nowhereAudio.player(13).volume.value = -5
 	const currentIndex = randomIndexGenerator.next()
 	const textIndex = textIndexGenerator.next()
 	const randomJitter = msToS(randomJitterGenerator.next())

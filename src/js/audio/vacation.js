@@ -102,6 +102,7 @@ const randomWave = new Stochastic(instruction1)
 wavePlayers.volume.value = -15
 operatorPlayers.volume.value = 5
 waterPlayers.volume.value = 3
+voicePlayer.volume.value = -6
 
 const loopWaves = new RandomMetro(() => {
 	let interval
@@ -132,11 +133,11 @@ const loopWaves = new RandomMetro(() => {
 })
 
 const loopVoice = new RandomMetro(() => {
-	voicePlayer.start(1)
+	voicePlayer.start(60)
 	return {
-		interval: sToMs(randomInt(35, 65)),
+		interval: sToMs(randomInt(140, 200)),
 		clear: () => {
-			voicePlayer.stop(1)
+			voicePlayer.stop()
 		},
 	}
 })

@@ -46,7 +46,7 @@ const loop = new RandomMetro(() => {
 	const playerDuration = sToMs(selectedPlayer.buffer.duration)
 	console.log('playerduration ' + playerDuration)
 	selectedPlayer.start()
-	return { interval: Math.ceil(playerDuration) + jitterDuration }
+	return { interval: sToMs(Math.ceil(playerDuration) + jitterDuration) }
 })
 
 const onStart = async (video) => {

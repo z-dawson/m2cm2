@@ -129,7 +129,7 @@ const audioUrls = [
 	'Freeze CLIPS [2023-02-28 123556].mp3',
 ]
 
-const voiceIntervals = new Stochastic([45, 60, 15, 2 * 60, 3 * 60])
+const voiceIntervals = new Stochastic([80, 100, 2 * 60, 2.2 * 60])
 
 const voiceUrl = '/audio/lobby/recurring.mp3'
 
@@ -141,10 +141,11 @@ const voiceLoaded = new Promise((resolve) => {
 		onload: resolve,
 	}).toDestination()
 })
+voice.volume.value = -8
 
 const voiceLoop = new Tone.Loop((time) => {
 	const randomDuration = voiceIntervals.next()
-	voice.start(time)
+	voice.start(randomDuration)
 	voiceLoop.interval = time + randomDuration
 })
 
