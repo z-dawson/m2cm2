@@ -188,6 +188,8 @@ const onStop = () => {
 	timeSelector.stop()
 	loop1.stop()
 	loop2.stop()
+	concertAudio1.stopAll()
+	concertAudio2.stopAll()
 	video?.current?.pause?.()
 	video2?.current?.pause?.()
 	;[(video, video2)].forEach((v) => {
