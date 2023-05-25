@@ -1,9 +1,8 @@
 import * as Tone from 'tone'
 import Stochastic from '@/js/audio/stochastic.js'
-import { msToS, RandomMetro } from './common'
+import { RandomMetro } from './common'
 import { sToMs } from './common'
-import { randomRange } from './common'
-import { randomInt, Urn } from './common'
+import { Urn } from './common'
 
 const audioUrls = [
 	'/audio/sonyEricsson/5thSentence.mp3',
@@ -16,7 +15,7 @@ const audioUrls = [
 
 let video
 let timingSound
-let sonyAudio = new Tone.Players(audioUrls).toDestination()
+let sonyAudio
 const loaded = new Promise((resolve) => {
 	sonyAudio = new Tone.Players({
 		urls: audioUrls,
@@ -54,7 +53,12 @@ let loopSound = new RandomMetro(() => {
 	let playerDuration = sonyAudio.player(playerIndex).buffer.duration
 	sonyAudio.player(playerIndex).start()
 	timingSound = playerDuration
-	return { interval: sToMs(timingSound) }
+	return {
+		interval: sToMs(timingSound),
+		clear: () => {
+			sonyAudio.player(playerIndex).stop()
+		},
+	}
 })
 
 const onStart = async (video) => {
@@ -71,9 +75,12 @@ const onStart = async (video) => {
 }
 
 const onStop = (video) => {
-	video.current.pause()
 	Tone.Transport.stop()
-	video.current.currentTime = 0
+	loopSound.stop()
+	if (video.current) {
+		video.current.currentTime = 0
+		video.current.pause()
+	}
 }
 
 export { onStart, onStop, init }
