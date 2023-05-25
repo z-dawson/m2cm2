@@ -1,7 +1,6 @@
 import { useWindowSize } from '@/js/hooks'
 import styles from '@/styles/Room.module.css'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import PlayAudio from '../components/PlayAudio'
 
 const Room = ({ name, play }) => {
 	const [soundEngine, setSoundEngine] = useState({})
@@ -46,7 +45,6 @@ const Room = ({ name, play }) => {
 
 	return (
 		<div className={styles.container}>
-			{/* <PlayAudio {...{ onStart, onStop }} enabled={loaded} /> */}
 			<video muted className={styles.video} ref={video}>
 				<source src={`/videos/${name}.mp4`} type="video/mp4" />
 			</video>
