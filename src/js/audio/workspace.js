@@ -31,15 +31,17 @@ let loop
 
 const init = (args) => {
 	video = args.video
+	if (!video.current) return
 	video.current.playbackRate = 0.25
 	video.current.addEventListener('ended', onEnd)
 
 	loop = new Tone.ToneEvent((time) => {
 		let duration = 0
 		while (
-			video.current.duration * (1 / video.current.playbackRate) >
+			video?.current?.duration * (1 / video?.current?.playbackRate) >
 			duration
 		) {
+			if (!video?.current) break
 			const playerIndex = rando(0, 1)
 			const playerDuration = workspaceAudio.player(playerIndex).buffer.duration
 			workspaceAudio.player(playerIndex).start(time + duration)
