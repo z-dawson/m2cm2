@@ -60,12 +60,20 @@ const Text = (props) => {
 				}
 
 				userName.current = getNewUserName()
-				nextWord()
+				endOfParagraph ? startReading() : nextWord()
 
 				return chat
 			})
 		}, sToMs(interval))
-	}, [])
+	}, [soundEngine])
+
+	const startReading = useCallback(() => {
+		console.log('start Reading')
+		;(async () => {
+			await soundEngine?.onStart?.(paragraphIndex.current)
+			nextWord()
+		})()
+	}, [soundEngine])
 
 	useEffect(() => {
 		sliced.current = text.map((paragraph) => {
@@ -81,10 +89,7 @@ const Text = (props) => {
 
 	useEffect(() => {
 		if (reading && soundEngine) {
-			;(async () => {
-				await soundEngine?.onStart?.(paragraphIndex.current)
-				nextWord()
-			})()
+			startReading()
 		}
 	}, [reading, soundEngine])
 
