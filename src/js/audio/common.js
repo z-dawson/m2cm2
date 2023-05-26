@@ -124,4 +124,19 @@ const Loop = class {
 	}
 }
 
-export { randomRange, Urn, RandomMetro, Loop, sToMs, msToS, randomInt }
+const getNumFilenames = (num, offset = 1, filetype = 'mp3') => {
+	return Array.from(Array(num)).map(
+		(name, index) => `${index + offset}.${filetype}`
+	)
+}
+
+export {
+	randomRange,
+	Urn,
+	RandomMetro,
+	Loop,
+	sToMs,
+	msToS,
+	randomInt,
+	getNumFilenames,
+}
