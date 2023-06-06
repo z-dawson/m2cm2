@@ -19,7 +19,7 @@ const Text = (props) => {
 
 	const sliced = useRef([])
 	const timeout = useRef()
-	const userName = useRef()
+	const userName = useRef(getNewUserName())
 
 	const nextWord = useCallback(() => {
 		const interval = timestamps[paragraphIndex.current][timestampIndex.current]
@@ -98,11 +98,11 @@ const Text = (props) => {
 			<div className={styles.expandingContainer}>
 				{chat.map((paragraph, index) => {
 					return (
-						<Fragment key={index}>
+						<p className={styles.sentence} key={index}>
 							<strong style={{ fontWeight: 600 }}>{userName.current}: </strong>
 							{paragraph.map((sentence, index) => {
 								return (
-									<p className={styles.sentence} key={index}>
+									<Fragment key={index}>
 										{sentence.map((word, index) => {
 											return (
 												<Fragment key={index}>
@@ -110,10 +110,10 @@ const Text = (props) => {
 												</Fragment>
 											)
 										})}
-									</p>
+									</Fragment>
 								)
 							})}
-						</Fragment>
+						</p>
 					)
 				})}
 			</div>
