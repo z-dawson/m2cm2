@@ -37,11 +37,13 @@ const Animation = ({ running }) => {
 					clearTimeout(timeout)
 					setRectangles([])
 				},
-				interval: duration + randomInt(3000, 5000),
+				interval: duration + sToMs(randomInt(3, 5)),
 			}
 		}).start()
 
-		return metro.stop
+		return () => {
+			metro.stop()
+		}
 	}, [running])
 
 	return (

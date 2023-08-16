@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
-import { randomInt, RandomMetro } from '@/js/audio/common'
+import { randomInt, RandomMetro, sToMs } from '@/js/audio/common'
 import { useWindowSize } from '@/js/hooks'
 import { useEffect, useRef, useState } from 'react'
 
-const size = 0.1
+const size = 0.4
 const duration = 1000
 
 const RandomImage = () => {
@@ -28,11 +28,13 @@ const RandomImage = () => {
 					clearTimeout(timeout)
 					setVisible(false)
 				},
-				interval: 5000,
+				interval: duration + sToMs(randomInt(4, 8)),
 			}
 		}).start()
 
-		return metro.stop
+		return () => {
+			metro.stop()
+		}
 	}, [windowSize])
 
 	return (
