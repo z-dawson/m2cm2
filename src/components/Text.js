@@ -10,11 +10,10 @@ const getNewUserName = () => userNameGenerator.generateUsername('_')
 
 const Text = (props) => {
 	const { reading, soundEngine } = props
-	const [chat, setChat] = useState([[[]]])
+	const [chat, setChat] = useState([[]])
 
 	const paragraphIndex = useRef(chooseParagraph.next())
 	const wordIndex = useRef(0)
-	const sentenceIndex = useRef(0)
 	const timestampIndex = useRef(0)
 
 	const sliced = useRef([])
@@ -24,39 +23,26 @@ const Text = (props) => {
 	const nextWord = useCallback(() => {
 		const interval = timestamps[paragraphIndex.current][timestampIndex.current]
 
-		const sentenceLength =
-			sliced.current[paragraphIndex.current][sentenceIndex.current].length
 		const paragraphLength = sliced.current[paragraphIndex.current].length
 
-		const endOfSentence = sentenceLength - 1 <= wordIndex.current
-		const endOfParagraph =
-			endOfSentence && paragraphLength - 1 <= sentenceIndex.current
+		const endOfParagraph = paragraphLength - 1 <= wordIndex.current
 
 		timeout.current = setTimeout(() => {
 			setChat((prev) => {
 				const chat = [...prev]
 
-				chat[chat.length - 1][sentenceIndex.current].push(
-					sliced.current[paragraphIndex.current][sentenceIndex.current][
-						wordIndex.current
-					]
+				chat[chat.length - 1].push(
+					sliced.current[paragraphIndex.current][wordIndex.current]
 				)
 
 				if (endOfParagraph) {
 					chat[chat.length] = [[]]
 					paragraphIndex.current = chooseParagraph.next()
-					sentenceIndex.current = wordIndex.current = 0
+					wordIndex.current = 0
 					timestampIndex.current = 0
 				} else {
 					timestampIndex.current += 1
-					if (endOfSentence) {
-						const currentSentence = chat[chat.length - 1]
-						currentSentence[currentSentence.length] = []
-						wordIndex.current = 0
-						sentenceIndex.current += 1
-					} else {
-						wordIndex.current += 1
-					}
+					wordIndex.current += 1
 				}
 
 				userName.current = getNewUserName()
@@ -77,8 +63,7 @@ const Text = (props) => {
 
 	useEffect(() => {
 		sliced.current = text.map((paragraph) => {
-			const sentences = paragraph.split(/[?.]\s/)
-			return sentences.map((sentence) => sentence.split(/[\s-]/))
+			return paragraph.split(/[\s-]/)
 		})
 
 		return () => {
@@ -98,18 +83,12 @@ const Text = (props) => {
 			<div className={styles.expandingContainer}>
 				{chat.map((paragraph, index) => {
 					return (
-						<p className={styles.sentence} key={index}>
+						<p className={styles.paragraph} key={index}>
 							<strong style={{ fontWeight: 600 }}>{userName.current}: </strong>
-							{paragraph.map((sentence, index) => {
+							{paragraph.map((word, index) => {
 								return (
 									<Fragment key={index}>
-										{sentence.map((word, index) => {
-											return (
-												<Fragment key={index}>
-													<span>{word}</span>{' '}
-												</Fragment>
-											)
-										})}
+										<span>{word}</span>{' '}
 									</Fragment>
 								)
 							})}
