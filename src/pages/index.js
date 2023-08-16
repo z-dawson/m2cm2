@@ -82,7 +82,7 @@ function Home() {
 					<RandomImage />
 					<div className={styles.bottomLayer}>
 						<div className={styles.animation}>
-							<Animation orientation={1} running={entered} />
+							<Animation running={entered} />
 						</div>
 					</div>
 				</main>

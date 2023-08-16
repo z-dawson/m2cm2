@@ -1,6 +1,6 @@
-import { sToMs } from '@/js/audio/common'
+import { RandomMetro, randomInt, sToMs } from '@/js/audio/common'
 import styles from '@/styles/Animation.module.css'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const getOrientation = (index) =>
 	[
@@ -13,27 +13,42 @@ const getOrientation = (index) =>
 const size = 0.5
 const rate = 10
 
-const Animation = ({ orientation = 0, running }) => {
+const Animation = ({ running }) => {
 	const [rectangles, setRectangles] = useState([])
-	const getOrientationArray = useCallback(
-		(pos) =>
-			getOrientation(orientation % 4).map(
-				(p) => pos * p + 100 * (p < 0 ? size : 0)
-			),
-		[orientation]
-	)
+	const orientation = useRef(0)
+	const pos = useRef([0, 0])
+
+	const getOrientationArray = (rectPos) =>
+		getOrientation(orientation.current % 4).map(
+			(p) => rectPos * p + 100 * (p < 0 ? size : 0)
+		)
 
 	useEffect(() => {
 		const length = 16
-		setRectangles(running ? Array(length).fill(0) : [])
-		setTimeout(() => setRectangles([]), sToMs(1 + length / rate))
+
+		const metro = new RandomMetro(() => {
+			setRectangles(running ? Array(length).fill(0) : [])
+			const duration = sToMs(1 + length / rate)
+			const timeout = setTimeout(() => setRectangles([]), duration)
+			orientation.current = randomInt(4)
+			pos.current[0] = randomInt(100)
+			return {
+				clear: () => {
+					clearTimeout(timeout)
+					setRectangles([])
+				},
+				interval: duration + randomInt(3000, 5000),
+			}
+		}).start()
+
+		return metro.stop
 	}, [running])
 
 	return (
 		<div className={styles.container}>
 			{rectangles.map((el, index, arr) => {
-				const pos = (size * 100 * index) / arr.length
-				const [y, x] = getOrientationArray(pos)
+				const rectPos = pos.current[0] + (size * 100 * index) / arr.length
+				const [y, x] = getOrientationArray(rectPos)
 				return (
 					<div
 						style={{
