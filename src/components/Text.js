@@ -19,7 +19,7 @@ const Text = (props) => {
 
 	const sliced = useRef([])
 	const timeout = useRef()
-	const userName = useRef(getNewUserName())
+	const userName = useRef('')
 
 	const nextWord = useCallback(() => {
 		const interval = timestamps[paragraphIndex.current][timestampIndex.current]
