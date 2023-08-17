@@ -87,7 +87,7 @@ const Loop = class {
 
 	init(callback, options = {}) {
 		this.callback = callback
-		const initOptions = { interval: 1000 }
+		const initOptions = { interval: sToMs(1) }
 		Object.assign(this, initOptions, options)
 		this.count = 0
 		return this

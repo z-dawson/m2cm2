@@ -4,7 +4,7 @@ import { useWindowSize } from '@/js/hooks'
 import { useEffect, useRef, useState } from 'react'
 
 const size = 0.4
-const duration = 1000
+const duration = sToMs(1)
 
 const RandomImage = () => {
 	const position = useRef([0, 0])

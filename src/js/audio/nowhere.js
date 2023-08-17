@@ -29,7 +29,7 @@ const loaded = new Promise((resolve) => {
 	}).toDestination()
 })
 const randomIndexGenerator = new Stochastic([{ range: [0, 11] }])
-const randomJitterGenerator = new Stochastic([{ range: [-2000, 4000] }])
+const randomJitterGenerator = new Stochastic([{ range: [sToMs(-2), sToMs(4)] }])
 
 const instruction3 = [
 	{
