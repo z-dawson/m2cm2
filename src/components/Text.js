@@ -18,7 +18,7 @@ const Text = (props) => {
 
 	const sliced = useRef([])
 	const timeout = useRef()
-	const userName = useRef('')
+	const userNames = useRef(new Array(3).fill(''))
 
 	const nextWord = useCallback(() => {
 		const interval = timestamps[paragraphIndex.current][timestampIndex.current]
@@ -45,7 +45,7 @@ const Text = (props) => {
 					wordIndex.current += 1
 				}
 
-				userName.current = getNewUserName()
+				userNames.current = userNames.current.map(getNewUserName)
 				endOfParagraph ? startReading() : nextWord()
 
 				return chat
@@ -84,7 +84,9 @@ const Text = (props) => {
 				{chat.map((paragraph, index) => {
 					return (
 						<p className={styles.paragraph} key={index}>
-							<strong style={{ fontWeight: 600 }}>{userName.current}: </strong>
+							<strong style={{ fontWeight: 600 }}>
+								{userNames.current[index % userNames.current.length]}:{' '}
+							</strong>
 							{paragraph.map((word, index) => {
 								return (
 									<Fragment key={index}>
