@@ -1,3 +1,4 @@
+import { loadVideo } from '@/js/helpers'
 import { useWindowSize } from '@/js/hooks'
 import styles from '@/styles/Room.module.css'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -32,15 +33,11 @@ const Room = ({ name, play, onFinish }) => {
 	useEffect(() => {
 		;(async () => {
 			const soundEngineModule = await import(`@/js/audio/${name}.js`)
-			video.current.load()
-			loadListener.current = () => {
-				soundEngineModule?.init?.({ video, video2, onFinish })
-				setLoaded(true)
-				setSoundEngine(soundEngineModule)
-			}
-			video.current.addEventListener('loadedmetadata', loadListener.current)
+			await loadVideo(video.current, loadListener.current)
+			soundEngineModule?.init?.({ video, video2, onFinish })
+			setLoaded(true)
+			setSoundEngine(soundEngineModule)
 		})()
-		return () => removeEventListener('loadedmetadata', loadListener.current)
 	}, [name])
 
 	return (
@@ -48,14 +45,16 @@ const Room = ({ name, play, onFinish }) => {
 			<video muted className={styles.video} ref={video}>
 				<source src={`/videos/${name}.mp4`} type="video/mp4" />
 			</video>
-			<video
-				muted
-				className={styles.video}
-				style={{ visibility: 'hidden' }}
-				ref={video2}
-			>
-				<source src="/videos/concert2.mp4" type="video/mp4" />
-			</video>
+			{name == 'content' && (
+				<video
+					muted
+					className={styles.video}
+					style={{ visibility: 'hidden' }}
+					ref={video2}
+				>
+					<source src="/videos/concert2.mp4" type="video/mp4" />
+				</video>
+			)}
 		</div>
 	)
 }
