@@ -23,7 +23,7 @@ const onStart = async (index) => {
 }
 
 const onStop = (index = playingIndex) => {
-	players.player(index).stop()
+	players.loaded && players.player(index).stop()
 }
 
 export { onStart, onStop }

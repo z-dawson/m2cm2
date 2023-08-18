@@ -48,6 +48,8 @@ function Home() {
 		setDestinationTrigger(true)
 	}
 
+	const reading = entered && !ad
+
 	return (
 		<>
 			<Head>
@@ -87,7 +89,7 @@ function Home() {
 					</div>
 				</main>
 				<aside className={styles.aside}>
-					<Text reading={entered} soundEngine={soundEngine} />
+					<Text reading={reading} soundEngine={soundEngine} />
 				</aside>
 			</div>
 		</>

@@ -76,6 +76,10 @@ const Text = (props) => {
 		if (reading && soundEngine) {
 			startReading()
 		}
+		if (!reading && soundEngine) {
+			clearTimeout(timeout.current)
+			soundEngine?.onStop?.()
+		}
 	}, [reading, soundEngine])
 
 	return (

@@ -2,7 +2,7 @@ import { useWindowSize } from '@/js/hooks'
 import styles from '@/styles/Room.module.css'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-const Room = ({ name, play }) => {
+const Room = ({ name, play, onFinish }) => {
 	const [soundEngine, setSoundEngine] = useState({})
 	const [loaded, setLoaded] = useState(false)
 	const video = useRef()
@@ -34,7 +34,7 @@ const Room = ({ name, play }) => {
 			const soundEngineModule = await import(`@/js/audio/${name}.js`)
 			video.current.load()
 			loadListener.current = () => {
-				soundEngineModule?.init?.({ video, video2 })
+				soundEngineModule?.init?.({ video, video2, onFinish })
 				setLoaded(true)
 				setSoundEngine(soundEngineModule)
 			}

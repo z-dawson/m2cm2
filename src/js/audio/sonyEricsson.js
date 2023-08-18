@@ -16,6 +16,8 @@ const audioUrls = [
 let video
 let timingSound
 let sonyAudio
+let onFinish
+const event = 'ended'
 const loaded = new Promise((resolve) => {
 	sonyAudio = new Tone.Players({
 		urls: audioUrls,
@@ -25,7 +27,11 @@ const loaded = new Promise((resolve) => {
 
 const init = (args) => {
 	video = args.video
-	video.current.loop = true
+	video.current.loop = false
+	onFinish = () => {
+		args.onFinish()
+	}
+	video.current.addEventListener(event, onFinish, true)
 }
 const urn = new Urn(audioUrls.length, audioUrls.length - 2)
 let instruction1 = [
@@ -77,6 +83,7 @@ const onStart = async (video) => {
 const onStop = (video) => {
 	Tone.Transport.stop()
 	loopSound.stop()
+	removeEventListener(event, onFinish, true)
 	if (video.current) {
 		video.current.currentTime = 0
 		video.current.pause()

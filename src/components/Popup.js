@@ -19,7 +19,7 @@ const Popup = ({ onSkip, ad }) => {
 				<button onClick={handleClick} className={styles.skipAd}>
 					Skip Ad <BiSkipNext style={{ fontSize: '1.6rem' }} />
 				</button>
-				<Room name={ad} play={play} />
+				<Room name={ad} play={play} onFinish={handleClick} />
 			</div>
 		</div>
 	)
