@@ -16,19 +16,19 @@ const Room = ({ name, play, onFinish }) => {
 		soundEngine?.onResize?.(size)
 	}, [size, soundEngine])
 
-	const onStart = useCallback(() => {
-		soundEngine?.onStart?.(video)
+	const start = useCallback(() => {
+		soundEngine?.start?.(video)
 	}, [soundEngine])
 
-	const onStop = useCallback(() => {
-		soundEngine?.onStop?.(video)
+	const stop = useCallback(() => {
+		soundEngine?.stop?.(video)
 	}, [soundEngine])
 
-	useEffect(() => onStop, [onStop])
+	useEffect(() => stop, [stop])
 
 	useEffect(() => {
-		;(play ? onStart : onStop)()
-	}, [play, onStart])
+		;(play ? start : stop)()
+	}, [play, start])
 
 	useEffect(() => {
 		;(async () => {

@@ -56,7 +56,7 @@ const Text = (props) => {
 	const startReading = useCallback(() => {
 		console.log('start Reading')
 		;(async () => {
-			await soundEngine?.onStart?.(paragraphIndex.current)
+			await soundEngine?.start?.(paragraphIndex.current)
 			nextWord()
 		})()
 	}, [soundEngine])
@@ -68,7 +68,7 @@ const Text = (props) => {
 
 		return () => {
 			clearTimeout(timeout.current)
-			soundEngine?.onStop?.()
+			soundEngine?.stop?.()
 		}
 	}, [soundEngine])
 
@@ -78,7 +78,7 @@ const Text = (props) => {
 		}
 		if (!reading && soundEngine) {
 			clearTimeout(timeout.current)
-			soundEngine?.onStop?.()
+			soundEngine?.stop?.()
 		}
 	}, [reading, soundEngine])
 

@@ -49,7 +49,7 @@ const init = (args) => {
 	})
 }
 
-const onStart = async () => {
+const start = async () => {
 	await Promise.all([Tone.start(), loaded, voiceLoaded])
 	Tone.Transport.start()
 	video.current.currentTime = 0
@@ -73,7 +73,7 @@ const onRepeat = () => {
 	players.player(playerIndexes[1]).start(Tone.now() + 4.2)
 }
 
-const onStop = (video) => {
+const stop = (video) => {
 	if (video.current) {
 		video.current.pause()
 		video.current.currentTime = 0
@@ -86,4 +86,4 @@ const onStop = (video) => {
 	Tone.Transport.stop()
 }
 
-export { onStart, onStop, init }
+export { start, stop, init }

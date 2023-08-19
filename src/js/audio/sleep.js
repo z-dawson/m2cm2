@@ -72,7 +72,7 @@ const loopVoice = new Tone.Loop((time) => {
 	sleepAudio.player(0).stop(time + sleepAudio.player(0).buffer.duration)
 })
 
-const onStart = async (video) => {
+const start = async (video) => {
 	await Promise.all([Tone.start(), loaded])
 	Tone.Transport.start()
 	loop.start()
@@ -81,7 +81,7 @@ const onStart = async (video) => {
 	video.current.play()
 }
 
-const onStop = (video) => {
+const stop = (video) => {
 	if (video.current) {
 		video.current.pause()
 		video.current.currentTime = 0
@@ -95,4 +95,4 @@ const onStop = (video) => {
 	Tone.Transport.stop()
 }
 
-export { onStart, onStop, init }
+export { start, stop, init }

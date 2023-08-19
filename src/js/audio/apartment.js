@@ -74,7 +74,7 @@ const init = (args) => {
 	})
 }
 
-const onStart = async (video) => {
+const start = async (video) => {
 	await Promise.all([Tone.start(), loaded])
 	video.current.currentTime = 0
 	video.current.play()
@@ -91,7 +91,7 @@ const onRepeat = () => {
 	apartmentAudio.player(playerIndex).start(Tone.now())
 }
 
-const onStop = (video) => {
+const stop = (video) => {
 	if (video.current) {
 		video.current.pause()
 		video.current.currentTime = 0
@@ -102,4 +102,4 @@ const onStop = (video) => {
 	// apartmentAudio.dispose()
 }
 
-export { onStart, onStop, init }
+export { start, stop, init }

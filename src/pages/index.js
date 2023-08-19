@@ -37,7 +37,7 @@ function Home() {
 		setDestinationRoom(name)
 		if (randomInt(100) < probability) {
 			showAd()
-			soundEngine?.onStop?.()
+			soundEngine?.stop?.()
 		} else {
 			setDestinationTrigger(true)
 		}

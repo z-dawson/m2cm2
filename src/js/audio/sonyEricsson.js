@@ -67,7 +67,7 @@ let loopSound = new RandomMetro(() => {
 	}
 })
 
-const onStart = async (video) => {
+const start = async (video) => {
 	await Promise.all([Tone.start(), loaded])
 	timingSound = sonyAudio.player(0).buffer.duration
 	console.log('Timing' + sonyAudio.player(2).buffer.duration)
@@ -80,7 +80,7 @@ const onStart = async (video) => {
 	video.current.play()
 }
 
-const onStop = (video) => {
+const stop = (video) => {
 	Tone.Transport.stop()
 	loopSound.stop()
 	removeEventListener(event, onFinish, true)
@@ -90,4 +90,4 @@ const onStop = (video) => {
 	}
 }
 
-export { onStart, onStop, init }
+export { start, stop, init }

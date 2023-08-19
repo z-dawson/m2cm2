@@ -84,7 +84,7 @@ const timeSelector = new RandomMetro(() => {
 	}
 })
 
-const onStart = async (video) => {
+const start = async (video) => {
 	await Promise.all([Tone.start(), loaded1, loaded2])
 	Tone.Transport.start()
 	video.current.currentTime = 0
@@ -96,7 +96,7 @@ const onStart = async (video) => {
 	timeSelector.start()
 }
 
-const onStop = () => {
+const stop = () => {
 	timeSelector.stop()
 	loop1.stop()
 	loop2.stop()
@@ -112,4 +112,4 @@ const onStop = () => {
 	})
 }
 
-export { onStart, onStop, init }
+export { start, stop, init }

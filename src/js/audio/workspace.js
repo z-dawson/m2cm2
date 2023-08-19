@@ -63,7 +63,7 @@ const init = (args) => {
 	})
 }
 
-const onStart = async (video) => {
+const start = async (video) => {
 	await Promise.all([Tone.start(), loaded])
 	Tone.Transport.start()
 	video.current.currentTime = 0
@@ -82,7 +82,7 @@ const onEnd = () => {
 	Tone.Transport.stop()
 }
 
-const onStop = (video) => {
+const stop = (video) => {
 	if (video.current) {
 		video.current.pause()
 		video.current.currentTime = 0
@@ -92,4 +92,4 @@ const onStop = (video) => {
 	Tone.Transport.stop()
 }
 
-export { onStart, onStop, init }
+export { start, stop, init }

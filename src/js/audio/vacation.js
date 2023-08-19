@@ -186,7 +186,7 @@ const onResize = ({ width, height }) => {
 	video?.current && Object.assign(video.current.style, styles)
 }
 
-const onStart = async (video) => {
+const start = async (video) => {
 	await Promise.all([Tone.start(), loaded, voiceLoaded])
 	loopWaves.start()
 	loopVoice.start()
@@ -195,7 +195,7 @@ const onStart = async (video) => {
 	video.current.play()
 }
 
-const onStop = (video) => {
+const stop = (video) => {
 	if (video.current) {
 		video.current.pause()
 		video.current.currentTime = 0
@@ -206,4 +206,4 @@ const onStop = (video) => {
 	loopOperatorAndWater.stop()
 }
 
-export { onStart, onStop, init, onResize }
+export { start, stop, init, onResize }

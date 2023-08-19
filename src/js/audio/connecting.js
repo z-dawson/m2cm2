@@ -59,13 +59,13 @@ let loopText = new RandomMetro(() => {
 	}
 })
 
-const onStart = async (video) => {
+const start = async (video) => {
 	await Promise.all([Tone.start(), loaded])
 	loopSound.start()
 	loopText.start()
 	video.current.play()
 }
-const onStop = (video) => {
+const stop = (video) => {
 	Tone.Transport.stop()
 	loopSound.stop()
 	loopText.stop()
@@ -75,4 +75,4 @@ const onStop = (video) => {
 	}
 }
 
-export { onStart, onStop, init }
+export { start, stop, init }

@@ -16,14 +16,14 @@ const loaded = new Promise((resolve, reject) => {
 
 let playingIndex
 
-const onStart = async (index) => {
+const start = async (index) => {
 	await Promise.all([Tone.start(), loaded])
 	playingIndex = index
 	players.player(playingIndex).start(Tone.now())
 }
 
-const onStop = (index = playingIndex) => {
+const stop = (index = playingIndex) => {
 	players.loaded && players.player(index).stop()
 }
 
-export { onStart, onStop }
+export { start, stop }
