@@ -33,12 +33,15 @@ const Urn = class {
 	}
 }
 
-const randomFloat = (min, max) => {
+const getRange = (range) => (range.length == 1 ? [0, range[0]] : range)
+
+const randomFloat = (...range) => {
+	const [min, max] = getRange(range)
 	return Math.random() * (max - min) + min
 }
 
 const randomInt = (...range) => {
-	const [min, max] = range.length == 1 ? [0, range[0]] : range
+	const [min, max] = getRange(range)
 	return Math.floor(randomFloat(min, max))
 }
 
@@ -138,5 +141,6 @@ export {
 	sToMs,
 	msToS,
 	randomInt,
+	randomFloat,
 	getNumFilenames,
 }

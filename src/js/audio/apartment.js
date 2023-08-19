@@ -1,6 +1,12 @@
 import * as Tone from 'tone'
-import { Urn, RandomMetro, sToMs, Loop, randomInt } from '@/js/audio/common'
-import { rando } from '@nastyox/rando.js'
+import {
+	Urn,
+	RandomMetro,
+	sToMs,
+	Loop,
+	randomInt,
+	randomFloat,
+} from '@/js/audio/common'
 
 const urls = [
 	'S0_03 a.mp3',
@@ -38,7 +44,7 @@ const init = (args) => {
 		if (!looping && !video?.current?.paused) onRepeat()
 	})
 	randomMetro = new RandomMetro(({ count }) => {
-		const time = video.current.duration * rando(1, 'float')
+		const time = video.current.duration * randomFloat(1)
 		const newLoop = count > 0
 
 		const loopCallback = ({ count }) => {
@@ -53,8 +59,8 @@ const init = (args) => {
 		if (newLoop) {
 			looping = true
 			const loopOptions = {
-				interval: rando(200, 1500),
-				times: rando(2, 5) + 1,
+				interval: randomInt(200, 1500),
+				times: randomInt(2, 5) + 1,
 			}
 			loop.start(loopCallback, loopOptions)
 
@@ -63,7 +69,7 @@ const init = (args) => {
 		const { duration } = video.current
 		return {
 			clear: newLoop ? loop.stop : undefined,
-			interval: sToMs(randomInt(duration / 2, duration * 2)),
+			interval: sToMs(duration * randomInt(0.5, 2)),
 		}
 	})
 }

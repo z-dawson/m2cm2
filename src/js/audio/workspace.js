@@ -1,5 +1,5 @@
 import * as Tone from 'tone'
-import { rando } from '@nastyox/rando.js'
+import { randomInt } from './common'
 
 const urls = [
 	'memory.mp3',
@@ -42,11 +42,11 @@ const init = (args) => {
 			duration
 		) {
 			if (!video?.current) break
-			const playerIndex = rando(0, 1)
+			const playerIndex = randomInt(1)
 			const playerDuration = workspaceAudio.player(playerIndex).buffer.duration
 			workspaceAudio.player(playerIndex).start(time + duration)
 
-			const playerIndexNext = rando(2, 8)
+			const playerIndexNext = randomInt(2, 8)
 			const playerDurationNext =
 				workspaceAudio.player(playerIndexNext).buffer.duration
 			workspaceAudio
