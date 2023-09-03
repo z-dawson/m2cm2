@@ -43,7 +43,7 @@ const loop = new RandomMetro(() => {
 	const jitterDuration = randomDuration.next()
 	console.log(jitterDuration)
 	const selectedPlayer = travelAudio.player(playerIndex)
-	const playerDuration = sToMs(selectedPlayer.buffer.duration)
+	const playerDuration = selectedPlayer.buffer.duration
 	console.log('playerduration ' + playerDuration)
 	selectedPlayer.start()
 	return { interval: sToMs(Math.ceil(playerDuration) + jitterDuration) }
