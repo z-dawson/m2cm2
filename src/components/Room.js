@@ -45,7 +45,7 @@ const Room = ({ name, play, onFinish }) => {
 			<video muted className={styles.video} ref={video}>
 				<source src={`/videos/${name}.mp4`} type="video/mp4" />
 			</video>
-			{name == 'content' && (
+			{name == 'concert' && (
 				<video
 					muted
 					className={styles.video}
