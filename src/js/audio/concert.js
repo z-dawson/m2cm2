@@ -30,6 +30,7 @@ const init = (args) => {
 	video = args.video
 	video.current.loop = true
 	video2 = args.video2
+	video2.current.loop = true
 }
 
 concertAudio1.fadeOut = 0.02
@@ -44,8 +45,23 @@ const instruction3 = [
 const randomBank1 = new Stochastic([{ range: [0, 59] }])
 const randomBank2 = new Stochastic([{ range: [0, 25] }])
 const bankSelector = new Stochastic(instruction3)
-const randomTiming1 = new Stochastic([{ range: [14, 30] }])
-const randomTiming2 = new Stochastic([{ range: [16, 24] }])
+const randomTiming1 = new Stochastic([
+	{ value: 0.3, repeat: 10 },
+	{ value: 3 },
+	{ value: 15 },
+	{ value: 4 },
+	{ value: 2 },
+	{ value: 0.8 },
+])
+const randomTiming2 = new Stochastic([
+	{ value: 0.3, repeat: 10 },
+	{ value: 3 },
+	{ value: 15 },
+	{ value: 4 },
+	{ value: 2 },
+	{ value: 0.8 },
+])
+const videoTiming = new Stochastic([{ range: [0, 7] }])
 const loop1 = new Tone.Loop(() => {
 	console.log('loop1')
 	let playerIndex = randomBank1.next()
@@ -67,20 +83,23 @@ const loop2 = new Tone.Loop(() => {
 const timeSelector = new RandomMetro(() => {
 	console.log('timeSelector')
 	if (bankSelector.next() == 1) {
-		video.current.currentTime = 0
+		let VT = sToMs(videoTiming.next())
+		video.current.currentTime = VT
+		console.log(VT)
 		concertAudio1.volume.rampTo(0, 0.05)
 		concertAudio2.volume.rampTo(-80, 0.05)
 		video.current.style.visibility = 'visible'
 		video2.current.style.visibility = 'hidden'
 		return { interval: sToMs(randomTiming1.next()) }
 	} else {
-		video2.current.currentTime = 0
+		let VT = sToMs(videoTiming.next())
+		console.log(videoTiming)
 		video2.current.play()
 		video2.current.style.visibility = 'visible'
 		video.current.style.visibility = 'hidden'
 		concertAudio1.volume.rampTo(-80, 0.05)
 		concertAudio2.volume.rampTo(0, 0.05)
-		return { interval: sToMs(randomTiming2.next()) }
+		return { interval: sToMs(randomTiming1.next()) }
 	}
 })
 
