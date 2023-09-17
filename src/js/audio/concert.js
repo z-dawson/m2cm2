@@ -53,14 +53,6 @@ const randomTiming1 = new Stochastic([
 	{ value: 2 },
 	{ value: 0.8 },
 ])
-const randomTiming2 = new Stochastic([
-	{ value: 0.3, repeat: 10 },
-	{ value: 3 },
-	{ value: 15 },
-	{ value: 4 },
-	{ value: 2 },
-	{ value: 0.8 },
-])
 const videoTiming = new Stochastic([{ range: [0, 7] }])
 const loop1 = new Tone.Loop(() => {
 	console.log('loop1')
@@ -92,7 +84,6 @@ const timeSelector = new RandomMetro(() => {
 		video2.current.style.visibility = 'hidden'
 		return { interval: sToMs(randomTiming1.next()) }
 	} else {
-		let VT = sToMs(videoTiming.next())
 		console.log(videoTiming)
 		video2.current.play()
 		video2.current.style.visibility = 'visible'
