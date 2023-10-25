@@ -12,8 +12,10 @@ const roboto = Roboto_Serif({
 
 export default function App({ Component, pageProps }) {
 	const [entered, setEntered] = useState(false)
+	const [chat, setChat] = useState([[]])
+
 	return (
-		<EnteredContext.Provider value={{ entered, setEntered }}>
+		<EnteredContext.Provider value={{ entered, setEntered, chat, setChat }}>
 			<div className={roboto.className}>
 				<Component {...pageProps} />
 			</div>
