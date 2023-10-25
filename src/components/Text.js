@@ -4,6 +4,7 @@ import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import styles from '@/styles/Text.module.css'
 import { sToMs, Urn } from '@/js/audio/common'
 import userNameGenerator from 'username-generator'
+import delay from 'delay'
 
 const chooseParagraph = new Urn(timestamps.length, timestamps.length - 1)
 const getNewUserName = () => userNameGenerator.generateUsername('_')
@@ -46,7 +47,7 @@ const Text = (props) => {
 				}
 
 				userNames.current = userNames.current.map(getNewUserName)
-				endOfParagraph ? startReading() : nextWord()
+				endOfParagraph ? delay(5000).then(startReading) : nextWord()
 
 				return chat
 			})
