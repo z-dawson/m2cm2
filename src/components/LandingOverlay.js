@@ -1,3 +1,12 @@
+import { randomInt } from '@/js/audio/common'
+import sentences from '@/js/text/landingPageText'
+import delay from 'delay'
+import { useCallback, useEffect, useRef, useState } from 'react'
+
+const splitSentences = sentences.map((sentence) => {
+	return sentence.split(' ')
+})
+
 const styles = {
 	position: 'fixed',
 	top: 0,
@@ -16,6 +25,33 @@ const styles = {
 }
 
 const LandingOverlay = ({ onClick }) => {
+	const [displayedText, setDisplayedText] = useState('')
+
+	const sentenceIndex = useRef(randomInt(splitSentences.length))
+	const wordIndex = useRef(-1)
+
+	const startSentence = useCallback(async () => {
+		const selectedSentence = splitSentences[sentenceIndex.current]
+
+		if (wordIndex.current >= selectedSentence.length) {
+			wordIndex.current = -1
+			sentenceIndex.current = randomInt(splitSentences.length)
+		}
+		setDisplayedText(selectedSentence.slice(0, wordIndex.current + 1).join(' '))
+		await delay(
+			wordIndex.current < 0
+				? 1000
+				: selectedSentence[wordIndex.current].length * 200
+		)
+		wordIndex.current++
+		startSentence()
+	}, [])
+
+	useEffect(() => {
+		sentenceIndex.current = randomInt(splitSentences.length)
+		startSentence()
+	}, [])
+
 	return (
 		<div onClick={onClick} style={styles}>
 			<div
@@ -28,13 +64,7 @@ const LandingOverlay = ({ onClick }) => {
 					padding: '0 10px',
 				}}
 			>
-				<video
-					muted
-					autoPlay
-					loop
-					src="listen to the music shorter.mp4"
-					style={{ width: '110%', objectFit: 'cover' }}
-				/>
+				{displayedText}
 			</div>
 		</div>
 	)

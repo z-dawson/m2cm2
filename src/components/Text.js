@@ -1,29 +1,41 @@
 import text from '@/js/text/text'
 import timestamps from '@/js/text/timestamps'
-import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
+import { Fragment, useCallback, useContext, useEffect, useRef } from 'react'
 import styles from '@/styles/Text.module.css'
 import { sToMs, Urn } from '@/js/audio/common'
 import userNameGenerator from 'username-generator'
+import delay from 'delay'
+import { EnteredContext } from '@/pages/_app'
 
 const chooseParagraph = new Urn(timestamps.length, timestamps.length - 1)
 const getNewUserName = () => userNameGenerator.generateUsername('_')
 
+const sliced = text.map((paragraph) => {
+	return paragraph.split(/[\s-]/)
+})
+
 const Text = (props) => {
 	const { reading, soundEngine } = props
-	const [chat, setChat] = useState([[]])
+	const { chat, setChat } = useContext(EnteredContext)
 
 	const paragraphIndex = useRef(chooseParagraph.next())
 	const wordIndex = useRef(0)
 	const timestampIndex = useRef(0)
 
-	const sliced = useRef([])
 	const timeout = useRef()
 	const userNames = useRef(new Array(3).fill(''))
+
+	const onEndOfParagraph = useCallback(() => {
+		setChat((prev) => [...prev, [[]]])
+		paragraphIndex.current = chooseParagraph.next()
+		wordIndex.current = 0
+		timestampIndex.current = 0
+	}, [chat])
 
 	const nextWord = useCallback(() => {
 		const interval = timestamps[paragraphIndex.current][timestampIndex.current]
 
-		const paragraphLength = sliced.current[paragraphIndex.current].length
+		const paragraphLength = sliced[paragraphIndex.current].length
 
 		const endOfParagraph = paragraphLength - 1 <= wordIndex.current
 
@@ -32,21 +44,18 @@ const Text = (props) => {
 				const chat = [...prev]
 
 				chat[chat.length - 1].push(
-					sliced.current[paragraphIndex.current][wordIndex.current]
+					sliced[paragraphIndex.current][wordIndex.current]
 				)
 
 				if (endOfParagraph) {
-					chat[chat.length] = [[]]
-					paragraphIndex.current = chooseParagraph.next()
-					wordIndex.current = 0
-					timestampIndex.current = 0
+					onEndOfParagraph()
 				} else {
 					timestampIndex.current += 1
 					wordIndex.current += 1
 				}
 
 				userNames.current = userNames.current.map(getNewUserName)
-				endOfParagraph ? startReading() : nextWord()
+				endOfParagraph ? delay(5000).then(startReading) : nextWord()
 
 				return chat
 			})
@@ -62,15 +71,23 @@ const Text = (props) => {
 	}, [soundEngine])
 
 	useEffect(() => {
-		sliced.current = text.map((paragraph) => {
-			return paragraph.split(/[\s-]/)
-		})
-
 		return () => {
 			clearTimeout(timeout.current)
 			soundEngine?.stop?.()
 		}
 	}, [soundEngine])
+
+	useEffect(
+		() => () => {
+			setChat((prev) => {
+				const chat = [...prev]
+				chat[chat.length - 1] = structuredClone(sliced[paragraphIndex.current])
+				return chat
+			})
+			onEndOfParagraph()
+		},
+		[]
+	)
 
 	useEffect(() => {
 		if (reading && soundEngine) {
