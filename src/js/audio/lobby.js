@@ -1,6 +1,7 @@
 import * as Tone from 'tone'
 import { Urn, getNumFilenames } from './common'
 import Stochastic from './stochastic'
+import { prefix } from '../constants'
 
 const audioUrls = getNumFilenames(124)
 
@@ -30,7 +31,7 @@ const loaded = new Promise((resolve) => {
 	players = new Tone.Players({
 		urls: audioUrls,
 		onload: resolve,
-		baseUrl: '/audio/lobby/',
+		baseUrl: `${prefix}/audio/lobby/`,
 	}).toDestination()
 })
 

@@ -1,6 +1,7 @@
 import * as Tone from 'tone'
 import Stochastic from '@/js/audio/stochastic.js'
 import { msToS, RandomMetro, sToMs, getNumFilenames } from './common'
+import { prefix } from '../constants'
 
 const urls = ['empty.mp3', ...getNumFilenames(56)]
 let sleepAudio
@@ -9,7 +10,7 @@ const loaded = new Promise((resolve) => {
 	sleepAudio = new Tone.Players({
 		urls,
 		onload: resolve,
-		baseUrl: '/audio/Sleep/',
+		baseUrl: `${prefix}/audio/Sleep/`,
 	}).toDestination()
 })
 let video

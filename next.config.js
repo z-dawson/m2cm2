@@ -13,6 +13,6 @@ if (isGithubActions) {
 
 module.exports = {
 	assetPrefix: assetPrefix,
-	basePath: basePath,
+	basePath,
 	reactStrictMode: false,
 }

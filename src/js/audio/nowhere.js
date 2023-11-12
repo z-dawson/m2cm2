@@ -1,6 +1,7 @@
 import * as Tone from 'tone'
 import Stochastic from '@/js/audio/stochastic.js'
 import { msToS, RandomMetro, sToMs } from './common'
+import { prefix } from '../constants'
 
 const urls = [
 	'iteration1.mp3',
@@ -25,7 +26,7 @@ const loaded = new Promise((resolve) => {
 	nowhereAudio = new Tone.Players({
 		urls,
 		onload: resolve,
-		baseUrl: '/audio/nowhere/',
+		baseUrl: `${prefix}/audio/nowhere/`,
 	}).toDestination()
 })
 const randomIndexGenerator = new Stochastic([{ range: [0, 11] }])

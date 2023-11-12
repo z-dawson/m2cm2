@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { randomInt, RandomMetro, sToMs } from '@/js/audio/common'
+import { prefix } from '@/js/constants'
 import { useWindowSize } from '@/js/hooks'
 import { useEffect, useRef, useState } from 'react'
 
@@ -48,7 +49,7 @@ const RandomImage = () => {
 						left: position.current[1],
 					}}
 				>
-					<img src={`/scores/${image.current + 1}.svg`} alt="score" />
+					<img src={`${prefix}/scores/${image.current + 1}.svg`} alt="score" />
 				</div>
 			)}
 		</>
