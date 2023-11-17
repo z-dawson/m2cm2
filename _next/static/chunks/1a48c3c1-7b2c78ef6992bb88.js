@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[874],{7516:function(t,n,r){r.d(n,{Aro:function(){return a}});var u=r(8357);function a(t){return(0,u.w_)({tag:"svg",attr:{viewBox:"0 0 24 24"},child:[{tag:"path",attr:{d:"M7 7v10l7-5zm9 10V7h-2v10z"}}]})(t)}}}]);
