@@ -2,6 +2,7 @@ import * as Tone from 'tone'
 import Stochastic from '@/js/audio/stochastic.js'
 import { RandomMetro, getNumFilenames } from './common'
 import { sToMs } from './common'
+import { prefix } from '../constants'
 
 const audioUrls1 = getNumFilenames(60)
 const audioUrls2 = getNumFilenames(26)
@@ -12,7 +13,7 @@ const loaded1 = new Promise((resolve) => {
 	concertAudio1 = new Tone.Players({
 		urls: audioUrls1,
 		onload: resolve,
-		baseUrl: '/audio/concert/piano1/',
+		baseUrl: `${prefix}/audio/concert/piano1/`,
 	}).toDestination()
 })
 
@@ -20,7 +21,7 @@ const loaded2 = new Promise((resolve) => {
 	concertAudio2 = new Tone.Players({
 		urls: audioUrls2,
 		onload: resolve,
-		baseUrl: '/audio/concert/piano2/',
+		baseUrl: `${prefix}/audio/concert/piano2/`,
 	}).toDestination()
 })
 

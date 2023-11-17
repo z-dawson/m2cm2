@@ -1,3 +1,4 @@
+import { prefix } from '@/js/constants'
 import { loadVideo } from '@/js/helpers'
 import { useWindowSize } from '@/js/hooks'
 import styles from '@/styles/Room.module.css'
@@ -43,7 +44,7 @@ const Room = ({ name, play, onFinish }) => {
 	return (
 		<div className={styles.container}>
 			<video muted className={styles.video} ref={video}>
-				<source src={`/videos/${name}.mp4`} type="video/mp4" />
+				<source src={`${prefix}/videos/${name}.mp4`} type="video/mp4" />
 			</video>
 			{name == 'concert' && (
 				<video
@@ -52,7 +53,7 @@ const Room = ({ name, play, onFinish }) => {
 					style={{ visibility: 'hidden' }}
 					ref={video2}
 				>
-					<source src="/videos/concert2.mp4" type="video/mp4" />
+					<source src={`${prefix}/videos/concert2.mp4`} type="video/mp4" />
 				</video>
 			)}
 		</div>

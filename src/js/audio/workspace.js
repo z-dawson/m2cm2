@@ -1,5 +1,6 @@
 import * as Tone from 'tone'
 import { randomInt } from './common'
+import { prefix } from '../constants'
 
 const urls = [
 	'memory.mp3',
@@ -21,7 +22,7 @@ const loaded = new Promise((resolve) => {
 	workspaceAudio = new Tone.Players({
 		urls,
 		onload: resolve,
-		baseUrl: '/audio/workspace/',
+		baseUrl: `${prefix}/audio/workspace/`,
 	}).toDestination()
 })
 

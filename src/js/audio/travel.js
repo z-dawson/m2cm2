@@ -1,6 +1,7 @@
 import * as Tone from 'tone'
 import Stochastic from '@/js/audio/stochastic.js'
 import { RandomMetro, sToMs } from './common'
+import { prefix } from '../constants'
 
 const urls = [
 	'travel5.mp3',
@@ -17,7 +18,7 @@ const loaded = new Promise((resolve) => {
 	travelAudio = new Tone.Players({
 		urls,
 		onload: resolve,
-		baseUrl: '/audio/travel/',
+		baseUrl: `${prefix}/audio/travel/`,
 	}).toDestination()
 })
 
