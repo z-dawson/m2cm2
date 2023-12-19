@@ -20,7 +20,7 @@ function Home() {
 	const [destinationTrigger, setDestinationTrigger] = useState(false)
 
 	useEffect(() => {
-		; (async () => {
+		;(async () => {
 			const soundEngineModule = await import(`../js/audio/index.js`)
 			setSoundEngine(soundEngineModule)
 		})()
