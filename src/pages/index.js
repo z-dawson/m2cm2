@@ -31,14 +31,14 @@ function Home() {
 	}, [destinationTrigger])
 
 	const handleRoomClick = (name) => {
-		const probability = 30
+		// const probability = 30
 		setDestinationRoom(name)
-		if (randomInt(100) < probability) {
-			// showAd()
-			soundEngine?.stop?.()
-		} else {
-			setDestinationTrigger(true)
-		}
+		// if (randomInt(100) < probability) {
+		// 	// showAd()
+		// 	soundEngine?.stop?.()
+		// } else {
+		// }
+		setDestinationTrigger(true)
 	}
 
 	const handleSkip = () => {
