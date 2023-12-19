@@ -1,5 +1,8 @@
 import * as Tone from 'tone'
 import { randomInt } from './common'
+import Stochastic from './stochastic'
+import { sToMs } from './common'
+import { RandomMetro } from './common'
 import { prefix } from '../constants'
 
 const urls = [
@@ -14,6 +17,20 @@ const urls = [
 	'remembering.mp3',
 	'returning.mp3',
 	'searching.mp3',
+	'Monody1.mp3',
+	'Monody2.mp3',
+	'Monody3.mp3',
+	'Monody4.mp3',
+	'Monody5.mp3',
+	'Monody6.mp3',
+	'Monody8.mp3',
+	'Monody7.mp3',
+	'Monody9.mp3',
+	'Monody10.mp3',
+	'Monody11.mp3',
+	'Monody12.mp3',
+	'Monody13.mp3',
+	'Monody14.mp3',
 ]
 
 let workspaceAudio
@@ -26,61 +43,46 @@ const loaded = new Promise((resolve) => {
 	}).toDestination()
 })
 
+const instruction1 = [
+	{ name: 'words', range: [3, 11], probability: 1, followedBy: ['keywords'] },
+	{ name: 'keywords', range: [1, 2], probability: 0, followedBy: ['words'] },
+]
+const instruction2 = [{ range: [12, 25] }]
+const instruction3 = [{ range: [35, 45] }]
+const textInterval = new Stochastic(instruction3)
+const randomText = new Stochastic(instruction1)
+const randomMonody = new Stochastic(instruction2)
+
 let video
 
-let loop
+//let loop
+
+const loop = new RandomMetro(() => {
+	let currentInterval = sToMs(textInterval.next())
+	let textIndex = randomText.next()
+	workspaceAudio.player(textIndex).start(30)
+	return { interval: currentInterval }
+})
+const loop2 = new RandomMetro(() => {
+	const musicIndex = randomMonody.next()
+	const currentPlayer = workspaceAudio.player(musicIndex)
+	const currentPlayerDur = sToMs(currentPlayer.buffer.duration)
+	currentPlayer.start()
+	return { interval: currentPlayerDur }
+})
 
 const init = (args) => {
 	video = args.video
-	if (!video.current) return
-	video.current.playbackRate = 0.25
-	video.current.addEventListener('ended', onEnd)
-
-	loop = new Tone.ToneEvent((time) => {
-		let duration = 0
-		while (
-			video?.current?.duration * (1 / video?.current?.playbackRate) >
-			duration
-		) {
-			if (!video?.current) break
-			const playerIndex = randomInt(1)
-			const playerDuration = workspaceAudio.player(playerIndex).buffer.duration
-			workspaceAudio.player(playerIndex).start(time + duration)
-
-			const playerIndexNext = randomInt(2, 8)
-			const playerDurationNext =
-				workspaceAudio.player(playerIndexNext).buffer.duration
-			workspaceAudio
-				.player(playerIndexNext)
-				.start(time + playerDuration + duration)
-			duration += playerDuration + playerDurationNext
-			console.log(`schedule player ${playerIndex}, time: ${time + duration}`)
-			console.log(
-				`scheduling player ${playerIndexNext}, time: ${
-					time + playerDuration + duration
-				}`
-			)
-		}
-	})
+	video.current.loop = true
 }
 
 const start = async (video) => {
 	await Promise.all([Tone.start(), loaded])
 	Tone.Transport.start()
+	loop.start()
+	loop2.start()
 	video.current.currentTime = 0
 	video.current.play()
-	loop.start()
-	Object.assign(video.current.style, {
-		animationName: 'workspace',
-		animationDuration: `${
-			video.current.duration * (1 / video.current.playbackRate)
-		}s`,
-	})
-}
-
-const onEnd = () => {
-	loop.cancel(Tone.immediate())
-	Tone.Transport.stop()
 }
 
 const stop = (video) => {
@@ -89,6 +91,7 @@ const stop = (video) => {
 		video.current.currentTime = 0
 	}
 	loop.cancel(Tone.immediate())
+	loop2.cancel(Tone.immediate())
 	workspaceAudio.stopAll()
 	Tone.Transport.stop()
 }
