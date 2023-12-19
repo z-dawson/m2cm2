@@ -11,18 +11,16 @@ import { randomInt } from '@/js/audio/common.js'
 import { useRouter } from 'next/router'
 import RandomImage from '@/components/RandomImage.js'
 
-const adds = ['workspace']
-
 function Home() {
 	const [soundEngine, setSoundEngine] = useState()
 	const { entered, setEntered } = useContext(EnteredContext)
-	const { showAd, skipAd, ad } = useAd(adds)
+	// const { showAd, skipAd, ad } = useAd(adds)
 	const route = useRouter()
 	const [destinationRoom, setDestinationRoom] = useState()
 	const [destinationTrigger, setDestinationTrigger] = useState(false)
 
 	useEffect(() => {
-		;(async () => {
+		; (async () => {
 			const soundEngineModule = await import(`../js/audio/index.js`)
 			setSoundEngine(soundEngineModule)
 		})()
@@ -36,7 +34,7 @@ function Home() {
 		const probability = 30
 		setDestinationRoom(name)
 		if (randomInt(100) < probability) {
-			showAd()
+			// showAd()
 			soundEngine?.stop?.()
 		} else {
 			setDestinationTrigger(true)
@@ -44,11 +42,11 @@ function Home() {
 	}
 
 	const handleSkip = () => {
-		skipAd()
+		// skipAd()
 		setDestinationTrigger(true)
 	}
 
-	const reading = entered && !ad
+	const reading = entered // && !ad
 
 	return (
 		<>
@@ -65,7 +63,7 @@ function Home() {
 					}}
 				/>
 			)}
-			{ad && <Popup ad={ad} onSkip={handleSkip} />}
+			{/* {ad && <Popup ad={ad} onSkip={handleSkip} />} */}
 			<div className={styles.container}>
 				<nav className={styles.nav}>
 					<ul>
