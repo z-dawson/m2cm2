@@ -90,8 +90,8 @@ const stop = (video) => {
 		video.current.pause()
 		video.current.currentTime = 0
 	}
-	loop.cancel(Tone.immediate())
-	loop2.cancel(Tone.immediate())
+	loop.stop()
+	loop2.stop()
 	workspaceAudio.stopAll()
 	Tone.Transport.stop()
 }
