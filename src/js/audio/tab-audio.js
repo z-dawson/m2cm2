@@ -50,4 +50,8 @@ export default class TabAudio {
 		const playerIndex = this.indexMapping[index]
 		this.players.player(playerIndex).seek(0)
 	}
+
+	stopAll() {
+		this.players.stopAll()
+	}
 }

@@ -21,6 +21,10 @@ const Experience = () => {
 			loaded.current = true
 			tabs.forEach((tab) => tabAudio.current.play(tab))
 		})
+		return () => {
+			console.log(tabAudio.current)
+			tabAudio.current.stopAll()
+		}
 	}, [])
 
 	const addTab = () => {
