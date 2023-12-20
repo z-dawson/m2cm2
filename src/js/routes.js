@@ -5,7 +5,7 @@ const routes = [
 	{ name: 'concert' },
 	{ name: 'nowhere' },
 	{ name: 'vacation' },
-	{ name: 'experience' },
+	{ name: 'experience', file: true },
 	{ name: 'travel' },
 	{ name: 'workspace' },
 ]

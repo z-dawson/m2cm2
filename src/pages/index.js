@@ -10,6 +10,7 @@ import Popup, { useAd } from '@/components/Popup.js'
 import { randomInt } from '@/js/audio/common.js'
 import { useRouter } from 'next/router'
 import RandomImage from '@/components/RandomImage.js'
+import Link from 'next/link.js'
 
 function Home() {
 	const [soundEngine, setSoundEngine] = useState()
@@ -68,6 +69,15 @@ function Home() {
 				<nav className={styles.nav}>
 					<ul>
 						{routes.map((route, index) => {
+							if (route.file) {
+								return (
+									<li key={index}>
+										<Link href={route.name}>
+											<div>{route.name}</div>
+										</Link>
+									</li>
+								)
+							}
 							return (
 								<li key={index}>
 									<a onClick={() => handleRoomClick(route.name)}>

@@ -1,8 +1,7 @@
-import * as Tone from 'tone'
 import Stochastic from '@/js/audio/stochastic.js'
-import { RandomMetro, getNumFilenames } from './common'
-import { sToMs } from './common'
+import * as Tone from 'tone'
 import { prefix } from '../constants'
+import { RandomMetro, getNumFilenames, sToMs } from './common'
 
 const audioUrls1 = getNumFilenames(60)
 const audioUrls2 = getNumFilenames(26)
@@ -123,4 +122,4 @@ const stop = () => {
 	})
 }
 
-export { start, stop, init }
+export { init, start, stop }

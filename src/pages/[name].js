@@ -17,9 +17,11 @@ export default Page
 
 export const getStaticPaths = async () => {
 	return {
-		paths: routes.map(({ name }) => ({
-			params: { name },
-		})),
+		paths: routes
+			.filter(({ file }) => !file)
+			.map(({ name }) => ({
+				params: { name },
+			})),
 		fallback: false,
 	}
 }
