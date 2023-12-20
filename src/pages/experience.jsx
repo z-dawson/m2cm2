@@ -61,7 +61,7 @@ const Experience = () => {
 	return (
 		<>
 			<Tabs
-				style={{ margin: 100, border: 'solid gray 1px', userSelect: 'none' }}
+				style={{ border: 'solid gray 1px', userSelect: 'none', margin: '1rem' }}
 				selectedIndex={selected}
 				onSelect={(index) => {
 					select(index)
@@ -93,7 +93,7 @@ const Experience = () => {
 						<TabPanel
 							key={tab}
 							style={{
-								height: '80vh',
+								height: '90vh',
 								padding: '1rem',
 							}}
 						>
