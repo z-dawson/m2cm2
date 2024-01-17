@@ -3,22 +3,23 @@ import styles from '@/styles/Home.module.css'
 import routes from '@/js/routes'
 import Animation from '@/components/Animation'
 import Text from '@/components/Text'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import LandingOverlay from '@/components/LandingOverlay.js'
 import { EnteredContext } from './_app.js'
-import Popup, { useAd } from '@/components/Popup.js'
-import { randomInt } from '@/js/audio/common.js'
+import { randomInt, sToMs } from '@/js/audio/common.js'
 import { useRouter } from 'next/router'
 import RandomImage from '@/components/RandomImage.js'
 import Link from 'next/link.js'
+import PopupContainer from '@/components/PopupContainer.js'
+import Experience from '@/components/Experience.js'
 
 function Home() {
 	const [soundEngine, setSoundEngine] = useState()
 	const { entered, setEntered } = useContext(EnteredContext)
-	// const { showAd, skipAd, ad } = useAd(adds)
 	const route = useRouter()
-	const [destinationRoom, setDestinationRoom] = useState()
-	const [destinationTrigger, setDestinationTrigger] = useState(false)
+	const destinationRoom = useRef()
+	const [popup, setPopup] = useState(false)
+	const gotoDestinationTimeout = useRef()
 
 	useEffect(() => {
 		;(async () => {
@@ -27,27 +28,27 @@ function Home() {
 		})()
 	}, [soundEngine])
 
-	useEffect(() => {
-		destinationTrigger && route.push(`/${destinationRoom}`)
-	}, [destinationTrigger])
+	const gotoDestination = () => {
+		clearTimeout(gotoDestinationTimeout.current)
+		route.push(`/${destinationRoom.current}`)
+	}
 
 	const handleRoomClick = (name) => {
-		// const probability = 30
-		setDestinationRoom(name)
-		// if (randomInt(100) < probability) {
-		// 	// showAd()
-		// 	soundEngine?.stop?.()
-		// } else {
-		// }
-		setDestinationTrigger(true)
+		const probability = 30
+		destinationRoom.current = name
+		soundEngine?.stop?.()
+		if (randomInt(100) < probability) {
+			setPopup(true)
+			gotoDestinationTimeout.current = setTimeout(
+				() => gotoDestination(destinationRoom.current),
+				sToMs(60 * 2)
+			)
+		} else {
+			gotoDestination()
+		}
 	}
 
-	const handleSkip = () => {
-		// skipAd()
-		setDestinationTrigger(true)
-	}
-
-	const reading = entered // && !ad
+	const reading = entered && !popup
 
 	return (
 		<>
@@ -64,7 +65,11 @@ function Home() {
 					}}
 				/>
 			)}
-			{/* {ad && <Popup ad={ad} onSkip={handleSkip} />} */}
+			{popup && (
+				<PopupContainer>
+					<Experience onAllClosed={gotoDestination} />
+				</PopupContainer>
+			)}
 			<div className={styles.container}>
 				<nav className={styles.nav}>
 					<ul>

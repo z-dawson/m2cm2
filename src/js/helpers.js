@@ -13,6 +13,7 @@ export const loadVideo = (video) => {
 }
 
 export const getLowestUnused = (array) => {
+	if (array.length == 0) return 0
 	const sorted = [...array].sort((a, b) => a - b)
 	let lowest = -1
 	for (let i = 0; i < sorted.length; ++i) {

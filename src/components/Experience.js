@@ -1,3 +1,4 @@
+'use client'
 import { randomInt, sToMs } from '@/js/audio/common'
 import { getLowestUnused } from '@/js/helpers'
 import { PlusOutlined, CloseSquareFilled } from '@ant-design/icons'
@@ -7,13 +8,15 @@ import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
 import TabAudio from '../js/audio/tab-audio'
 
-const tabReopenPercentage = 35
+const tabExceptionPercentage = 30
+const maxTabs = 20
 
-const Experience = () => {
+const Experience = ({ onAllClosed }) => {
 	const [tabs, setTabs] = useState([0])
 	const [selected, select] = useState(0)
 	const loaded = useRef(false)
 	const tabAudio = useRef()
+	const firstTabInteraction = useRef(true)
 
 	useEffect(() => {
 		tabAudio.current = new TabAudio()
@@ -22,22 +25,34 @@ const Experience = () => {
 			tabs.forEach((tab) => tabAudio.current.play(tab))
 		})
 		return () => {
-			console.log(tabAudio.current)
 			tabAudio.current.stopAll()
 		}
 	}, [])
 
-	const addTab = () => {
+	const addTab = (chance) => {
 		if (!loaded.current) return
+		const computedPercentage =
+			typeof chance === 'number' ? chance : tabExceptionPercentage
 		setTabs((prev) => {
-			const newValue = getLowestUnused(prev)
-			tabAudio.current.play(newValue)
-			select(prev.length)
-			return [...prev, newValue]
+			const moreThanOne =
+				randomInt(100) < computedPercentage && prev.length < maxTabs / 2
+			const newTabs = Array.from(
+				new Array(moreThanOne ? randomInt(2, 6) : 1)
+			).reduce(
+				(newTabs) => {
+					const tab = getLowestUnused(newTabs)
+					tabAudio.current.play(tab)
+					return [...newTabs, tab]
+				},
+				[...prev]
+			)
+			select(newTabs.length - 1)
+			firstTabInteraction.current = false
+			return newTabs
 		})
 	}
 
-	const getTagRemover = (removed) => (event) => {
+	const getTabRemover = (removed) => (event) => {
 		event.stopPropagation()
 		if (!loaded.current) return
 		tabAudio.current.stop(tabs[removed])
@@ -49,11 +64,17 @@ const Experience = () => {
 					? selected - 1
 					: selected
 			})
-			if (randomInt(100) < tabReopenPercentage) {
+			if (
+				randomInt(100) <
+				(firstTabInteraction.current ? 80 : tabExceptionPercentage)
+			) {
 				setTimeout(() => {
-					addTab()
+					addTab(100)
 				}, sToMs(0.5))
+			} else if (next.length == 0) {
+				onAllClosed()
 			}
+			firstTabInteraction.current = false
 			return next
 		})
 	}
@@ -61,7 +82,7 @@ const Experience = () => {
 	return (
 		<>
 			<Tabs
-				style={{ border: 'solid gray 1px', userSelect: 'none', margin: '1rem' }}
+				style={{ width: '100%', height: '100%' }}
 				selectedIndex={selected}
 				onSelect={(index) => {
 					select(index)
@@ -77,13 +98,11 @@ const Experience = () => {
 								}}
 							>
 								Tab {tab + 1}{' '}
-								{tabs.length > 1 && (
-									<CloseSquareFilled onClick={getTagRemover(index)} />
-								)}
+								<CloseSquareFilled onClick={getTabRemover(index)} />
 							</Tab>
 						)
 					})}
-					{tabs.length < 20 && (
+					{tabs.length < maxTabs && (
 						<Button icon={<PlusOutlined />} type="text" onClick={addTab} />
 					)}
 				</TabList>
@@ -96,9 +115,7 @@ const Experience = () => {
 								height: '90vh',
 								padding: '1rem',
 							}}
-						>
-							<h2>Tab {tab + 1}</h2>
-						</TabPanel>
+						></TabPanel>
 					)
 				})}
 			</Tabs>
