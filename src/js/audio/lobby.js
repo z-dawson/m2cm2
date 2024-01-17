@@ -1,5 +1,5 @@
 import * as Tone from 'tone'
-import { Urn, getNumFilenames } from './common'
+import { Loop, RandomMetro, Urn, getNumFilenames, sToMs } from './common'
 import Stochastic from './stochastic'
 import { prefix } from '../constants'
 
@@ -19,10 +19,14 @@ const voiceLoaded = new Promise((resolve) => {
 })
 voice.volume.value = -8
 
-const voiceLoop = new Tone.Loop((time) => {
-	const randomDuration = voiceIntervals.next()
-	voice.start(randomDuration)
-	voiceLoop.interval = time + randomDuration
+const voiceLoop = new RandomMetro(({ count }) => {
+	if (count !== 0) {
+		voice.start()
+		console.log('recurring...')
+	}
+	return {
+		interval: sToMs(voiceIntervals.next()),
+	}
 })
 
 let players
@@ -82,8 +86,8 @@ const stop = (video) => {
 	playerIndexes.forEach((index) => {
 		players.player(index).stop()
 	})
-	voiceLoop.cancel()
 	voiceLoop.stop()
+	voice.stop()
 	Tone.Transport.stop()
 }
 
