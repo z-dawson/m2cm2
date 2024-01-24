@@ -66,7 +66,11 @@ const init = (args) => {
 		}
 		const { duration } = video.current
 		return {
-			clear: newLoop ? loop.stop : undefined,
+			clear: newLoop
+				? () => {
+						loop.stop()
+				  }
+				: undefined,
 			interval: sToMs(duration * randomFloat(0.5, 2)),
 		}
 	})
