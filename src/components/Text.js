@@ -1,14 +1,25 @@
+import { Urn, sToMs } from '@/js/audio/common'
 import text from '@/js/text/text'
 import timestamps from '@/js/text/timestamps'
-import { Fragment, useCallback, useContext, useEffect, useRef } from 'react'
-import styles from '@/styles/Text.module.css'
-import { sToMs, Urn } from '@/js/audio/common'
-import userNameGenerator from 'username-generator'
-import delay from 'delay'
 import { EnteredContext } from '@/pages/_app'
+import styles from '@/styles/Text.module.css'
+import delay from 'delay'
+import { Fragment, useCallback, useContext, useEffect, useRef } from 'react'
+import {
+	adjectives,
+	animals,
+	colors,
+	uniqueNamesGenerator,
+} from 'unique-names-generator'
+
+const getNewUserName = () =>
+	uniqueNamesGenerator({
+		dictionaries: [adjectives, [...colors, ...animals]],
+		separator: '_',
+		length: 2,
+	})
 
 const chooseParagraph = new Urn(timestamps.length, timestamps.length - 1)
-const getNewUserName = () => userNameGenerator.generateUsername('_')
 
 const sliced = text.map((paragraph) => {
 	return paragraph.split(/[\s-]/)
@@ -73,6 +84,7 @@ const Text = (props) => {
 	useEffect(() => {
 		return () => {
 			clearTimeout(timeout.current)
+			console.log('stop Reading')
 			soundEngine?.stop?.()
 		}
 	}, [soundEngine])
