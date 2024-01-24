@@ -15,3 +15,7 @@
 .container .paragraph {
 	margin-bottom: 1.5rem;
 }
+
+.username {
+	font-weight: 600;
+}

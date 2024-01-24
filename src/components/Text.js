@@ -1,4 +1,4 @@
-import { Urn, sToMs } from '@/js/audio/common'
+import { Urn, randomInt, sToMs } from '@/js/audio/common'
 import text from '@/js/text/text'
 import timestamps from '@/js/text/timestamps'
 import { EnteredContext } from '@/pages/_app'
@@ -12,12 +12,28 @@ import {
 	uniqueNamesGenerator,
 } from 'unique-names-generator'
 
-const getNewUserName = () =>
-	uniqueNamesGenerator({
-		dictionaries: [adjectives, [...colors, ...animals]],
-		separator: '_',
-		length: 2,
-	})
+const getNewUserName = () => {
+	const configs = [
+		{
+			dictionaries: [adjectives, [...colors, ...animals]],
+			separator: '_',
+			length: 2,
+		},
+		{
+			dictionaries: [
+				colors,
+				animals,
+				[92, 99, 11, 53, 45, 2323, 7777, '__', '/////'].map((n) =>
+					n.toString()
+				),
+			],
+			separator: '',
+			style: 'capital',
+		},
+	]
+
+	return uniqueNamesGenerator(configs[randomInt(configs.length)])
+}
 
 const chooseParagraph = new Urn(timestamps.length, timestamps.length - 1)
 
@@ -117,9 +133,10 @@ const Text = (props) => {
 				{chat.map((paragraph, index) => {
 					return (
 						<p className={styles.paragraph} key={index}>
-							<strong style={{ fontWeight: 600 }}>
+							<strong className={styles.username}>
 								{userNames.current[index % userNames.current.length]}:{' '}
 							</strong>
+							<br />
 							{paragraph.map((word, index) => {
 								return (
 									<Fragment key={index}>
