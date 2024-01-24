@@ -36,6 +36,7 @@ export default class TabAudio {
 		this.discarded.push(this.available.splice(randomIndex, 1)[0])
 		this.players.player(playerIndex).start()
 		this.players.player(playerIndex).loop = true
+		return randomIndex
 	}
 
 	stop(index) {

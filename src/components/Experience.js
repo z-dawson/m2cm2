@@ -7,22 +7,25 @@ import { useEffect, useRef, useState } from 'react'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
 import TabAudio from '../js/audio/tab-audio'
+import { prefix } from '@/js/constants'
 
 const tabExceptionPercentage = 30
 const maxTabs = 20
 
 const Experience = ({ onAllClosed }) => {
-	const [tabs, setTabs] = useState([0])
+	const [tabs, setTabs] = useState([])
 	const [selected, select] = useState(0)
 	const loaded = useRef(false)
 	const tabAudio = useRef()
 	const firstTabInteraction = useRef(true)
+	const tabToAudioMapping = useRef([])
 
 	useEffect(() => {
 		tabAudio.current = new TabAudio()
 		tabAudio.current.load().then(() => {
 			loaded.current = true
-			tabs.forEach((tab) => tabAudio.current.play(tab))
+			// tabToAudioMapping.current = tabs.map((tab) => tabAudio.current.play(tab))
+			addTab()
 		})
 		return () => {
 			tabAudio.current.stopAll()
@@ -41,7 +44,7 @@ const Experience = ({ onAllClosed }) => {
 			).reduce(
 				(newTabs) => {
 					const tab = getLowestUnused(newTabs)
-					tabAudio.current.play(tab)
+					tabToAudioMapping.current[tab] = tabAudio.current.play(tab)
 					return [...newTabs, tab]
 				},
 				[...prev]
@@ -82,7 +85,7 @@ const Experience = ({ onAllClosed }) => {
 	return (
 		<>
 			<Tabs
-				style={{ width: '100%', height: '100%' }}
+				style={{ width: '100%', height: '100%', userSelect: 'none' }}
 				selectedIndex={selected}
 				onSelect={(index) => {
 					select(index)
@@ -108,6 +111,11 @@ const Experience = ({ onAllClosed }) => {
 				</TabList>
 
 				{tabs.map((tab) => {
+					const scoreIndex = tabToAudioMapping.current[tab]
+					console.log({
+						scoreIndex,
+						tabToAudioMapping: tabToAudioMapping.current,
+					})
 					return (
 						<TabPanel
 							key={tab}
@@ -115,7 +123,12 @@ const Experience = ({ onAllClosed }) => {
 								height: '90vh',
 								padding: '1rem',
 							}}
-						></TabPanel>
+						>
+							<img
+								src={`${prefix}/scores/single_note/${scoreIndex + 1}.svg`}
+								alt="score"
+							/>
+						</TabPanel>
 					)
 				})}
 			</Tabs>

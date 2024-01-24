@@ -94,7 +94,7 @@ function Home() {
 					</ul>
 				</nav>
 				<main className={styles.main}>
-					<RandomImage />
+					{/* <RandomImage /> */}
 					<div className={styles.bottomLayer}>
 						<div className={styles.animation}>
 							<Animation running={entered} />
