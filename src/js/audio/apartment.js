@@ -1,12 +1,12 @@
-import * as Tone from 'tone'
 import {
-	Urn,
-	RandomMetro,
-	sToMs,
 	Loop,
-	randomInt,
+	RandomMetro,
+	Urn,
 	randomFloat,
+	randomInt,
+	sToMs,
 } from '@/js/audio/common'
+import * as Tone from 'tone'
 import { prefix } from '../constants'
 
 const urls = [
@@ -34,9 +34,6 @@ const loop = new Loop()
 let playerIndex
 let video
 let looping = false
-
-apartmentAudio.fadeOut = 0.3
-apartmentAudio.fadeIn = 0.08
 
 const init = (args) => {
 	video = args.video
@@ -70,7 +67,7 @@ const init = (args) => {
 		const { duration } = video.current
 		return {
 			clear: newLoop ? loop.stop : undefined,
-			interval: sToMs(duration * randomInt(0.5, 2)),
+			interval: sToMs(duration * randomFloat(0.5, 2)),
 		}
 	})
 }
@@ -79,6 +76,8 @@ const start = async (video) => {
 	await Promise.all([Tone.start(), loaded])
 	video.current.currentTime = 0
 	video.current.play()
+	apartmentAudio.fadeOut = 0.3
+	apartmentAudio.fadeIn = 0.08
 
 	randomMetro.start()
 }
@@ -103,4 +102,4 @@ const stop = (video) => {
 	// apartmentAudio.dispose()
 }
 
-export { start, stop, init }
+export { init, start, stop }
