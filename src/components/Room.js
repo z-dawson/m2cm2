@@ -3,6 +3,7 @@ import { loadVideo } from '@/js/helpers'
 import { useWindowSize } from '@/js/hooks'
 import styles from '@/styles/Room.module.css'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/router'
 
 const Room = ({ name, play, onFinish }) => {
 	const [soundEngine, setSoundEngine] = useState({})
@@ -10,6 +11,11 @@ const Room = ({ name, play, onFinish }) => {
 	const video = useRef()
 	const video2 = useRef()
 	const loadListener = useRef()
+	const route = useRouter()
+
+	const goHome = () => {
+		route.push('/')
+	}
 
 	const size = useWindowSize()
 
@@ -43,6 +49,9 @@ const Room = ({ name, play, onFinish }) => {
 
 	return (
 		<div className={styles.container}>
+			<button className={styles.back} onClick={goHome}>
+				←
+			</button>
 			<video muted className={styles.video} ref={video}>
 				<source src={`${prefix}/videos/${name}.mp4`} type="video/mp4" />
 			</video>

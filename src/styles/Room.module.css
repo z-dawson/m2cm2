@@ -9,3 +9,24 @@
 	height: 100%;
 	width: 100%;
 }
+
+.back {
+	position: absolute;
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
+	z-index: 100;
+	top: 58vh;
+	width: 750px;
+	height: 115px;
+	opacity: 0;
+	cursor: pointer;
+	border: none;
+	font-size: 7rem;
+	line-height: 100%;
+}
+
+.back:hover {
+	opacity: 0.3;
+}
