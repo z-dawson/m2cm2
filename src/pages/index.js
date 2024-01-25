@@ -1,17 +1,16 @@
-import Head from 'next/head'
-import styles from '@/styles/Home.module.css'
-import routes from '@/js/routes'
 import Animation from '@/components/Animation'
-import Text from '@/components/Text'
-import { useContext, useEffect, useRef, useState } from 'react'
-import LandingOverlay from '@/components/LandingOverlay.js'
-import { EnteredContext } from './_app.js'
-import { randomInt, sToMs } from '@/js/audio/common.js'
-import { useRouter } from 'next/router'
-import RandomImage from '@/components/RandomImage.js'
-import Link from 'next/link.js'
-import PopupContainer from '@/components/PopupContainer.js'
 import Experience from '@/components/Experience.js'
+import LandingOverlay from '@/components/LandingOverlay.js'
+import PopupContainer from '@/components/PopupContainer.js'
+import Text from '@/components/Text'
+import { randomInt, sToMs } from '@/js/audio/common.js'
+import routes from '@/js/routes'
+import styles from '@/styles/Home.module.css'
+import Head from 'next/head'
+import Link from 'next/link.js'
+import { useRouter } from 'next/router'
+import { useContext, useEffect, useRef, useState } from 'react'
+import { EnteredContext } from './_app.js'
 
 function Home() {
 	const [soundEngine, setSoundEngine] = useState()
@@ -27,6 +26,12 @@ function Home() {
 			setSoundEngine(soundEngineModule)
 		})()
 	}, [soundEngine])
+
+	useEffect(() => {
+		routes.forEach(({ name }) => {
+			route.prefetch(`/${name}`)
+		})
+	}, [route])
 
 	const gotoDestination = () => {
 		clearTimeout(gotoDestinationTimeout.current)
