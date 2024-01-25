@@ -1,7 +1,7 @@
 import * as Tone from 'tone'
-import { Loop, RandomMetro, Urn, getNumFilenames, sToMs } from './common'
-import Stochastic from './stochastic'
 import { prefix } from '../constants'
+import { RandomMetro, Urn, getNumFilenames, sToMs } from './common'
+import Stochastic from './stochastic'
 
 const audioUrls = getNumFilenames(124)
 
@@ -63,13 +63,6 @@ const start = async () => {
 }
 
 const onRepeat = () => {
-	// stop prev
-	// urn.discarded
-	// 	.slice(urn.discarded.length - 2, urn.discarded.length)
-	// 	.forEach((index) => {
-	// 		players.player(index).stop()
-	// 	})
-
 	playerIndexes = [urn.next(), urn.next()]
 	console.log(`schedule player ${playerIndexes[0]} for door opening`)
 	players.player(playerIndexes[0]).start(Tone.now() + 0.9)
@@ -91,4 +84,4 @@ const stop = (video) => {
 	Tone.Transport.stop()
 }
 
-export { start, stop, init }
+export { init, start, stop }
