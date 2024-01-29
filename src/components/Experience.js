@@ -20,6 +20,7 @@ const Experience = ({ onAllClosed }) => {
 	const firstTabInteraction = useRef(true)
 	const tabToAudioMapping = useRef([])
 	const addTimeout = useRef()
+	const margins = useRef([])
 
 	useEffect(() => {
 		tabAudio.current = new TabAudio()
@@ -46,6 +47,7 @@ const Experience = ({ onAllClosed }) => {
 				(newTabs) => {
 					const tab = getLowestUnused(newTabs)
 					tabToAudioMapping.current[tab] = tabAudio.current.play(tab)
+					margins[tab] = [randomInt(-10, 40), randomInt(-10, 40)]
 					return [...newTabs, tab]
 				},
 				[...prev]
@@ -129,6 +131,10 @@ const Experience = ({ onAllClosed }) => {
 							<img
 								src={`${prefix}/scores/single_note/${scoreIndex + 1}.svg`}
 								alt="score"
+								style={{
+									marginLeft: `${margins[tab][0]}vw`,
+									marginTop: `${margins[tab][1]}vh`,
+								}}
 							/>
 						</TabPanel>
 					)
