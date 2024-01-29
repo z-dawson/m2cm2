@@ -19,6 +19,7 @@ const Experience = ({ onAllClosed }) => {
 	const tabAudio = useRef()
 	const firstTabInteraction = useRef(true)
 	const tabToAudioMapping = useRef([])
+	const addTimeout = useRef()
 
 	useEffect(() => {
 		tabAudio.current = new TabAudio()
@@ -71,10 +72,11 @@ const Experience = ({ onAllClosed }) => {
 				randomInt(100) <
 				(firstTabInteraction.current ? 80 : tabExceptionPercentage)
 			) {
-				setTimeout(() => {
+				addTimeout.current = setTimeout(() => {
 					addTab(100)
 				}, sToMs(0.5))
 			} else if (next.length == 0) {
+				clearTimeout(addTimeout.current)
 				onAllClosed()
 			}
 			firstTabInteraction.current = false
