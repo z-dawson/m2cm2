@@ -2,7 +2,7 @@ import Animation from '@/components/Animation'
 import Experience from '@/components/Experience.js'
 import LandingOverlay from '@/components/LandingOverlay.js'
 import PopupContainer from '@/components/PopupContainer.js'
-import Text from '@/components/Text'
+import Chatbot from '@/components/Chatbot.js'
 import { randomInt, sToMs } from '@/js/audio/common.js'
 import routes from '@/js/routes'
 import styles from '@/styles/Home.module.css'
@@ -107,7 +107,7 @@ function Home() {
 					</div>
 				</main>
 				<aside className={styles.aside}>
-					<Text reading={reading} soundEngine={soundEngine} />
+					<Chatbot reading={reading} soundEngine={soundEngine} />
 				</aside>
 			</div>
 		</>
