@@ -1,3 +1,5 @@
+// DISCONTINUED
+
 import * as Tone from 'tone'
 import Stochastic from '@/js/audio/stochastic.js'
 import { RandomMetro } from './common'

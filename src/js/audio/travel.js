@@ -20,6 +20,7 @@ const loaded = new Promise((resolve) => {
 		onload: resolve,
 		baseUrl: `${prefix}/audio/travel/`,
 	}).toDestination()
+	travelAudio.player(5).volume.value = -13
 })
 
 let video

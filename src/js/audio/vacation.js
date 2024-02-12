@@ -41,6 +41,7 @@ const voiceLoaded = new Promise((resolve) => {
 		url: baseUrl + voiceUrl,
 		onload: resolve,
 	}).toDestination()
+	voicePlayer.volume.value = -13
 })
 
 const wavePanner = new Tone.Panner(0).toDestination()

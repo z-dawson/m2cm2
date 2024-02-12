@@ -1,3 +1,5 @@
+// DISCONTINUED
+
 import * as Tone from 'tone'
 import Stochastic from '@/js/audio/stochastic.js'
 import { RandomMetro } from './common'
@@ -20,6 +22,7 @@ const loaded = new Promise((resolve) => {
 		onload: resolve,
 		baseUrl: `${prefix}/audio/Connecting/`,
 	}).toDestination()
+	connectingAudio.player(0).volume.value = -13
 })
 
 const init = (args) => {

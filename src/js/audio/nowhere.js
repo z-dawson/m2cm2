@@ -56,8 +56,8 @@ const textIndexGenerator = new Stochastic(instruction3)
 let video
 const reverbDuration = 10
 const loop = new RandomMetro(() => {
-	nowhereAudio.player(12).volume.value = -5
-	nowhereAudio.player(13).volume.value = -5
+	nowhereAudio.player(12).volume.value = -13
+	nowhereAudio.player(13).volume.value = -13
 	const currentIndex = randomIndexGenerator.next()
 	const textIndex = textIndexGenerator.next()
 	const randomJitter = msToS(randomJitterGenerator.next())

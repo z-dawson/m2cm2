@@ -1,9 +1,7 @@
 import * as Tone from 'tone'
-import { randomInt } from './common'
-import Stochastic from './stochastic'
-import { sToMs } from './common'
-import { RandomMetro } from './common'
 import { prefix } from '../constants'
+import { RandomMetro, sToMs } from './common'
+import Stochastic from './stochastic'
 
 const urls = [
 	'memory.mp3',
@@ -41,6 +39,9 @@ const loaded = new Promise((resolve) => {
 		onload: resolve,
 		baseUrl: `${prefix}/audio/workspace/`,
 	}).toDestination()
+	Array.from(Array(11)).forEach((_, index) => {
+		workspaceAudio.player(index).volume.value = -13
+	})
 })
 
 const instruction1 = [
@@ -96,4 +97,4 @@ const stop = (video) => {
 	Tone.Transport.stop()
 }
 
-export { start, stop, init }
+export { init, start, stop }

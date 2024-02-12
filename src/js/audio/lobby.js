@@ -16,8 +16,8 @@ const voiceLoaded = new Promise((resolve) => {
 		url: voiceUrl,
 		onload: resolve,
 	}).toDestination()
+	voice.volume.value = -13
 })
-voice.volume.value = -8
 
 const voiceLoop = new RandomMetro(({ count }) => {
 	if (count !== 0) {
