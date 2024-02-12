@@ -4,6 +4,7 @@ import { useWindowSize } from '@/js/hooks'
 import styles from '@/styles/Room.module.css'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
+import Head from 'next/head'
 
 const Room = ({ name, play, onFinish }) => {
 	const [soundEngine, setSoundEngine] = useState({})
@@ -49,6 +50,9 @@ const Room = ({ name, play, onFinish }) => {
 
 	return (
 		<div className={styles.container}>
+			<Head>
+				<title>{name} - music to compose music to</title>
+			</Head>
 			<button className={styles.back} onClick={goHome}>
 				←
 			</button>
