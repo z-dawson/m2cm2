@@ -51,7 +51,7 @@ const Room = ({ name, play, onFinish }) => {
 	return (
 		<div className={styles.container}>
 			<Head>
-				<title>{name} - music to compose music to</title>
+				<title>{name + ' - music to compose music to'}</title>
 			</Head>
 			<button className={styles.back} onClick={goHome}>
 				←

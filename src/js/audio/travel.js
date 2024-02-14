@@ -20,7 +20,6 @@ const loaded = new Promise((resolve) => {
 		onload: resolve,
 		baseUrl: `${prefix}/audio/travel/`,
 	}).toDestination()
-	travelAudio.player(5).volume.value = -13
 })
 
 let video
@@ -53,6 +52,7 @@ const loop = new RandomMetro(() => {
 
 const start = async (video) => {
 	await Promise.all([Tone.start(), loaded])
+	travelAudio.player(5).volume.value = -13
 	Tone.Transport.start()
 	loop.start()
 	video.current.currentTime = 0
