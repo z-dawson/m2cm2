@@ -16,7 +16,6 @@ const voiceLoaded = new Promise((resolve) => {
 		url: voiceUrl,
 		onload: resolve,
 	}).toDestination()
-	voice.volume.value = -13
 })
 
 const voiceLoop = new RandomMetro(({ count }) => {
@@ -56,6 +55,7 @@ const init = (args) => {
 
 const start = async () => {
 	await Promise.all([Tone.start(), loaded, voiceLoaded])
+	voice.volume.value = -13
 	Tone.Transport.start()
 	video.current.currentTime = 0
 	video.current.play()

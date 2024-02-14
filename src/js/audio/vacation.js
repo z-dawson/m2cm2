@@ -41,7 +41,6 @@ const voiceLoaded = new Promise((resolve) => {
 		url: baseUrl + voiceUrl,
 		onload: resolve,
 	}).toDestination()
-	voicePlayer.volume.value = -13
 })
 
 const wavePanner = new Tone.Panner(0).toDestination()
@@ -189,6 +188,7 @@ const onResize = ({ width, height }) => {
 
 const start = async (video) => {
 	await Promise.all([Tone.start(), loaded, voiceLoaded])
+	voicePlayer.volume.value = -13
 	loopWaves.start()
 	loopVoice.start()
 	loopOperatorAndWater.start()

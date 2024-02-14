@@ -22,7 +22,6 @@ const loaded = new Promise((resolve) => {
 		onload: resolve,
 		baseUrl: `${prefix}/audio/Connecting/`,
 	}).toDestination()
-	connectingAudio.player(0).volume.value = -13
 })
 
 const init = (args) => {
@@ -65,6 +64,7 @@ let loopText = new RandomMetro(() => {
 
 const start = async (video) => {
 	await Promise.all([Tone.start(), loaded])
+	connectingAudio.player(0).volume.value = -13
 	loopSound.start()
 	loopText.start()
 	video.current.play()

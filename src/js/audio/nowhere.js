@@ -56,8 +56,6 @@ const textIndexGenerator = new Stochastic(instruction3)
 let video
 const reverbDuration = 10
 const loop = new RandomMetro(() => {
-	nowhereAudio.player(12).volume.value = -13
-	nowhereAudio.player(13).volume.value = -13
 	const currentIndex = randomIndexGenerator.next()
 	const textIndex = textIndexGenerator.next()
 	const randomJitter = msToS(randomJitterGenerator.next())
@@ -90,6 +88,8 @@ const init = (args) => {
 
 const start = async (video) => {
 	await Promise.all([Tone.start(), loaded])
+	nowhereAudio.player(12).volume.value = -13
+	nowhereAudio.player(13).volume.value = -13
 	Tone.Transport.start()
 	loop.start()
 	video.current.currentTime = 0

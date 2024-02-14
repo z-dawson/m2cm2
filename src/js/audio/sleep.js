@@ -34,7 +34,6 @@ const rest = new Stochastic([{ range: [1.5, 4.5] }])
 let playerIndex = 1
 
 const loop = new RandomMetro(() => {
-	sleepAudio.player(0).volume.value = -13
 	let Timing
 	const shuffleState = shuffleMode.next()
 	const glitchTime = msToS(fastRepeats.next())
@@ -75,6 +74,7 @@ const loopVoice = new Tone.Loop((time) => {
 
 const start = async (video) => {
 	await Promise.all([Tone.start(), loaded])
+	sleepAudio.player(0).volume.value = -13
 	Tone.Transport.start()
 	loop.start()
 	loopVoice.start(60)

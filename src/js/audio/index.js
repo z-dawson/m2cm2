@@ -13,13 +13,13 @@ const loaded = new Promise((resolve, reject) => {
 		onload: () => resolve(),
 		baseUrl: `${prefix}/audio/index/`,
 	}).toDestination()
-	players.volume.value = -13
 })
 
 let playingIndex
 
 const start = async (index) => {
 	await Promise.all([Tone.start(), loaded])
+	players.volume.value = -13
 	playingIndex = index
 	players.player(playingIndex).start(Tone.now())
 }

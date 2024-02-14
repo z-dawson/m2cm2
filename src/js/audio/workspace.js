@@ -39,9 +39,6 @@ const loaded = new Promise((resolve) => {
 		onload: resolve,
 		baseUrl: `${prefix}/audio/workspace/`,
 	}).toDestination()
-	Array.from(Array(11)).forEach((_, index) => {
-		workspaceAudio.player(index).volume.value = -13
-	})
 })
 
 const instruction1 = [
@@ -79,6 +76,9 @@ const init = (args) => {
 
 const start = async (video) => {
 	await Promise.all([Tone.start(), loaded])
+	Array.from(Array(11)).forEach((_, index) => {
+		workspaceAudio.player(index).volume.value = -13
+	})
 	Tone.Transport.start()
 	loop.start()
 	loop2.start()
