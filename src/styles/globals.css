@@ -34,9 +34,6 @@ body {
 body {
 	color: rgb(var(--foreground-rgb));
 	background: rgb(var(--background-rgb));
-	font-family: "Roboto Serif", serif;
-	font-weight: 200;
-	font-size: 15px;
 }
 
 a {

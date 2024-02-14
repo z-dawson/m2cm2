@@ -4,7 +4,13 @@ export default function Document() {
 	return (
 		<Html lang="en">
 			<Head />
-			<body>
+			<body
+				style={{
+					fontFamily: '"Roboto Serif", serif',
+					fontWeight: 200,
+					fontSize: '15px',
+				}}
+			>
 				<Main />
 				<NextScript />
 			</body>
