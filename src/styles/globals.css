@@ -71,3 +71,20 @@ ul {
 		object-position: 30% 100%;
 	}
 }
+
+.delay {
+	animation-name: del;
+	animation-duration: 2s;
+	animation-fill-mode: forwards;
+	animation-timing-function: steps(2, jump-none);
+}
+
+@keyframes del {
+	0% {
+		display: none;
+	}
+
+	100% {
+		display: block;
+	}
+}
