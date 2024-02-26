@@ -83,7 +83,9 @@ const Text = (props) => {
 				}
 
 				userNames.current = userNames.current.map(getNewUserName)
-				endOfParagraph ? delay(15000).then(startReading) : nextWord()
+				endOfParagraph
+					? delay(sToMs(randomInt(10, 45))).then(startReading)
+					: nextWord()
 
 				return chat
 			})
