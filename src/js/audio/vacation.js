@@ -127,7 +127,9 @@ const loopWaves = new RandomMetro(() => {
 	return {
 		interval: sToMs(interval),
 		clear: () => {
-			wavePlayers.player(playerIndex).stop()
+			if (playerIndex != null) {
+				wavePlayers.player(playerIndex).stop()
+			}
 		},
 	}
 })
