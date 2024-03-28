@@ -1,7 +1,7 @@
 import { Urn, randomInt, sToMs } from '@/js/audio/common'
 import text from '@/js/text/text'
 import timestamps from '@/js/text/timestamps'
-import { EnteredContext } from '@/pages/_app'
+import { GlobalContext } from '@/pages/_app'
 import styles from '@/styles/Text.module.css'
 import delay from 'delay'
 import { Fragment, useCallback, useContext, useEffect, useRef } from 'react'
@@ -45,7 +45,7 @@ const maxParagraphs = 5
 
 const Text = (props) => {
 	const { reading, soundEngine } = props
-	const { chat, setChat } = useContext(EnteredContext)
+	const { chat, setChat } = useContext(GlobalContext)
 	const paragraphIndex = useRef(chooseParagraph.next())
 	const wordIndex = useRef(0)
 

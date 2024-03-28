@@ -10,11 +10,12 @@ import Head from 'next/head'
 import Link from 'next/link.js'
 import { useRouter } from 'next/router'
 import { useContext, useEffect, useRef, useState } from 'react'
-import { EnteredContext } from './_app.js'
+import { GlobalContext } from './_app.js'
 
 function Home() {
 	const [soundEngine, setSoundEngine] = useState()
-	const { entered, setEntered } = useContext(EnteredContext)
+	const { entered, setEntered, nextPopupIn, setNextPopupIn } =
+		useContext(GlobalContext)
 	const route = useRouter()
 	const destinationRoom = useRef()
 	const [popup, setPopup] = useState(false)
@@ -42,13 +43,15 @@ function Home() {
 		const probability = 30
 		destinationRoom.current = name
 		soundEngine?.stop?.()
-		if (randomInt(100) < probability) {
+		if (nextPopupIn === 0) {
 			setPopup(true)
 			gotoDestinationTimeout.current = setTimeout(
 				() => gotoDestination(destinationRoom.current),
 				sToMs(60 * 2)
 			)
+			setNextPopupIn(randomInt(3, 6))
 		} else {
+			setNextPopupIn((prev) => prev - 1)
 			gotoDestination()
 		}
 	}
