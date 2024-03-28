@@ -55,12 +55,15 @@ let video
 
 //let loop
 
-const loop = new RandomMetro(() => {
-	let currentInterval = sToMs(textInterval.next())
-	let textIndex = randomText.next()
-	workspaceAudio.player(textIndex).start(30)
+const loop = new RandomMetro(({ count }) => {
+	const currentInterval = sToMs(textInterval.next())
+	const textIndex = randomText.next()
+	if (count !== 0) {
+		workspaceAudio.player(textIndex).start()
+	}
 	return { interval: currentInterval }
 })
+
 const loop2 = new RandomMetro(() => {
 	const musicIndex = randomMonody.next()
 	const currentPlayer = workspaceAudio.player(musicIndex)

@@ -134,8 +134,8 @@ const loopWaves = new RandomMetro(() => {
 	}
 })
 
-const loopVoice = new RandomMetro(() => {
-	voicePlayer.start(60)
+const loopVoice = new RandomMetro(({ count }) => {
+	if (count !== 0) voicePlayer.start()
 	return {
 		interval: sToMs(randomInt(140, 200)),
 		clear: () => {
