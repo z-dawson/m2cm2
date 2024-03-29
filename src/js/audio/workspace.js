@@ -1,7 +1,8 @@
 import * as Tone from 'tone'
-import { prefix } from '../constants'
+import { prefix, xFadeTime } from '../constants'
 import { RandomMetro, sToMs } from './common'
 import Stochastic from './stochastic'
+import delay from 'delay'
 
 const urls = [
 	'memory.mp3',
@@ -80,6 +81,7 @@ const init = (args) => {
 const start = async (video) => {
 	await Promise.all([Tone.start(), loaded])
 	Array.from(Array(11)).forEach((_, index) => {
+		workspaceAudio.volume.value = 0
 		workspaceAudio.player(index).volume.value = -13
 	})
 	Tone.Transport.start()
@@ -89,13 +91,15 @@ const start = async (video) => {
 	video.current.play()
 }
 
-const stop = (video) => {
+const stop = async (video) => {
 	if (video.current) {
 		video.current.pause()
 		video.current.currentTime = 0
 	}
+	workspaceAudio.volume.rampTo(-80, xFadeTime)
 	loop.stop()
 	loop2.stop()
+	await delay(sToMs(xFadeTime))
 	workspaceAudio.stopAll()
 	Tone.Transport.stop()
 }

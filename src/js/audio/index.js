@@ -1,5 +1,7 @@
 import * as Tone from 'tone'
-import { prefix } from '../constants'
+import { prefix, xFadeTime } from '../constants'
+import delay from 'delay'
+import { sToMs } from './common'
 
 const urls = new Array(8).fill(0).map((value, index) => {
 	return `Statement${index + 1}.mp3`
@@ -24,8 +26,12 @@ const start = async (index) => {
 	players.player(playingIndex).start(Tone.now())
 }
 
-const stop = (index = playingIndex) => {
-	players.loaded && players.player(index).stop()
+const stop = async (index = playingIndex) => {
+	if (players.loaded) {
+		players.volume.rampTo(-80, xFadeTime)
+		await delay(sToMs(xFadeTime))
+		players.player(index).stop()
+	}
 }
 
 export { start, stop }

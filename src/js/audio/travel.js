@@ -1,7 +1,8 @@
 import * as Tone from 'tone'
 import Stochastic from '@/js/audio/stochastic.js'
 import { RandomMetro, sToMs } from './common'
-import { prefix } from '../constants'
+import { prefix, xFadeTime } from '../constants'
+import delay from 'delay'
 
 const urls = [
 	'travel5.mp3',
@@ -52,6 +53,7 @@ const loop = new RandomMetro(() => {
 
 const start = async (video) => {
 	await Promise.all([Tone.start(), loaded])
+	travelAudio.volume.value = 0
 	travelAudio.player(5).volume.value = -13
 	Tone.Transport.start()
 	loop.start()
@@ -59,12 +61,14 @@ const start = async (video) => {
 	video.current.play()
 }
 
-const stop = (video) => {
+const stop = async (video) => {
 	if (video.current) {
 		video.current.pause()
 		video.current.currentTime = 0
 	}
+	travelAudio.volume.rampTo(-80, xFadeTime)
 	loop.stop()
+	await delay(sToMs(xFadeTime))
 	Tone.Transport.stop()
 	travelAudio.stopAll()
 }

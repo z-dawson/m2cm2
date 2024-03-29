@@ -1,7 +1,8 @@
 import * as Tone from 'tone'
-import { prefix } from '../constants'
+import { prefix, xFadeTime } from '../constants'
 import { RandomMetro, Urn, getNumFilenames, sToMs } from './common'
 import Stochastic from './stochastic'
+import delay from 'delay'
 
 const audioUrls = getNumFilenames(124)
 
@@ -55,6 +56,7 @@ const init = (args) => {
 
 const start = async () => {
 	await Promise.all([Tone.start(), loaded, voiceLoaded])
+	players.volume.value = 0
 	voice.volume.value = -13
 	Tone.Transport.start()
 	video.current.currentTime = 0
@@ -71,15 +73,15 @@ const onRepeat = () => {
 	players.player(playerIndexes[1]).start(Tone.now() + 4.2)
 }
 
-const stop = (video) => {
+const stop = async (video) => {
 	if (video.current) {
 		video.current.pause()
 		video.current.currentTime = 0
 	}
-	playerIndexes.forEach((index) => {
-		players.player(index).stop()
-	})
+	players.volume.rampTo(-80, xFadeTime)
 	voiceLoop.stop()
+	await delay(sToMs(xFadeTime))
+	players.stopAll()
 	voice.stop()
 	Tone.Transport.stop()
 }

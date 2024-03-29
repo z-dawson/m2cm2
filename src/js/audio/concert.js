@@ -1,7 +1,8 @@
 import Stochastic from '@/js/audio/stochastic.js'
 import * as Tone from 'tone'
-import { prefix } from '../constants'
+import { prefix, xFadeTime } from '../constants'
 import { RandomMetro, getNumFilenames, sToMs } from './common'
+import delay from 'delay'
 
 const audioUrls1 = getNumFilenames(60)
 const audioUrls2 = getNumFilenames(26)
@@ -96,6 +97,8 @@ const timeSelector = new RandomMetro(() => {
 
 const start = async (video) => {
 	await Promise.all([Tone.start(), loaded1, loaded2])
+	concertAudio1.volume.rampTo(0, 0.05)
+	concertAudio2.volume.rampTo(0, 0.05)
 	Tone.Transport.start()
 	video.current.currentTime = 0
 	video.current.play()
@@ -106,12 +109,9 @@ const start = async (video) => {
 	timeSelector.start()
 }
 
-const stop = () => {
-	timeSelector.stop()
-	loop1.stop()
-	loop2.stop()
-	concertAudio1.stopAll()
-	concertAudio2.stopAll()
+const stop = async () => {
+	concertAudio1.volume.rampTo(-80, xFadeTime)
+	concertAudio2.volume.rampTo(-80, xFadeTime)
 	video?.current?.pause?.()
 	video2?.current?.pause?.()
 	;[(video, video2)].forEach((v) => {
@@ -120,6 +120,12 @@ const stop = () => {
 			v.current.currentTime = 0
 		}
 	})
+	timeSelector.stop()
+	loop1.stop()
+	loop2.stop()
+	await delay(sToMs(xFadeTime))
+	concertAudio1.stopAll()
+	concertAudio2.stopAll()
 }
 
 export { init, start, stop }

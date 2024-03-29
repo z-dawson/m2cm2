@@ -4,7 +4,8 @@ import * as Tone from 'tone'
 import Stochastic from '@/js/audio/stochastic.js'
 import { RandomMetro } from './common'
 import { sToMs } from './common'
-import { prefix } from '../constants'
+import { prefix, xFadeTime } from '../constants'
+import delay from 'delay'
 
 const audioUrls = [
 	'connecting.mp3',
@@ -69,14 +70,17 @@ const start = async (video) => {
 	loopText.start()
 	video.current.play()
 }
-const stop = (video) => {
-	Tone.Transport.stop()
-	loopSound.stop()
-	loopText.stop()
+const stop = async (video) => {
 	if (video.current) {
 		video.current.pause()
 		video.current.currentTime = 0
 	}
+	connectingAudio.volume.rampTo(-80, xFadeTime)
+	loopSound.stop()
+	loopText.stop()
+	await delay(sToMs(xFadeTime))
+	Tone.Transport.stop()
+	connectingAudio.stopAll()
 }
 
 export { start, stop, init }

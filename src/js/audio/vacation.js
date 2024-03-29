@@ -2,6 +2,8 @@ import * as Tone from 'tone'
 import Stochastic from '@/js/audio/stochastic.js'
 import { randomInt, RandomMetro } from './common'
 import { sToMs } from './common'
+import { xFadeTime } from '../constants'
+import delay from 'delay'
 
 const waveUrls = ['Small Wave.mp3', 'Medium Wave.mp3', 'Large Wave.mp3']
 const operatorUrls = [
@@ -191,6 +193,9 @@ const onResize = ({ width, height }) => {
 const start = async (video) => {
 	await Promise.all([Tone.start(), loaded, voiceLoaded])
 	voicePlayer.volume.value = -13
+	;[operatorPlayers, waterPlayers, wavePlayers].forEach((players) => {
+		players.volume.value = 0
+	})
 	loopWaves.start()
 	loopVoice.start()
 	loopOperatorAndWater.start()
@@ -198,15 +203,25 @@ const start = async (video) => {
 	video.current.play()
 }
 
-const stop = (video) => {
+const stop = async (video) => {
 	if (video.current) {
 		video.current.pause()
 		video.current.currentTime = 0
 	}
-	Tone.Transport.stop()
+	;[voicePlayer, wavePlayers, operatorPlayers, waterPlayers].forEach(
+		(player) => {
+			player.volume.rampTo(-80, xFadeTime)
+		}
+	)
 	loopWaves.stop()
 	loopVoice.stop()
 	loopOperatorAndWater.stop()
+	await delay(sToMs(xFadeTime))
+	Tone.Transport.stop()
+	voicePlayer.stop()
+	;[operatorPlayers, waterPlayers, wavePlayers].forEach((players) => {
+		players.stopAll()
+	})
 }
 
 export { start, stop, init, onResize }

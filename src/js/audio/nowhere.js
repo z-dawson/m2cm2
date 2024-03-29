@@ -1,7 +1,8 @@
 import * as Tone from 'tone'
 import Stochastic from '@/js/audio/stochastic.js'
 import { msToS, RandomMetro, sToMs } from './common'
-import { prefix } from '../constants'
+import { prefix, xFadeTime } from '../constants'
+import delay from 'delay'
 
 const urls = [
 	'iteration1.mp3',
@@ -88,6 +89,7 @@ const init = (args) => {
 
 const start = async (video) => {
 	await Promise.all([Tone.start(), loaded])
+	nowhereAudio.volume.value = 0
 	nowhereAudio.player(12).volume.value = -13
 	nowhereAudio.player(13).volume.value = -13
 	Tone.Transport.start()
@@ -96,12 +98,14 @@ const start = async (video) => {
 	video.current.play()
 }
 
-const stop = () => {
+const stop = async () => {
 	if (video.current) {
 		video.current.pause()
 		video.current.currentTime = 0
 	}
+	nowhereAudio.volume.rampTo(-80, xFadeTime)
 	loop.stop(Tone.immediate())
+	await delay(sToMs(xFadeTime))
 	nowhereAudio.stopAll()
 	Tone.Transport.stop()
 }

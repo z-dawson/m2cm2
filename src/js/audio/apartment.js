@@ -7,7 +7,8 @@ import {
 	sToMs,
 } from '@/js/audio/common'
 import * as Tone from 'tone'
-import { prefix } from '../constants'
+import { prefix, xFadeTime } from '../constants'
+import delay from 'delay'
 
 const urls = [
 	'S0_03 a.mp3',
@@ -78,6 +79,8 @@ const init = (args) => {
 
 const start = async (video) => {
 	await Promise.all([Tone.start(), loaded])
+	console.log('start apartment')
+	apartmentAudio.volume.rampTo(0, 0.05)
 	video.current.currentTime = 0
 	video.current.play()
 	apartmentAudio.fadeOut = 0.3
@@ -95,14 +98,16 @@ const onRepeat = () => {
 	apartmentAudio.player(playerIndex).start(Tone.now())
 }
 
-const stop = (video) => {
+const stop = async (video) => {
 	if (video.current) {
 		video.current.pause()
 		video.current.currentTime = 0
 	}
 	console.log({ playerIndex })
-	if (typeof playerIndex == 'number') apartmentAudio.player(playerIndex).stop()
+	apartmentAudio.volume.rampTo(-80, xFadeTime)
 	randomMetro.stop()
+	await delay(sToMs(xFadeTime))
+	if (typeof playerIndex == 'number') apartmentAudio.player(playerIndex).stop()
 	// apartmentAudio.dispose()
 }
 
