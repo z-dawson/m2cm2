@@ -56,7 +56,14 @@ const Room = ({ name, play, onFinish }) => {
 			<button className={styles.back} onClick={goHome}>
 				←
 			</button>
-			<video muted className={styles.video} ref={video}>
+			<video
+				className={styles.video}
+				ref={video}
+				loop
+				onPause={() => {
+					video.current.play()
+				}}
+			>
 				<source src={`${prefix}/videos/${name}.mp4`} type="video/mp4" />
 			</video>
 			{name == 'concert' && (
