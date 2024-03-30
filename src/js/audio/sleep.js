@@ -4,6 +4,8 @@ import { msToS, RandomMetro, sToMs, getNumFilenames } from './common'
 import { prefix, xFadeTime } from '../constants'
 import delay from 'delay'
 
+let active = false
+
 const urls = ['empty.mp3', ...getNumFilenames(56)]
 let sleepAudio
 
@@ -74,7 +76,9 @@ const loopVoice = new Tone.Loop((time) => {
 })
 
 const start = async (video) => {
+	active = true
 	await Promise.all([Tone.start(), loaded])
+	if (!active) return
 	sleepAudio.volume.value = 0
 	sleepAudio.player(0).volume.value = -13
 	Tone.Transport.start()
@@ -85,6 +89,7 @@ const start = async (video) => {
 }
 
 const stop = async (video) => {
+	active = false
 	if (video.current) {
 		video.current.pause()
 		video.current.currentTime = 0

@@ -4,6 +4,8 @@ import { msToS, RandomMetro, sToMs } from './common'
 import { prefix, xFadeTime } from '../constants'
 import delay from 'delay'
 
+let active = false
+
 const urls = [
 	'iteration1.mp3',
 	'iteration2.mp3',
@@ -88,7 +90,9 @@ const init = (args) => {
 }
 
 const start = async (video) => {
+	active = true
 	await Promise.all([Tone.start(), loaded])
+	if (!active) return
 	nowhereAudio.volume.value = 0
 	nowhereAudio.player(12).volume.value = -13
 	nowhereAudio.player(13).volume.value = -13
@@ -99,6 +103,7 @@ const start = async (video) => {
 }
 
 const stop = async () => {
+	active = false
 	if (video.current) {
 		video.current.pause()
 		video.current.currentTime = 0

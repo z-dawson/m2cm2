@@ -3,6 +3,8 @@ import { prefix, xFadeTime } from '../constants'
 import delay from 'delay'
 import { sToMs } from './common'
 
+let active = false
+
 const urls = new Array(8).fill(0).map((value, index) => {
 	return `Statement${index + 1}.mp3`
 })
@@ -20,13 +22,16 @@ const loaded = new Promise((resolve, reject) => {
 let playingIndex
 
 const start = async (index) => {
+	active = true
 	await Promise.all([Tone.start(), loaded])
+	if (!active) return
 	players.volume.value = -13
 	playingIndex = index
 	players.player(playingIndex).start(Tone.now())
 }
 
 const stop = async (index = playingIndex) => {
+	active = false
 	if (players.loaded) {
 		players.volume.rampTo(-80, xFadeTime)
 		await delay(sToMs(xFadeTime))

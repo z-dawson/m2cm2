@@ -5,6 +5,8 @@ import { sToMs } from './common'
 import { xFadeTime } from '../constants'
 import delay from 'delay'
 
+let active = false
+
 const waveUrls = ['Small Wave.mp3', 'Medium Wave.mp3', 'Large Wave.mp3']
 const operatorUrls = [
 	'Operator/Operator 1.mp3',
@@ -191,7 +193,9 @@ const onResize = ({ width, height }) => {
 }
 
 const start = async (video) => {
+	active = true
 	await Promise.all([Tone.start(), loaded, voiceLoaded])
+	if (!active) return
 	voicePlayer.volume.value = -13
 	;[operatorPlayers, waterPlayers, wavePlayers].forEach((players) => {
 		players.volume.value = 0
@@ -204,6 +208,7 @@ const start = async (video) => {
 }
 
 const stop = async (video) => {
+	active = false
 	if (video.current) {
 		video.current.pause()
 		video.current.currentTime = 0

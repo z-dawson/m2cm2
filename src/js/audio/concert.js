@@ -4,6 +4,8 @@ import { prefix, xFadeTime } from '../constants'
 import { RandomMetro, getNumFilenames, sToMs } from './common'
 import delay from 'delay'
 
+let active = false
+
 const audioUrls1 = getNumFilenames(60)
 const audioUrls2 = getNumFilenames(26)
 
@@ -96,7 +98,9 @@ const timeSelector = new RandomMetro(() => {
 })
 
 const start = async (video) => {
+	active = true
 	await Promise.all([Tone.start(), loaded1, loaded2])
+	if (!active) return
 	concertAudio1.volume.rampTo(0, 0.05)
 	concertAudio2.volume.rampTo(0, 0.05)
 	Tone.Transport.start()
@@ -110,6 +114,7 @@ const start = async (video) => {
 }
 
 const stop = async () => {
+	active = false
 	concertAudio1.volume.rampTo(-80, xFadeTime)
 	concertAudio2.volume.rampTo(-80, xFadeTime)
 	video?.current?.pause?.()

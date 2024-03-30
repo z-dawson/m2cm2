@@ -21,15 +21,19 @@ const Experience = ({ onAllClosed }) => {
 	const tabToAudioMapping = useRef([])
 	const addTimeout = useRef()
 	const margins = useRef([])
+	const active = useRef(false)
 
 	useEffect(() => {
 		tabAudio.current = new TabAudio()
+		active.current = true
 		tabAudio.current.load().then(() => {
 			loaded.current = true
 			// tabToAudioMapping.current = tabs.map((tab) => tabAudio.current.play(tab))
+			if (!active.current) return
 			addTab()
 		})
 		return () => {
+			active.current = false
 			tabAudio.current.stopAll()
 		}
 	}, [])

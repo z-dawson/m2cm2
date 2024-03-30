@@ -7,6 +7,8 @@ import { sToMs } from './common'
 import { prefix, xFadeTime } from '../constants'
 import delay from 'delay'
 
+let active = false
+
 const audioUrls = [
 	'connecting.mp3',
 	'connecting5.mp3',
@@ -64,13 +66,16 @@ let loopText = new RandomMetro(() => {
 })
 
 const start = async (video) => {
+	active = true
 	await Promise.all([Tone.start(), loaded])
+	if (!active) return
 	connectingAudio.player(0).volume.value = -13
 	loopSound.start()
 	loopText.start()
 	video.current.play()
 }
 const stop = async (video) => {
+	active = false
 	if (video.current) {
 		video.current.pause()
 		video.current.currentTime = 0

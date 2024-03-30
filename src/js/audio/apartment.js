@@ -10,6 +10,8 @@ import * as Tone from 'tone'
 import { prefix, xFadeTime } from '../constants'
 import delay from 'delay'
 
+let active = false
+
 const urls = [
 	'S0_03 a.mp3',
 	'S0_03 b.mp3',
@@ -78,7 +80,9 @@ const init = (args) => {
 }
 
 const start = async (video) => {
+	active = true
 	await Promise.all([Tone.start(), loaded])
+	if (!active) return
 	console.log('start apartment')
 	apartmentAudio.volume.rampTo(0, 0.05)
 	video.current.currentTime = 0
@@ -99,6 +103,7 @@ const onRepeat = () => {
 }
 
 const stop = async (video) => {
+	active = false
 	if (video.current) {
 		video.current.pause()
 		video.current.currentTime = 0

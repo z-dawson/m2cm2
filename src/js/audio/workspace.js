@@ -4,6 +4,8 @@ import { RandomMetro, sToMs } from './common'
 import Stochastic from './stochastic'
 import delay from 'delay'
 
+let active = false
+
 const urls = [
 	'memory.mp3',
 	'continue.mp3',
@@ -79,7 +81,9 @@ const init = (args) => {
 }
 
 const start = async (video) => {
+	active = true
 	await Promise.all([Tone.start(), loaded])
+	if (!active) return
 	Array.from(Array(11)).forEach((_, index) => {
 		workspaceAudio.volume.value = 0
 		workspaceAudio.player(index).volume.value = -13
@@ -92,6 +96,7 @@ const start = async (video) => {
 }
 
 const stop = async (video) => {
+	active = false
 	if (video.current) {
 		video.current.pause()
 		video.current.currentTime = 0

@@ -6,6 +6,8 @@ import { RandomMetro } from './common'
 import { sToMs } from './common'
 import { Urn } from './common'
 
+let active = false
+
 const audioUrls = [
 	'/audio/sonyEricsson/5thSentence.mp3',
 	'/audio/sonyEricsson/4thSentence.mp3',
@@ -70,7 +72,9 @@ let loopSound = new RandomMetro(() => {
 })
 
 const start = async (video) => {
+	active = true
 	await Promise.all([Tone.start(), loaded])
+	if (!active) return
 	timingSound = sonyAudio.player(0).buffer.duration
 	console.log('Timing' + sonyAudio.player(2).buffer.duration)
 	loopSound.start({
@@ -83,6 +87,7 @@ const start = async (video) => {
 }
 
 const stop = (video) => {
+	active = false
 	Tone.Transport.stop()
 	loopSound.stop()
 	removeEventListener(event, onFinish, true)

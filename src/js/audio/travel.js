@@ -4,6 +4,8 @@ import { RandomMetro, sToMs } from './common'
 import { prefix, xFadeTime } from '../constants'
 import delay from 'delay'
 
+let active = false
+
 const urls = [
 	'travel5.mp3',
 	'travel4.mp3',
@@ -52,7 +54,9 @@ const loop = new RandomMetro(() => {
 })
 
 const start = async (video) => {
+	active = true
 	await Promise.all([Tone.start(), loaded])
+	if (!active) return
 	travelAudio.volume.value = 0
 	travelAudio.player(5).volume.value = -13
 	Tone.Transport.start()
@@ -62,6 +66,7 @@ const start = async (video) => {
 }
 
 const stop = async (video) => {
+	active = false
 	if (video.current) {
 		video.current.pause()
 		video.current.currentTime = 0

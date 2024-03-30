@@ -4,6 +4,8 @@ import { RandomMetro, Urn, getNumFilenames, sToMs } from './common'
 import Stochastic from './stochastic'
 import delay from 'delay'
 
+let active = false
+
 const audioUrls = getNumFilenames(124)
 
 const voiceIntervals = new Stochastic([80, 100, 2 * 60, 2.2 * 60])
@@ -55,7 +57,9 @@ const init = (args) => {
 }
 
 const start = async () => {
+	active = true
 	await Promise.all([Tone.start(), loaded, voiceLoaded])
+	if (!active) return
 	players.volume.value = 0
 	voice.volume.value = -13
 	Tone.Transport.start()
@@ -74,6 +78,7 @@ const onRepeat = () => {
 }
 
 const stop = async (video) => {
+	active = false
 	if (video.current) {
 		video.current.pause()
 		video.current.currentTime = 0
