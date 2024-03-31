@@ -1,2 +1,2 @@
 export const prefix = process.env.NEXT_PUBLIC_BASE_PATH || ''
-export const xFadeTime = 1
+export const xFadeTime = 0.05
