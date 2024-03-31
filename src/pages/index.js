@@ -40,7 +40,6 @@ function Home() {
 	}
 
 	const handleRoomClick = (name) => {
-		const probability = 30
 		destinationRoom.current = name
 		soundEngine?.stop?.()
 		if (nextPopupIn === 0) {
@@ -102,7 +101,6 @@ function Home() {
 					</ul>
 				</nav>
 				<main className={styles.main}>
-					{/* <RandomImage /> */}
 					<div className={styles.bottomLayer}>
 						<div className={styles.animation}>
 							<Animation running={entered} />
