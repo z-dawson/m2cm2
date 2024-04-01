@@ -21,13 +21,13 @@ const loaded = new Promise((resolve, reject) => {
 
 let playingIndex
 
-const start = async (index) => {
+const start = async (index, offset = 0) => {
 	active = true
 	await Promise.all([Tone.start(), loaded])
 	if (!active) return
 	players.volume.value = -13
 	playingIndex = index
-	players.player(playingIndex).start(Tone.now())
+	players.player(playingIndex).start(Tone.now(), offset)
 }
 
 const stop = async (index = playingIndex) => {

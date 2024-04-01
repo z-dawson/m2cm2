@@ -45,9 +45,7 @@ const maxParagraphs = 5
 
 const Text = (props) => {
 	const { reading, soundEngine } = props
-	const { chat, setChat } = useContext(GlobalContext)
-	const paragraphIndex = useRef(chooseParagraph.next())
-	const wordIndex = useRef(0)
+	const { chat, setChat, paragraphIndex, wordIndex } = useContext(GlobalContext)
 
 	const timeout = useRef()
 	const userNames = useRef(new Array(maxParagraphs).fill(''))
@@ -95,7 +93,13 @@ const Text = (props) => {
 	const startReading = useCallback(() => {
 		console.log('start Reading')
 		;(async () => {
-			await soundEngine?.start?.(paragraphIndex.current)
+			await soundEngine?.start?.(
+				paragraphIndex.current,
+				timestamps[paragraphIndex.current].reduce((accum, timestamp, index) => {
+					if (wordIndex.current > index) accum += timestamp
+					return accum
+				}, 0)
+			)
 			nextWord()
 		})()
 	}, [soundEngine])
@@ -110,14 +114,6 @@ const Text = (props) => {
 
 	useEffect(() => {
 		userNames.current = userNames.current.map(getNewUserName)
-		return () => {
-			setChat((prev) => {
-				const chat = [...prev]
-				chat[chat.length - 1] = structuredClone(words[paragraphIndex.current])
-				return chat
-			})
-			onEndOfParagraph()
-		}
 	}, [])
 
 	useEffect(() => {
