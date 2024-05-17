@@ -38,7 +38,9 @@ const getNewUserName = () => {
 const chooseParagraph = new Urn(timestamps.length, timestamps.length - 1)
 
 const words = text.map((paragraph) => {
-	return paragraph.split(/[\s-]/)
+	return Array.from(paragraph.matchAll(/([^\s-]*[\s-]|[^\s-]+$)/g)).map(
+		(a) => a[0]
+	)
 })
 
 const maxParagraphs = 5
@@ -50,33 +52,24 @@ const Text = (props) => {
 	const timeout = useRef()
 	const userNames = useRef(new Array(maxParagraphs).fill(''))
 
-	const onEndOfParagraph = useCallback(() => {
-		setChat((prev) => {
-			const newChat = [...prev, []].filter((_, i, { length }) => {
-				return i > length - maxParagraphs
-			})
-			return newChat
-		})
-		paragraphIndex.current = chooseParagraph.next()
-		wordIndex.current = 0
-	}, [setChat])
-
 	const nextWord = useCallback(() => {
 		const interval = timestamps[paragraphIndex.current][wordIndex.current]
 		const currentParagraph = words[paragraphIndex.current]
 
-		const endOfParagraph = currentParagraph.length - 1 <= wordIndex.current
-		// const endOfParagraph = 5 <= wordIndex.current
-
 		timeout.current = setTimeout(() => {
 			setChat((prev) => {
-				const chat = [...prev]
-
-				chat[chat.length - 1].push(currentParagraph[wordIndex.current])
+				let chat
+				const endOfParagraph = currentParagraph.length - 1 <= wordIndex.current
 
 				if (endOfParagraph) {
-					onEndOfParagraph()
+					chat = [...prev, []].filter((_, i, { length }) => {
+						return i > length - maxParagraphs - 1
+					})
+					paragraphIndex.current = chooseParagraph.next()
+					wordIndex.current = 0
 				} else {
+					chat = [...prev]
+					chat[chat.length - 1].push(currentParagraph[wordIndex.current])
 					wordIndex.current += 1
 				}
 
@@ -84,11 +77,10 @@ const Text = (props) => {
 				endOfParagraph
 					? delay(sToMs(randomInt(10, 45))).then(startReading)
 					: nextWord()
-
 				return chat
 			})
 		}, sToMs(interval))
-	}, [soundEngine])
+	}, [soundEngine, setChat, paragraphIndex, wordIndex])
 
 	const startReading = useCallback(() => {
 		console.log('start Reading')
@@ -102,7 +94,7 @@ const Text = (props) => {
 			)
 			nextWord()
 		})()
-	}, [soundEngine])
+	}, [nextWord, paragraphIndex, soundEngine, wordIndex])
 
 	useEffect(() => {
 		return () => {
@@ -124,7 +116,7 @@ const Text = (props) => {
 			clearTimeout(timeout.current)
 			soundEngine?.stop?.()
 		}
-	}, [reading, soundEngine])
+	}, [reading, soundEngine, startReading])
 
 	return (
 		<div className={styles.container}>
@@ -132,7 +124,7 @@ const Text = (props) => {
 				{chat.map((paragraph, index) => {
 					return (
 						<p className={styles.paragraph} key={index}>
-							{chat[index].length ? (
+							{paragraph.length ? (
 								<strong className={styles.username}>
 									{userNames.current[index % userNames.current.length]}:{' '}
 								</strong>
@@ -143,7 +135,7 @@ const Text = (props) => {
 							{paragraph.map((word, index) => {
 								return (
 									<Fragment key={index}>
-										<span>{word}</span>{' '}
+										<span>{word}</span>
 									</Fragment>
 								)
 							})}
