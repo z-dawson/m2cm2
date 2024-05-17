@@ -80,6 +80,24 @@ const init = (args) => {
 	video.current.loop = true
 }
 
+const onResize = ({ width, height }) => {
+	const animation = {
+		animationName: 'horizontal-scroll',
+		animationDuration: '40s',
+		animationDirection: 'alternate',
+		animationIterationCount: 'infinite',
+		animationTimingFunction: 'linear',
+	}
+
+	const noAnimation = {
+		animation: 'none',
+	}
+
+	const styles = height > width ? animation : noAnimation
+
+	video?.current && Object.assign(video.current.style, styles)
+}
+
 const start = async (video) => {
 	active = true
 	await Promise.all([Tone.start(), loaded])
@@ -109,4 +127,4 @@ const stop = async (video) => {
 	Tone.Transport.stop()
 }
 
-export { init, start, stop }
+export { init, start, stop, onResize }
