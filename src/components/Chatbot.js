@@ -58,9 +58,10 @@ const Text = (props) => {
 
 		timeout.current = setTimeout(() => {
 			setChat((prev) => {
-				let chat
+				let chat = [...prev]
 				const endOfParagraph = currentParagraph.length - 1 <= wordIndex.current
 
+				chat[chat.length - 1].push(currentParagraph[wordIndex.current])
 				if (endOfParagraph) {
 					chat = [...prev, []].filter((_, i, { length }) => {
 						return i > length - maxParagraphs - 1
@@ -68,8 +69,6 @@ const Text = (props) => {
 					paragraphIndex.current = chooseParagraph.next()
 					wordIndex.current = 0
 				} else {
-					chat = [...prev]
-					chat[chat.length - 1].push(currentParagraph[wordIndex.current])
 					wordIndex.current += 1
 				}
 
