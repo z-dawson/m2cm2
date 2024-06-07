@@ -48,9 +48,9 @@ const maxParagraphs = 5
 const Text = (props) => {
 	const { reading, soundEngine } = props
 	const { chat, setChat, paragraphIndex, wordIndex } = useContext(GlobalContext)
-
 	const timeout = useRef()
 	const userNames = useRef(new Array(maxParagraphs).fill(''))
+	const abortController = useRef(new AbortController())
 
 	const nextWord = useCallback(() => {
 		const interval = timestamps[paragraphIndex.current][wordIndex.current]
@@ -61,6 +61,8 @@ const Text = (props) => {
 				let chat = [...prev]
 				const endOfParagraph = currentParagraph.length - 1 <= wordIndex.current
 
+				userNames.current = userNames.current.map(getNewUserName)
+
 				chat[chat.length - 1].push(currentParagraph[wordIndex.current])
 				if (endOfParagraph) {
 					chat = [...prev, []].filter((_, i, { length }) => {
@@ -68,21 +70,24 @@ const Text = (props) => {
 					})
 					paragraphIndex.current = chooseParagraph.next()
 					wordIndex.current = 0
+					delay(sToMs(randomInt(10, 45)), {
+						signal: abortController.current.signal,
+					})
+						.then(startReading)
+						.catch(() => {
+							console.log('typing delay aborted')
+						})
 				} else {
 					wordIndex.current += 1
+					nextWord()
 				}
 
-				userNames.current = userNames.current.map(getNewUserName)
-				endOfParagraph
-					? delay(sToMs(randomInt(10, 45))).then(startReading)
-					: nextWord()
 				return chat
 			})
 		}, sToMs(interval))
-	}, [soundEngine, setChat, paragraphIndex, wordIndex])
+	}, [paragraphIndex, wordIndex, setChat])
 
 	const startReading = useCallback(() => {
-		console.log('start Reading')
 		;(async () => {
 			await soundEngine?.start?.(
 				paragraphIndex.current,
@@ -100,6 +105,7 @@ const Text = (props) => {
 			clearTimeout(timeout.current)
 			console.log('stop Reading')
 			soundEngine?.stop?.()
+			abortController.current.abort()
 		}
 	}, [soundEngine])
 
