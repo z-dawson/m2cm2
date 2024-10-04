@@ -4,7 +4,7 @@ const text = [
 	'listen to the music as you get distracted. ',
 	'to listen to the music, click through to enter.',
 	'listen to the music while you daydream.',
-	'listen to the music as you full asleep.',
+	'listen to the music as you fall asleep.',
 	'listen to the music actively and attentively.',
 	'to listen to the music, click through to enter.',
 	'listen to the music passively and inattentively.',
